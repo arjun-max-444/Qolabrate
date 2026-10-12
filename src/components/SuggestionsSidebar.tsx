@@ -10,7 +10,7 @@ import {
   type Brand, type Creator,
 } from "@/lib/matching";
 
-type Item = { id: string; name: string; avatar?: string | null; sub: string; score: number; reasons: string[]; demo?: boolean };
+type Item = { id: string; name: string; avatar: string | null | undefined; sub: string; score: number; reasons: string[]; demo: boolean | undefined };
 
 function Chips({ options, value, onChange, label }: { options: string[]; value: string[]; onChange: (v: string[]) => void; label: string }) {
   return (
