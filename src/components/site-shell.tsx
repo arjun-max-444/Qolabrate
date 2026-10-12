@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from "sonner";
 import { ProfileMenu } from "@/components/profile-menu";
+import { categories } from "@/lib/marketplace-data";
 const AccountContext = createContext<{
   user: User | null;
   role: AppRole | null;
