@@ -1,13 +1,13 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { Search, ArrowUpRight, LogOut, ChevronDown } from "lucide-react";
+import { Search, ArrowUpRight, ChevronDown } from "lucide-react";
 import { NotificationBell } from "@/components/notification-bell";
 import { dashboardFor, type AppRole } from "@/lib/roles";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from "sonner";
-import { categories } from "@/lib/marketplace-data";
+import { ProfileMenu } from "@/components/profile-menu";
 const AccountContext = createContext<{
   user: User | null;
   role: AppRole | null;
@@ -119,15 +119,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
               <a href={dashboardFor(role)}>Dashboard</a>
               {role !== "admin" && <a href={role === "brand" ? "/brand/inbox" : "/creator/inbox"} className="extra-link">Inbox</a>}
               <NotificationBell userId={user.id} />
-              <Button
-                size="icon"
-                variant="ghost"
-                aria-label="Sign out"
-                title="Sign out"
-                onClick={() => supabase.auth.signOut()}
-              >
-                <LogOut />
-              </Button>
+              <ProfileMenu userId={user.id} role={role} email={user.email ?? ""} />
             </>
           ) : (
             <>
@@ -147,26 +139,14 @@ export function SiteShell({ children }: { children: ReactNode }) {
         <nav className="member-nav" aria-label="Your account">
           <div className="container">
             {(role === "brand"
-              ? [["/brand/dashboard", "Dashboard"], ["/brand/profile", "Brand profile"], ["/brand/campaigns", "Campaigns"], ["/brand/campaigns/new", "New campaign"], ["/brand/inbox", "Inbox"], ["/marketplace", "Find creators"]]
-              : [["/creator/dashboard", "Dashboard"], ["/creator/profile", "My profile"], ["/creator/socials", "Social accounts"], ["/campaigns", "Campaigns"], ["/creator/inbox", "Inbox"]]
+              ? [["/brand/dashboard", "Dashboard"], ["/collabs", "Sent requests"], ["/brand/profile", "Brand profile"], ["/brand/campaigns", "Campaigns"], ["/brand/campaigns/new", "New campaign"], ["/brand/inbox", "Inbox"], ["/marketplace", "Find creators"]]
+              : [["/creator/dashboard", "Dashboard"], ["/collabs", "Collab invitations"], ["/creator/profile", "My profile"], ["/creator/socials", "Social accounts"], ["/campaigns", "Campaigns"], ["/creator/inbox", "Inbox"]]
             ).map(([href, label]) => (
               <a key={href} href={href}>{label}</a>
             ))}
           </div>
         </nav>
       )}
-      <nav className="category-nav">
-        <div className="container">
-          {categories.map((c) => (
-            <Link key={c} to="/marketplace" search={{ q: c }}>
-              {c}
-            </Link>
-          ))}
-          <Link to="/marketplace" search={{ q: "" }}>
-            All services <ArrowUpRight size={12} className="inline" />
-          </Link>
-        </div>
-      </nav>
       {children}
       <footer className="footer">
         <div className="container footer-inner">

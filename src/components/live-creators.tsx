@@ -5,6 +5,7 @@ import { SiteShell } from "@/components/site-shell";
 import { Button } from "@/components/ui/button";
 import { AudienceTiles, ReachChip } from "@/components/creator-audience";
 import { OfferButton } from "@/components/offer-dialog";
+import { InviteButton } from "@/components/collab-invite";
 import { supabase } from "@/integrations/supabase/client";
 import { followerRanges, formatCount, money, type PublicCreator } from "@/lib/social";
 
@@ -81,7 +82,7 @@ export function LiveCreatorProfile({ id }: { id: string }) {
             <p className="mt-4 leading-7 whitespace-pre-line">{c.bio}</p>
             <div className="tags mt-4">{[...c.categories, ...c.skills, ...c.languages].map((s) => <span className="tag" key={s}>{s}</span>)}</div>
             {c.rate != null && <p className="mt-4">Starting rate: <strong>{money(c.rate, c.currency)}</strong></p>}
-            <div className="flex gap-2 mt-4"><OfferButton creatorId={c.user_id} creatorName={c.full_name} /><Button asChild variant="outline" size="sm"><Link to="/campaigns">Browse campaigns</Link></Button></div>
+            <div className="flex gap-2 mt-4"><InviteButton creatorId={c.user_id} creatorName={c.full_name} /><OfferButton creatorId={c.user_id} creatorName={c.full_name} /><Button asChild variant="outline" size="sm"><Link to="/u/$username" params={{ username: c.user_id }}>Full profile</Link></Button><Button asChild variant="outline" size="sm"><Link to="/campaigns">Browse campaigns</Link></Button></div>
             <h2 className="text-xl font-bold mt-10">Audience</h2>
             <AudienceTiles creator={c} />
           </>

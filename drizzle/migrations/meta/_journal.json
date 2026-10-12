@@ -71,6 +71,13 @@
       "when": 1791841415474,
       "tag": "0009_enforce_business_email_and_initialize_matching",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1791842687709,
+      "tag": "0010_collab_system_and_public_profiles",
+      "breakpoints": true
     }
   ]
 }

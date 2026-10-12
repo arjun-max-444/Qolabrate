@@ -48,7 +48,9 @@ function Auth() {
         if (error) { setError(error.message); return; }
       }
       const { role: r } = await fetchRole();
-      navigate({ href: dashboardFor(r) });
+      const next = sessionStorage.getItem("qolabrate_next");
+      sessionStorage.removeItem("qolabrate_next");
+      navigate({ href: next && next.startsWith("/") && !next.startsWith("//") ? next : dashboardFor(r) });
     })();
   }, [user, mode]);
   useEffect(() => {

@@ -377,6 +377,158 @@ export type Database = {
           },
         ]
       }
+      collab_blocks: {
+        Row: {
+          blocked_id: string
+          blocker_id: string
+          created_at: string
+        }
+        Insert: {
+          blocked_id: string
+          blocker_id: string
+          created_at?: string
+        }
+        Update: {
+          blocked_id?: string
+          blocker_id?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collab_blocks_blocked_id_fkey"
+            columns: ["blocked_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collab_blocks_blocker_id_fkey"
+            columns: ["blocker_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collab_deliverables: {
+        Row: {
+          approved_at: string | null
+          collab_id: string
+          delivered_at: string | null
+          id: string
+          label: string
+          position: number
+        }
+        Insert: {
+          approved_at?: string | null
+          collab_id: string
+          delivered_at?: string | null
+          id?: string
+          label: string
+          position?: number
+        }
+        Update: {
+          approved_at?: string | null
+          collab_id?: string
+          delivered_at?: string | null
+          id?: string
+          label?: string
+          position?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collab_deliverables_collab_id_fkey"
+            columns: ["collab_id"]
+            isOneToOne: false
+            referencedRelation: "collabs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collab_messages: {
+        Row: {
+          body: string
+          collab_id: string
+          created_at: string
+          file_name: string | null
+          file_path: string | null
+          id: string
+          sender_id: string
+        }
+        Insert: {
+          body?: string
+          collab_id: string
+          created_at?: string
+          file_name?: string | null
+          file_path?: string | null
+          id?: string
+          sender_id: string
+        }
+        Update: {
+          body?: string
+          collab_id?: string
+          created_at?: string
+          file_name?: string | null
+          file_path?: string | null
+          id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collab_messages_collab_id_fkey"
+            columns: ["collab_id"]
+            isOneToOne: false
+            referencedRelation: "collabs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collab_messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collab_reports: {
+        Row: {
+          collab_id: string
+          created_at: string
+          id: string
+          reason: string
+          reporter_id: string
+        }
+        Insert: {
+          collab_id: string
+          created_at?: string
+          id?: string
+          reason: string
+          reporter_id: string
+        }
+        Update: {
+          collab_id?: string
+          created_at?: string
+          id?: string
+          reason?: string
+          reporter_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collab_reports_collab_id_fkey"
+            columns: ["collab_id"]
+            isOneToOne: false
+            referencedRelation: "collabs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collab_reports_reporter_id_fkey"
+            columns: ["reporter_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       collab_requests: {
         Row: {
           created_at: string | null
@@ -406,6 +558,177 @@ export type Database = {
           target_kind?: string
         }
         Relationships: []
+      }
+      collab_reviews: {
+        Row: {
+          collab_id: string
+          comment: string
+          created_at: string
+          rating: number
+          reviewee_id: string
+          reviewer_id: string
+        }
+        Insert: {
+          collab_id: string
+          comment?: string
+          created_at?: string
+          rating: number
+          reviewee_id: string
+          reviewer_id: string
+        }
+        Update: {
+          collab_id?: string
+          comment?: string
+          created_at?: string
+          rating?: number
+          reviewee_id?: string
+          reviewer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collab_reviews_collab_id_fkey"
+            columns: ["collab_id"]
+            isOneToOne: false
+            referencedRelation: "collabs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collab_reviews_reviewee_id_fkey"
+            columns: ["reviewee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collab_reviews_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collab_settings: {
+        Row: {
+          creator_id: string
+          daily_limit_per_brand: number
+          min_budget: number
+          open_to_collabs: boolean
+          updated_at: string
+        }
+        Insert: {
+          creator_id: string
+          daily_limit_per_brand?: number
+          min_budget?: number
+          open_to_collabs?: boolean
+          updated_at?: string
+        }
+        Update: {
+          creator_id?: string
+          daily_limit_per_brand?: number
+          min_budget?: number
+          open_to_collabs?: boolean
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collab_settings_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collabs: {
+        Row: {
+          accepted_at: string | null
+          brand_id: string
+          brief: string
+          budget_max: number
+          budget_min: number
+          cancel_reason: string | null
+          completed_at: string | null
+          counter_budget_max: number | null
+          counter_budget_min: number | null
+          counter_deadline: string | null
+          counter_note: string | null
+          created_at: string
+          creator_id: string
+          deadline: string | null
+          expires_at: string
+          id: string
+          message: string
+          plan_type: string
+          reference_links: string[]
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          brand_id: string
+          brief: string
+          budget_max?: number
+          budget_min?: number
+          cancel_reason?: string | null
+          completed_at?: string | null
+          counter_budget_max?: number | null
+          counter_budget_min?: number | null
+          counter_deadline?: string | null
+          counter_note?: string | null
+          created_at?: string
+          creator_id: string
+          deadline?: string | null
+          expires_at?: string
+          id?: string
+          message?: string
+          plan_type: string
+          reference_links?: string[]
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          brand_id?: string
+          brief?: string
+          budget_max?: number
+          budget_min?: number
+          cancel_reason?: string | null
+          completed_at?: string | null
+          counter_budget_max?: number | null
+          counter_budget_min?: number | null
+          counter_deadline?: string | null
+          counter_note?: string | null
+          created_at?: string
+          creator_id?: string
+          deadline?: string | null
+          expires_at?: string
+          id?: string
+          message?: string
+          plan_type?: string
+          reference_links?: string[]
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collabs_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collabs_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       creator_profiles: {
         Row: {
@@ -705,28 +1028,61 @@ export type Database = {
         Row: {
           account_status: string
           avatar_path: string | null
+          bio: string
+          company_name: string
+          cover_path: string | null
           created_at: string
           email: string
           full_name: string
           id: string
+          industry: string
+          location: string
+          skills: string[]
+          social_links: Json
+          starting_rate: number | null
+          tools: string[]
+          username: string | null
+          website: string
           whatsapp: string
         }
         Insert: {
           account_status?: string
           avatar_path?: string | null
+          bio?: string
+          company_name?: string
+          cover_path?: string | null
           created_at?: string
           email?: string
           full_name?: string
           id: string
+          industry?: string
+          location?: string
+          skills?: string[]
+          social_links?: Json
+          starting_rate?: number | null
+          tools?: string[]
+          username?: string | null
+          website?: string
           whatsapp?: string
         }
         Update: {
           account_status?: string
           avatar_path?: string | null
+          bio?: string
+          company_name?: string
+          cover_path?: string | null
           created_at?: string
           email?: string
           full_name?: string
           id?: string
+          industry?: string
+          location?: string
+          skills?: string[]
+          social_links?: Json
+          starting_rate?: number | null
+          tools?: string[]
+          username?: string | null
+          website?: string
           whatsapp?: string
         }
         Relationships: []
@@ -893,6 +1249,18 @@ export type Database = {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: Database["public"]["Enums"]["app_role"]
       }
+      collab_action: {
+        Args: {
+          _action: string
+          _deadline?: string
+          _id: string
+          _max?: number
+          _min?: number
+          _note?: string
+        }
+        Returns: string
+      }
+      collab_unlocked: { Args: { _collab: string }; Returns: boolean }
       deal_contacts: {
         Args: { _id: string; _kind: string }
         Returns: {
@@ -902,6 +1270,11 @@ export type Database = {
           creator_whatsapp: string
         }[]
       }
+      deliverable_action: {
+        Args: { _action: string; _id: string }
+        Returns: undefined
+      }
+      expire_collabs: { Args: never; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -909,7 +1282,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_blocked: { Args: { _a: string; _b: string }; Returns: boolean }
       is_business_email: { Args: { _email: string }; Returns: boolean }
+      is_collab_party: { Args: { _collab: string }; Returns: boolean }
+      make_username: { Args: { _base: string; _id: string }; Returns: string }
       notify: {
         Args: { _body: string; _link: string; _title: string; _user: string }
         Returns: undefined
@@ -940,6 +1316,47 @@ export type Database = {
           youtube: Json
         }[]
       }
+      public_profile: {
+        Args: { _id?: string; _username?: string }
+        Returns: {
+          avatar_path: string
+          bio: string
+          company_name: string
+          cover_path: string
+          created_at: string
+          full_name: string
+          id: string
+          industry: string
+          location: string
+          min_budget: number
+          open_to_collabs: boolean
+          rating: number
+          review_count: number
+          role: string
+          skills: string[]
+          social_links: Json
+          starting_rate: number
+          tools: string[]
+          username: string
+          website: string
+        }[]
+      }
+      send_collab: {
+        Args: {
+          _brief: string
+          _creator: string
+          _deadline: string
+          _deliverables: string[]
+          _links: string[]
+          _max: number
+          _message: string
+          _min: number
+          _plan: string
+          _title: string
+        }
+        Returns: string
+      }
+      username_available: { Args: { _username: string }; Returns: boolean }
     }
     Enums: {
       app_role: "creator" | "brand" | "admin"

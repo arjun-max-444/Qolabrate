@@ -43,6 +43,7 @@ export const Route = createFileRoute("/brand/dashboard")({
         <>
           <Button asChild><Link to="/brand/campaigns/new">New campaign</Link></Button>
           <Button asChild variant="outline"><Link to="/brand/campaigns">Campaigns</Link></Button>
+          <Button asChild variant="outline"><Link to="/collabs">Sent requests</Link></Button>
           <Button asChild variant="outline"><Link to="/brand/inbox">Inbox</Link></Button>
           <Button asChild variant="outline"><Link to="/brand/profile">Brand profile</Link></Button>
           <Button asChild variant="outline"><Link to="/marketplace" search={{ q: "" }}>Find creators</Link></Button>

@@ -22,3 +22,10 @@
 - [x] Apply cinematic colors to account and marketplace pages.
 - [x] Verify signed-in creator dashboard/home suggestions, brand signup rejection, and nine tests.
 - [ ] Signed-in brand validation: needs an official-email brand account approved for testing.
+# Collabs & profiles
+- [x] Remove category bar from header.
+- [x] Collab requests (invite form, statuses, 7-day expiry, accept/decline/counter, sent requests, pending badge).
+- [x] Private workspace: live chat, files, pinned plan, deliverables, status bar, block/report, reviews, notifications.
+- [x] Creator collab settings (open, minimum budget, daily limit per brand).
+- [x] Profile system: account menu, /profile, /profile/edit, /u/:username, completeness bar.
+- [ ] Signed-in end-to-end collab test: needs an official-email brand account plus a creator account.

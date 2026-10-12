@@ -29,6 +29,7 @@ export const Route = createFileRoute("/creator/dashboard")({
         <>
           <Button asChild><Link to="/creator/profile">Edit profile</Link></Button>
           <Button asChild variant="outline"><Link to="/creator/socials">Social accounts</Link></Button>
+          <Button asChild variant="outline"><Link to="/collabs">Collab invitations</Link></Button>
           <Button asChild variant="outline"><Link to="/creator/inbox">Inbox</Link></Button>
           <Button asChild variant="outline"><Link to="/campaigns">Browse campaigns</Link></Button>
           <Button asChild variant="outline"><Link to="/marketplace" search={{ q: "" }}>Explore marketplace</Link></Button>
