@@ -106,13 +106,14 @@ function Home() {
           <div className="cine-head"><h2>Browse by craft</h2></div>
           <div className="cine-cats">
             {categories.map((c, i) => {
-              const n = creators.filter((x) => x.specialty.toLowerCase().includes(c.split(" ")[1]?.toLowerCase() ?? c.toLowerCase()) || x.skills.some((s) => s.toLowerCase().includes(c.toLowerCase()))).length;
+              const words = c.toLowerCase().split(" ").filter((w) => w !== "ai");
+              const n = creators.filter((x) => { const t = [x.specialty, ...x.skills, ...x.work.map((w) => w.category)].join(" ").toLowerCase(); return words.some((w) => t.includes(w.slice(0, 5))); }).length;
               return (
                 <Link key={c} to="/marketplace" search={{ q: c }} className="cine-cat">
                   <LazyVideo src={clip(i + 2)} poster={creators[i]?.work[0]?.image} label="" className="cine-cat-video" />
                   <div className="cine-cat-label">
                     <h3>{c}</h3>
-                    <span>{n || 2} creators</span>
+                    <span>{n} {n === 1 ? "creator" : "creators"}</span>
                   </div>
                 </Link>
               );
