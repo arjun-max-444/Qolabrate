@@ -33,6 +33,8 @@ import { Route as CreatorInboxRouteImport } from './routes/creator/inbox'
 import { Route as CreatorProfileRouteImport } from './routes/creator/profile'
 import { Route as CreatorSocialsRouteImport } from './routes/creator/socials'
 import { Route as CreatorsIdRouteImport } from './routes/creators/$id'
+import { Route as ProfileIndexRouteImport } from './routes/profile.index'
+import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as ApiGstValidateFormatRouteImport } from './routes/api/gst/validate-format'
 import { Route as ApiGstVerificationStatusRouteImport } from './routes/api/gst/verification-status'
 import { Route as BrandCampaignsIndexRouteImport } from './routes/brand/campaigns.index'
@@ -160,6 +162,16 @@ const CreatorsIdRoute = CreatorsIdRouteImport.update({
   path: '/creators/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileIndexRoute = ProfileIndexRouteImport.update({
+  id: '/profile/',
+  path: '/profile/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UUsernameRoute = UUsernameRouteImport.update({
+  id: '/u/$username',
+  path: '/u/$username',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiGstValidateFormatRoute = ApiGstValidateFormatRouteImport.update({
   id: '/api/gst/validate-format',
   path: '/api/gst/validate-format',
@@ -215,8 +227,10 @@ export interface FileRoutesByFullPath {
   '/creator/profile': typeof CreatorProfileRoute
   '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
+  '/u/$username': typeof UUsernameRoute
   '/campaigns/': typeof CampaignsIndexRoute
   '/collabs/': typeof CollabsIndexRoute
+  '/profile/': typeof ProfileIndexRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
   '/brand/campaigns/new': typeof BrandCampaignsNewRoute
@@ -247,8 +261,10 @@ export interface FileRoutesByTo {
   '/creator/profile': typeof CreatorProfileRoute
   '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
+  '/u/$username': typeof UUsernameRoute
   '/campaigns': typeof CampaignsIndexRoute
   '/collabs': typeof CollabsIndexRoute
+  '/profile': typeof ProfileIndexRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
   '/brand/campaigns/new': typeof BrandCampaignsNewRoute
@@ -280,8 +296,10 @@ export interface FileRoutesById {
   '/creator/profile': typeof CreatorProfileRoute
   '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
+  '/u/$username': typeof UUsernameRoute
   '/campaigns/': typeof CampaignsIndexRoute
   '/collabs/': typeof CollabsIndexRoute
+  '/profile/': typeof ProfileIndexRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
   '/brand/campaigns/new': typeof BrandCampaignsNewRoute
@@ -314,8 +332,10 @@ export interface FileRouteTypes {
     | '/creator/profile'
     | '/creator/socials'
     | '/creators/$id'
+    | '/u/$username'
     | '/campaigns/'
     | '/collabs/'
+    | '/profile/'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
     | '/brand/campaigns/new'
@@ -346,8 +366,10 @@ export interface FileRouteTypes {
     | '/creator/profile'
     | '/creator/socials'
     | '/creators/$id'
+    | '/u/$username'
     | '/campaigns'
     | '/collabs'
+    | '/profile'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
     | '/brand/campaigns/new'
@@ -378,8 +400,10 @@ export interface FileRouteTypes {
     | '/creator/profile'
     | '/creator/socials'
     | '/creators/$id'
+    | '/u/$username'
     | '/campaigns/'
     | '/collabs/'
+    | '/profile/'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
     | '/brand/campaigns/new'
@@ -404,8 +428,10 @@ export interface RootRouteChildren {
   CampaignsIdRoute: typeof CampaignsIdRoute
   CollabsIdRoute: typeof CollabsIdRoute
   CreatorsIdRoute: typeof CreatorsIdRoute
+  UUsernameRoute: typeof UUsernameRoute
   CampaignsIndexRoute: typeof CampaignsIndexRoute
   CollabsIndexRoute: typeof CollabsIndexRoute
+  ProfileIndexRoute: typeof ProfileIndexRoute
   ApiGstValidateFormatRoute: typeof ApiGstValidateFormatRoute
   ApiGstVerificationStatusRoute: typeof ApiGstVerificationStatusRoute
 }
@@ -580,6 +606,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreatorsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile/': {
+      id: '/profile/'
+      path: '/profile'
+      fullPath: '/profile/'
+      preLoaderRoute: typeof ProfileIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/u/$username': {
+      id: '/u/$username'
+      path: '/u/$username'
+      fullPath: '/u/$username'
+      preLoaderRoute: typeof UUsernameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/gst/validate-format': {
       id: '/api/gst/validate-format'
       path: '/api/gst/validate-format'
@@ -683,8 +723,10 @@ const rootRouteChildren: RootRouteChildren = {
   CampaignsIdRoute: CampaignsIdRoute,
   CollabsIdRoute: CollabsIdRoute,
   CreatorsIdRoute: CreatorsIdRoute,
+  UUsernameRoute: UUsernameRoute,
   CampaignsIndexRoute: CampaignsIndexRoute,
   CollabsIndexRoute: CollabsIndexRoute,
+  ProfileIndexRoute: ProfileIndexRoute,
   ApiGstValidateFormatRoute: ApiGstValidateFormatRoute,
   ApiGstVerificationStatusRoute: ApiGstVerificationStatusRoute,
 }
