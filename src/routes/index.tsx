@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useAccount } from "@/components/site-shell";
 import { Search, Pause, Play, BadgeCheck, ArrowRight, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CineFooter, CineNav, LazyVideo, Reveal } from "@/components/cinematic";
@@ -24,6 +25,11 @@ const tools = ["Runway", "Adobe", "OpenAI", "Blender", "Midjourney"];
 
 function Home() {
   const navigate = useNavigate();
+  const { user } = useAccount();
+  // Signed-in visitors (incl. just after sign-up / Google return) go straight to their own area.
+  useEffect(() => {
+    if (user) navigate({ to: "/auth", search: { mode: "signin" }, replace: true });
+  }, [user?.id]);
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("");
   const [paused, setPaused] = useState(false);
