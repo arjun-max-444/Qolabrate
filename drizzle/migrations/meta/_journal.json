@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1791828611769,
+      "tag": "0000_qolabrate_accounts_and_workspace",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791828798370,
+      "tag": "0001_portfolio_storage_permissions",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791828999698,
+      "tag": "0002_restrict_account_verification_fields",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1791829055748,
+      "tag": "0003_protect_creator_evidence_status",
+      "breakpoints": true
+    }
+  ]
+}

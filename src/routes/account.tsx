@@ -1,0 +1,447 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Upload, Check, ArrowRight } from "lucide-react";
+import { SiteShell, useAccount } from "@/components/site-shell";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { pageHead } from "@/lib/seo";
+import { validateGSTIN } from "@/lib/gstin";
+import { toast } from "sonner";
+export const Route = createFileRoute("/account")({
+  head: () =>
+    pageHead(
+      "Your account",
+      "Build your creator portfolio or submit your company details for review.",
+    ),
+  component: Account,
+});
+function Account() {
+  const { user } = useAccount();
+  const [kind, setKind] = useState("creator");
+  const [step, setStep] = useState(0);
+  const [draft, setDraft] = useState<{
+    name: string;
+    headline: string;
+    bio: string;
+    location: string;
+    skills: string;
+    tools: string;
+    website: string;
+    instagram: string;
+    youtube: string;
+    linkedin: string;
+    rate: string;
+    availability: string;
+    companySize: string;
+    turnover: string;
+    networth: string;
+    gstin: string;
+    title: string;
+  }>({
+    name: "",
+    headline: "",
+    bio: "",
+    location: "",
+    skills: "",
+    tools: "",
+    website: "",
+    instagram: "",
+    youtube: "",
+    linkedin: "",
+    rate: "",
+    availability: "Available this month",
+    companySize: "",
+    turnover: "",
+    networth: "",
+    gstin: "",
+    title: "",
+  });
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const [status, setStatus] = useState("");
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("profiles")
+      .select("full_name")
+      .eq("id", user.id)
+      .single()
+      .then(({ data }) => {
+        if (data) setDraft((d) => ({ ...d, name: data.full_name }));
+      });
+    supabase
+      .from("creator_profiles")
+      .select("*")
+      .eq("user_id", user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data)
+          setDraft((d) => ({
+            ...d,
+            ...(data.details as Record<string, string>),
+            headline: data.specialization,
+            bio: data.bio,
+            location: data.location,
+          }));
+      });
+    supabase
+      .from("brand_profiles")
+      .select("approval_status")
+      .eq("user_id", user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) setStatus(data.approval_status);
+      });
+  }, [user?.id]);
+  useEffect(() => {
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setPreview(url);
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
+  const update = (key: string, value: string) => setDraft((d) => ({ ...d, [key]: value }));
+  const field = (key: string, label: string, type = "text") => (
+    <label className="form-field">
+      {label}
+      <input
+        className="field"
+        type={type}
+        value={draft[key as keyof typeof draft] ?? ""}
+        onChange={(e) => update(key, e.target.value)}
+      />
+    </label>
+  );
+  async function save() {
+    if (!user) return;
+    if (!draft.name.trim()) {
+      setError("Please add your name or company name.");
+      return;
+    }
+    if (kind === "brand") {
+      const result = validateGSTIN(draft.gstin);
+      if (!result.valid) {
+        setError(result.reason ?? "Invalid GSTIN");
+        return;
+      }
+    }
+    setBusy(true);
+    setError("");
+    const { error: profileError } = await supabase
+      .from("profiles")
+      .update({ full_name: draft.name })
+      .eq("id", user.id);
+    if (profileError) {
+      setError("Could not save your account.");
+      setBusy(false);
+      return;
+    }
+    const result =
+      kind === "creator"
+        ? await supabase
+            .from("creator_profiles")
+            .upsert({
+              user_id: user.id,
+              specialization: draft.headline,
+              bio: draft.bio,
+              location: draft.location,
+              skills: draft.skills.split(",").filter(Boolean),
+              ai_tools: draft.tools.split(",").filter(Boolean),
+              social_links: {
+                website: draft.website,
+                instagram: draft.instagram,
+                youtube: draft.youtube,
+                linkedin: draft.linkedin,
+              },
+              details: draft,
+              profile_completion: 75,
+            })
+        : await supabase
+            .from("brand_profiles")
+            .insert({
+              user_id: user.id,
+              company_name: draft.name,
+              representative_name: draft.headline,
+              business_email: user.email ?? "",
+              website: draft.website,
+              industry: draft.location,
+              company_size: draft.companySize,
+              turnover_range: draft.turnover,
+              gstin_protected: draft.gstin,
+              details: draft,
+            });
+    if (result.error) {
+      setError(
+        kind === "brand"
+          ? "Your application may already be submitted. Please check its status below."
+          : "Could not save your profile. Please try again.",
+      );
+      setBusy(false);
+      return;
+    }
+    if (kind === "creator" && file) {
+      const path = `${user.id}/${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
+      const upload = await supabase.storage.from("portfolio").upload(path, file);
+      if (upload.error) {
+        setError("Profile saved, but your file could not be uploaded.");
+        setBusy(false);
+        return;
+      }
+      const { error } = await supabase
+        .from("portfolio_items")
+        .insert({
+          user_id: user.id,
+          storage_path: path,
+          media_type: file.type,
+          title: draft.title || file.name,
+        });
+      if (error) setError("File uploaded; portfolio details could not be saved.");
+    }
+    setBusy(false);
+    setStatus(kind === "brand" ? "pending_admin_review" : "Profile saved");
+    toast.success(kind === "brand" ? "Application submitted for review" : "Creator profile saved");
+  }
+  return (
+    <SiteShell>
+      <main className="container page-main">
+        {!user ? (
+          <section className="auth-wrap">
+            <h1>Make room for your next opportunity.</h1>
+            <p className="mt-4">Join the community as a creator or a brand.</p>
+            <Button asChild>
+              <Link to="/auth" search={{ mode: "signup" }}>
+                Create your account <ArrowRight />
+              </Link>
+            </Button>
+          </section>
+        ) : (
+          <>
+            <div className="page-heading">
+              <h1>Your creative identity.</h1>
+              <p>{user.email}</p>
+            </div>
+            <div className="flex gap-2 mb-7">
+              <Button
+                variant={kind === "creator" ? "default" : "outline"}
+                onClick={() => {
+                  setKind("creator");
+                  setStep(0);
+                }}
+              >
+                Creator
+              </Button>
+              <Button
+                variant={kind === "brand" ? "default" : "outline"}
+                onClick={() => {
+                  setKind("brand");
+                  setStep(0);
+                }}
+              >
+                Brand / agency
+              </Button>
+              <Button asChild variant="ghost">
+                <Link to="/workspace">My projects</Link>
+              </Button>
+            </div>
+            {status && (
+              <div className="notice" role="status">
+                <Check size={16} className="inline mr-2" />
+                {status.replaceAll("_", " ")}
+                {status === "pending_admin_review" && (
+                  <p className="mt-2">
+                    Company approval and official GST verification are pending. No official
+                    clearance has been granted.
+                  </p>
+                )}
+              </div>
+            )}
+            <div className="form-layout">
+              <aside className="steps">
+                {[
+                  "Basics",
+                  kind === "creator" ? "Social & practice" : "Business details",
+                  "Review",
+                ].map((label, i) => (
+                  <Button
+                    key={label}
+                    variant={step === i ? "secondary" : "ghost"}
+                    onClick={() => setStep(i)}
+                  >
+                    {i + 1}. {label}
+                  </Button>
+                ))}
+              </aside>
+              <section className="form-content">
+                <h2>
+                  {step === 0
+                    ? "Tell us about yourself."
+                    : step === 1
+                      ? "Add the details that matter."
+                      : "Review your profile."}
+                </h2>
+                {step === 0 && (
+                  <>
+                    {field(
+                      "name",
+                      kind === "creator" ? "Professional display name" : "Legal company name",
+                    )}
+                    {field(
+                      "headline",
+                      kind === "creator" ? "Professional headline" : "Representative name",
+                    )}
+                    {field("location", kind === "creator" ? "City / country" : "Industry")}
+                    <label className="form-field">
+                      Biography
+                      <textarea
+                        className="field"
+                        rows={4}
+                        value={draft.bio}
+                        onChange={(e) => update("bio", e.target.value)}
+                      />
+                    </label>
+                    {field("website", "Portfolio / company website", "url")}
+                  </>
+                )}
+                {step === 1 &&
+                  (kind === "creator" ? (
+                    <>
+                      <div className="field-pair">
+                        {field("skills", "Skills (comma separated)")}
+                        {field("tools", "Production tools (comma separated)")}
+                      </div>
+                      <div className="field-pair">
+                        {field("instagram", "Instagram URL")}
+                        {field("youtube", "YouTube URL")}
+                      </div>
+                      {field("linkedin", "LinkedIn URL")}
+                      <div className="field-pair">
+                        {field("rate", "Starting project rate (USD)", "number")}
+                        {field("availability", "Availability")}
+                      </div>
+                      <div className="portfolio-upload">
+                        <label className="form-field">
+                          <span className="flex gap-2">
+                            <Upload size={16} /> Portfolio image or video
+                          </span>
+                          <input
+                            type="file"
+                            accept="image/jpeg,image/png,image/webp,video/mp4,video/webm"
+                            onChange={(e) => {
+                              const next = e.target.files?.[0];
+                              if (!next) return;
+                              if (
+                                next.size > 100 * 1024 * 1024 ||
+                                ![
+                                  "image/jpeg",
+                                  "image/png",
+                                  "image/webp",
+                                  "video/mp4",
+                                  "video/webm",
+                                ].includes(next.type)
+                              ) {
+                                setError("Choose a supported image or video under 100 MB.");
+                                return;
+                              }
+                              setFile(next);
+                              setError("");
+                            }}
+                          />
+                        </label>
+                        {preview &&
+                          (file?.type.startsWith("video") ? (
+                            <video src={preview} controls className="upload-preview" />
+                          ) : (
+                            <img
+                              src={preview}
+                              alt="Selected portfolio work"
+                              className="upload-preview"
+                            />
+                          ))}
+                      </div>
+                      {field("title", "Portfolio project title")}
+                    </>
+                  ) : (
+                    <>
+                      <label className="form-field">
+                        Company size
+                        <select
+                          value={draft.companySize}
+                          onChange={(e) => update("companySize", e.target.value)}
+                        >
+                          <option value="">Select company size</option>
+                          {[
+                            "1–10 employees",
+                            "11–50 employees",
+                            "51–200 employees",
+                            "201+ employees",
+                          ].map((x) => (
+                            <option key={x}>{x}</option>
+                          ))}
+                        </select>
+                      </label>
+                      {field("turnover", "Annual turnover range")}
+                      {field("networth", "Estimated net worth range")}
+                      {field("rate", "Campaign budget (USD)", "number")}
+                      {field("gstin", "GSTIN")}
+                      <div className="notice">
+                        GSTIN format is checked only. Official verification remains unavailable.
+                      </div>
+                    </>
+                  ))}
+                {step === 2 && (
+                  <>
+                    <h3>{draft.name || "Your profile"}</h3>
+                    <p className="mt-3 text-muted-foreground">{draft.headline}</p>
+                    <p className="my-5 leading-7">{draft.bio}</p>
+                    <div className="profile-details">
+                      <div>
+                        <small>Skills</small>
+                        {draft.skills || "Not specified"}
+                      </div>
+                      <div>
+                        <small>Tools</small>
+                        {draft.tools || "Not specified"}
+                      </div>
+                      <div>
+                        <small>Portfolio</small>
+                        {file?.name || "No new file selected"}
+                      </div>
+                      <div>
+                        <small>Evidence</small>Self-reported until reviewed
+                      </div>
+                    </div>
+                  </>
+                )}
+                {error && (
+                  <p className="error-text" role="alert">
+                    {error}
+                  </p>
+                )}
+                <div className="form-actions">
+                  <Button
+                    variant="outline"
+                    disabled={step === 0}
+                    onClick={() => setStep((s) => s - 1)}
+                  >
+                    Back
+                  </Button>
+                  {step < 2 ? (
+                    <Button onClick={() => setStep((s) => s + 1)}>
+                      Continue <ArrowRight />
+                    </Button>
+                  ) : (
+                    <Button disabled={busy} onClick={save}>
+                      {busy ? "Saving…" : kind === "brand" ? "Submit for review" : "Save profile"}{" "}
+                      <Check />
+                    </Button>
+                  )}
+                </div>
+              </section>
+            </div>
+          </>
+        )}
+      </main>
+    </SiteShell>
+  );
+}
