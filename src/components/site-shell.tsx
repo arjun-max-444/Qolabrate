@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { Search, ArrowUpRight, LogOut } from "lucide-react";
+import { Search, ArrowUpRight, LogOut, ChevronDown } from "lucide-react";
+import { dashboardFor, type AppRole } from "@/lib/roles";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -8,13 +9,15 @@ import { Toaster, toast } from "sonner";
 import { categories } from "@/lib/marketplace-data";
 const AccountContext = createContext<{
   user: User | null;
+  role: AppRole | null;
   saved: string[];
   toggle: (id: string) => Promise<void>;
-}>({ user: null, saved: [], toggle: async () => {} });
+}>({ user: null, role: null, saved: [], toggle: async () => {} });
 export const useAccount = () => useContext(AccountContext);
 export function AccountProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [saved, setSaved] = useState<string[]>([]);
+  const [role, setRole] = useState<AppRole | null>(null);
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
@@ -26,8 +29,15 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!user) {
       setSaved([]);
+      setRole(null);
       return;
     }
+    supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id)
+      .maybeSingle()
+      .then(({ data }) => setRole((data?.role as AppRole) ?? null));
     supabase
       .from("shortlists")
       .select("creator_id")
@@ -51,14 +61,14 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     toast.success(exists ? "Removed from shortlist" : "Creator saved");
   };
   return (
-    <AccountContext.Provider value={{ user, saved, toggle }}>
+    <AccountContext.Provider value={{ user, role, saved, toggle }}>
       {children}
       <Toaster position="bottom-right" />
     </AccountContext.Provider>
   );
 }
 export function SiteShell({ children }: { children: ReactNode }) {
-  const { user } = useAccount();
+  const { user, role } = useAccount();
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
   return (
@@ -91,12 +101,18 @@ export function SiteShell({ children }: { children: ReactNode }) {
           <Link to="/marketplace" search={{ q: "" }} className="extra-link">
             Explore
           </Link>
-          <Link to="/account" className="seller-link">
-            Become a creator
-          </Link>
+          <details className="seller-link role-menu">
+            <summary>
+              Join as <ChevronDown size={12} className="inline" />
+            </summary>
+            <div className="role-menu-list">
+              <Link to="/for-creators">For Creators</Link>
+              <Link to="/for-brands">For Brands</Link>
+            </div>
+          </details>
           {user ? (
             <>
-              <Link to="/workspace">My projects</Link>
+              <a href={dashboardFor(role)}>Dashboard</a>
               <Button
                 size="icon"
                 variant="ghost"
