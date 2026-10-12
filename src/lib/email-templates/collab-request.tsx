@@ -27,7 +27,7 @@ function CollabRequest({ brand, title, budget, url }: Props) {
 
 export const template = {
   component: CollabRequest,
-  subject: (d: Record<string, any>) => `New collab request${d.brand ? ` from ${d.brand}` : ''}`,
+  subject: (d: Record<string, any>) => `New collab request${d['brand'] ? ` from ${d['brand']}` : ''}`,
   displayName: 'Collab request notification',
   previewData: { brand: 'GlowRoot', title: 'Summer launch reel', budget: '$500–$1,000' },
 } satisfies TemplateEntry

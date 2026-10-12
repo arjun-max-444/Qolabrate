@@ -10,8 +10,8 @@ export const sendWelcomeEmail = createServerFn({ method: "POST" })
     const { supabase, userId, claims } = context;
     const email = (claims as { email?: string }).email;
     if (!email) return { sent: false };
-    const { data: r } = await supabase.from("user_roles").select("role").eq("user_id", userId).maybeSingle();
-    const { data: p } = await supabase.from("profiles").select("full_name").eq("user_id", userId).maybeSingle();
+    const { data: r } = await supabase.from("user_roles").select("role").eq("id", userId).maybeSingle();
+    const { data: p } = await supabase.from("profiles").select("full_name").eq("id", userId).maybeSingle();
     const role = r?.role ?? "creator";
     const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
     try {
@@ -46,7 +46,7 @@ export const sendCollabRequestEmail = createServerFn({ method: "POST" })
       .limit(1)
       .maybeSingle();
     if (!c) return { sent: false };
-    const { data: bp } = await supabase.from("profiles").select("full_name,company_name").eq("user_id", userId).maybeSingle();
+    const { data: bp } = await supabase.from("profiles").select("full_name,company_name").eq("id", userId).maybeSingle();
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: u } = await supabaseAdmin.auth.admin.getUserById(c.creator_id);
     const to = u.user?.email;
