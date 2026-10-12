@@ -21,7 +21,7 @@ export function Reveal({ children, className = "", as: Tag = "section", id }: { 
 }
 
 /** Video that only loads when near the viewport. autoPlay loops; otherwise plays on hover/focus. */
-export function LazyVideo({ src, poster, hover = false, label, className = "" }: { src: string; poster?: string; hover?: boolean; label: string; className?: string }) {
+export function LazyVideo({ src, poster, hover = false, label, className = "" }: { src: string; poster?: string | undefined; hover?: boolean; label: string; className?: string }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [near, setNear] = useState(false);
   useEffect(() => {
