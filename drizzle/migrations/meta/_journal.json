@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1791828611769,
+      "tag": "0000_qolabrate_accounts_and_workspace",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791828798370,
+      "tag": "0001_portfolio_storage_permissions",
+      "breakpoints": true
+    }
+  ]
+}

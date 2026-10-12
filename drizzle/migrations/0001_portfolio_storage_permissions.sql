@@ -1,0 +1,3 @@
+CREATE POLICY portfolio_storage_read ON storage.objects FOR SELECT TO authenticated USING(bucket_id='portfolio' AND (storage.foldername(name))[1]=auth.uid()::text);
+CREATE POLICY portfolio_storage_insert ON storage.objects FOR INSERT TO authenticated WITH CHECK(bucket_id='portfolio' AND (storage.foldername(name))[1]=auth.uid()::text);
+CREATE POLICY portfolio_storage_delete ON storage.objects FOR DELETE TO authenticated USING(bucket_id='portfolio' AND (storage.foldername(name))[1]=auth.uid()::text);

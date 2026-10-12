@@ -10,33 +10,91 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BriefRouteImport } from './routes/brief'
+import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as WorkspaceRouteImport } from './routes/workspace'
+import { Route as CreatorsIdRouteImport } from './routes/creators/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BriefRoute = BriefRouteImport.update({
+  id: '/brief',
+  path: '/brief',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketplaceRoute = MarketplaceRouteImport.update({
+  id: '/marketplace',
+  path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkspaceRoute = WorkspaceRouteImport.update({
+  id: '/workspace',
+  path: '/workspace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreatorsIdRoute = CreatorsIdRouteImport.update({
+  id: '/creators/$id',
+  path: '/creators/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/brief': typeof BriefRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/workspace': typeof WorkspaceRoute
+  '/creators/$id': typeof CreatorsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/brief': typeof BriefRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/workspace': typeof WorkspaceRoute
+  '/creators/$id': typeof CreatorsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/brief': typeof BriefRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/workspace': typeof WorkspaceRoute
+  '/creators/$id': typeof CreatorsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/auth' | '/brief' | '/marketplace' | '/workspace' | '/creators/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/auth' | '/brief' | '/marketplace' | '/workspace' | '/creators/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/brief'
+    | '/marketplace'
+    | '/workspace'
+    | '/creators/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
+  BriefRoute: typeof BriefRoute
+  MarketplaceRoute: typeof MarketplaceRoute
+  WorkspaceRoute: typeof WorkspaceRoute
+  CreatorsIdRoute: typeof CreatorsIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +106,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/brief': {
+      id: '/brief'
+      path: '/brief'
+      fullPath: '/brief'
+      preLoaderRoute: typeof BriefRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marketplace': {
+      id: '/marketplace'
+      path: '/marketplace'
+      fullPath: '/marketplace'
+      preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/workspace': {
+      id: '/workspace'
+      path: '/workspace'
+      fullPath: '/workspace'
+      preLoaderRoute: typeof WorkspaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/creators/$id': {
+      id: '/creators/$id'
+      path: '/creators/$id'
+      fullPath: '/creators/$id'
+      preLoaderRoute: typeof CreatorsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
+  BriefRoute: BriefRoute,
+  MarketplaceRoute: MarketplaceRoute,
+  WorkspaceRoute: WorkspaceRoute,
+  CreatorsIdRoute: CreatorsIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
