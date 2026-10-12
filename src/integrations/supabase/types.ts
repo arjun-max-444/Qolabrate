@@ -909,6 +909,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_business_email: { Args: { _email: string }; Returns: boolean }
       notify: {
         Args: { _body: string; _link: string; _title: string; _user: string }
         Returns: undefined

@@ -64,6 +64,13 @@
       "when": 1791839257191,
       "tag": "0008_matching_directory_and_demo_seed",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1791841415474,
+      "tag": "0009_enforce_business_email_and_initialize_matching",
+      "breakpoints": true
     }
   ]
 }
