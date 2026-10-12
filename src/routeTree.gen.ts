@@ -23,6 +23,7 @@ import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as BrandDashboardRouteImport } from './routes/brand/dashboard'
 import { Route as BrandInboxRouteImport } from './routes/brand/inbox'
+import { Route as BrandProfileRouteImport } from './routes/brand/profile'
 import { Route as CreatorDashboardRouteImport } from './routes/creator/dashboard'
 import { Route as CreatorInboxRouteImport } from './routes/creator/inbox'
 import { Route as CreatorProfileRouteImport } from './routes/creator/profile'
@@ -30,6 +31,10 @@ import { Route as CreatorSocialsRouteImport } from './routes/creator/socials'
 import { Route as CreatorsIdRouteImport } from './routes/creators/$id'
 import { Route as ApiGstValidateFormatRouteImport } from './routes/api/gst/validate-format'
 import { Route as ApiGstVerificationStatusRouteImport } from './routes/api/gst/verification-status'
+import { Route as BrandCampaignsIndexRouteImport } from './routes/brand/campaigns.index'
+import { Route as BrandCampaignsNewRouteImport } from './routes/brand/campaigns.new'
+import { Route as BrandCampaignsIdIndexRouteImport } from './routes/brand/campaigns.$id.index'
+import { Route as BrandCampaignsIdEditRouteImport } from './routes/brand/campaigns.$id.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -101,6 +106,11 @@ const BrandInboxRoute = BrandInboxRouteImport.update({
   path: '/inbox',
   getParentRoute: () => BrandRouteRoute,
 } as any)
+const BrandProfileRoute = BrandProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => BrandRouteRoute,
+} as any)
 const CreatorDashboardRoute = CreatorDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -137,6 +147,26 @@ const ApiGstVerificationStatusRoute =
     path: '/api/gst/verification-status',
     getParentRoute: () => rootRouteImport,
   } as any)
+const BrandCampaignsIndexRoute = BrandCampaignsIndexRouteImport.update({
+  id: '/campaigns/',
+  path: '/campaigns/',
+  getParentRoute: () => BrandRouteRoute,
+} as any)
+const BrandCampaignsNewRoute = BrandCampaignsNewRouteImport.update({
+  id: '/campaigns/new',
+  path: '/campaigns/new',
+  getParentRoute: () => BrandRouteRoute,
+} as any)
+const BrandCampaignsIdIndexRoute = BrandCampaignsIdIndexRouteImport.update({
+  id: '/campaigns/$id/',
+  path: '/campaigns/$id/',
+  getParentRoute: () => BrandRouteRoute,
+} as any)
+const BrandCampaignsIdEditRoute = BrandCampaignsIdEditRouteImport.update({
+  id: '/campaigns/$id/edit',
+  path: '/campaigns/$id/edit',
+  getParentRoute: () => BrandRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -153,6 +183,7 @@ export interface FileRoutesByFullPath {
   '/admin/login': typeof AdminLoginRoute
   '/brand/dashboard': typeof BrandDashboardRoute
   '/brand/inbox': typeof BrandInboxRoute
+  '/brand/profile': typeof BrandProfileRoute
   '/creator/dashboard': typeof CreatorDashboardRoute
   '/creator/inbox': typeof CreatorInboxRoute
   '/creator/profile': typeof CreatorProfileRoute
@@ -160,6 +191,10 @@ export interface FileRoutesByFullPath {
   '/creators/$id': typeof CreatorsIdRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
+  '/brand/campaigns/new': typeof BrandCampaignsNewRoute
+  '/brand/campaigns/': typeof BrandCampaignsIndexRoute
+  '/brand/campaigns/$id/edit': typeof BrandCampaignsIdEditRoute
+  '/brand/campaigns/$id/': typeof BrandCampaignsIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -176,6 +211,7 @@ export interface FileRoutesByTo {
   '/admin/login': typeof AdminLoginRoute
   '/brand/dashboard': typeof BrandDashboardRoute
   '/brand/inbox': typeof BrandInboxRoute
+  '/brand/profile': typeof BrandProfileRoute
   '/creator/dashboard': typeof CreatorDashboardRoute
   '/creator/inbox': typeof CreatorInboxRoute
   '/creator/profile': typeof CreatorProfileRoute
@@ -183,6 +219,10 @@ export interface FileRoutesByTo {
   '/creators/$id': typeof CreatorsIdRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
+  '/brand/campaigns/new': typeof BrandCampaignsNewRoute
+  '/brand/campaigns': typeof BrandCampaignsIndexRoute
+  '/brand/campaigns/$id/edit': typeof BrandCampaignsIdEditRoute
+  '/brand/campaigns/$id': typeof BrandCampaignsIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -200,6 +240,7 @@ export interface FileRoutesById {
   '/admin/login': typeof AdminLoginRoute
   '/brand/dashboard': typeof BrandDashboardRoute
   '/brand/inbox': typeof BrandInboxRoute
+  '/brand/profile': typeof BrandProfileRoute
   '/creator/dashboard': typeof CreatorDashboardRoute
   '/creator/inbox': typeof CreatorInboxRoute
   '/creator/profile': typeof CreatorProfileRoute
@@ -207,6 +248,10 @@ export interface FileRoutesById {
   '/creators/$id': typeof CreatorsIdRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
+  '/brand/campaigns/new': typeof BrandCampaignsNewRoute
+  '/brand/campaigns/': typeof BrandCampaignsIndexRoute
+  '/brand/campaigns/$id/edit': typeof BrandCampaignsIdEditRoute
+  '/brand/campaigns/$id/': typeof BrandCampaignsIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -225,6 +270,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/brand/dashboard'
     | '/brand/inbox'
+    | '/brand/profile'
     | '/creator/dashboard'
     | '/creator/inbox'
     | '/creator/profile'
@@ -232,6 +278,10 @@ export interface FileRouteTypes {
     | '/creators/$id'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
+    | '/brand/campaigns/new'
+    | '/brand/campaigns/'
+    | '/brand/campaigns/$id/edit'
+    | '/brand/campaigns/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -248,6 +298,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/brand/dashboard'
     | '/brand/inbox'
+    | '/brand/profile'
     | '/creator/dashboard'
     | '/creator/inbox'
     | '/creator/profile'
@@ -255,6 +306,10 @@ export interface FileRouteTypes {
     | '/creators/$id'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
+    | '/brand/campaigns/new'
+    | '/brand/campaigns'
+    | '/brand/campaigns/$id/edit'
+    | '/brand/campaigns/$id'
   id:
     | '__root__'
     | '/'
@@ -271,6 +326,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/brand/dashboard'
     | '/brand/inbox'
+    | '/brand/profile'
     | '/creator/dashboard'
     | '/creator/inbox'
     | '/creator/profile'
@@ -278,6 +334,10 @@ export interface FileRouteTypes {
     | '/creators/$id'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
+    | '/brand/campaigns/new'
+    | '/brand/campaigns/'
+    | '/brand/campaigns/$id/edit'
+    | '/brand/campaigns/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -398,6 +458,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BrandInboxRouteImport
       parentRoute: typeof BrandRouteRoute
     }
+    '/brand/profile': {
+      id: '/brand/profile'
+      path: '/profile'
+      fullPath: '/brand/profile'
+      preLoaderRoute: typeof BrandProfileRouteImport
+      parentRoute: typeof BrandRouteRoute
+    }
     '/creator/dashboard': {
       id: '/creator/dashboard'
       path: '/dashboard'
@@ -447,17 +514,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiGstVerificationStatusRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/brand/campaigns/': {
+      id: '/brand/campaigns/'
+      path: '/campaigns'
+      fullPath: '/brand/campaigns/'
+      preLoaderRoute: typeof BrandCampaignsIndexRouteImport
+      parentRoute: typeof BrandRouteRoute
+    }
+    '/brand/campaigns/new': {
+      id: '/brand/campaigns/new'
+      path: '/campaigns/new'
+      fullPath: '/brand/campaigns/new'
+      preLoaderRoute: typeof BrandCampaignsNewRouteImport
+      parentRoute: typeof BrandRouteRoute
+    }
+    '/brand/campaigns/$id/': {
+      id: '/brand/campaigns/$id/'
+      path: '/campaigns/$id'
+      fullPath: '/brand/campaigns/$id/'
+      preLoaderRoute: typeof BrandCampaignsIdIndexRouteImport
+      parentRoute: typeof BrandRouteRoute
+    }
+    '/brand/campaigns/$id/edit': {
+      id: '/brand/campaigns/$id/edit'
+      path: '/campaigns/$id/edit'
+      fullPath: '/brand/campaigns/$id/edit'
+      preLoaderRoute: typeof BrandCampaignsIdEditRouteImport
+      parentRoute: typeof BrandRouteRoute
+    }
   }
 }
 
 interface BrandRouteRouteChildren {
   BrandDashboardRoute: typeof BrandDashboardRoute
   BrandInboxRoute: typeof BrandInboxRoute
+  BrandProfileRoute: typeof BrandProfileRoute
+  BrandCampaignsNewRoute: typeof BrandCampaignsNewRoute
+  BrandCampaignsIndexRoute: typeof BrandCampaignsIndexRoute
+  BrandCampaignsIdEditRoute: typeof BrandCampaignsIdEditRoute
+  BrandCampaignsIdIndexRoute: typeof BrandCampaignsIdIndexRoute
 }
 
 const BrandRouteRouteChildren: BrandRouteRouteChildren = {
   BrandDashboardRoute: BrandDashboardRoute,
   BrandInboxRoute: BrandInboxRoute,
+  BrandProfileRoute: BrandProfileRoute,
+  BrandCampaignsNewRoute: BrandCampaignsNewRoute,
+  BrandCampaignsIndexRoute: BrandCampaignsIndexRoute,
+  BrandCampaignsIdEditRoute: BrandCampaignsIdEditRoute,
+  BrandCampaignsIdIndexRoute: BrandCampaignsIdIndexRoute,
 }
 
 const BrandRouteRouteWithChildren = BrandRouteRoute._addFileChildren(
