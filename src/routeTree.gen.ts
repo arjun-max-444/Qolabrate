@@ -42,6 +42,8 @@ import { Route as BrandCampaignsIndexRouteImport } from './routes/brand/campaign
 import { Route as BrandCampaignsNewRouteImport } from './routes/brand/campaigns.new'
 import { Route as BrandCampaignsIdIndexRouteImport } from './routes/brand/campaigns.$id.index'
 import { Route as BrandCampaignsIdEditRouteImport } from './routes/brand/campaigns.$id.edit'
+import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -209,6 +211,16 @@ const BrandCampaignsIdEditRoute = BrandCampaignsIdEditRouteImport.update({
   path: '/campaigns/$id/edit',
   getParentRoute: () => BrandRouteRoute,
 } as any)
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/lovable/email/auth/preview',
+  path: '/lovable/email/auth/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/lovable/email/auth/webhook',
+  path: '/lovable/email/auth/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -243,6 +255,8 @@ export interface FileRoutesByFullPath {
   '/brand/campaigns/new': typeof BrandCampaignsNewRoute
   '/brand/campaigns/': typeof BrandCampaignsIndexRoute
   '/brand/campaigns/$id/edit': typeof BrandCampaignsIdEditRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/brand/campaigns/$id/': typeof BrandCampaignsIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -278,6 +292,8 @@ export interface FileRoutesByTo {
   '/brand/campaigns/new': typeof BrandCampaignsNewRoute
   '/brand/campaigns': typeof BrandCampaignsIndexRoute
   '/brand/campaigns/$id/edit': typeof BrandCampaignsIdEditRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/brand/campaigns/$id': typeof BrandCampaignsIdIndexRoute
 }
 export interface FileRoutesById {
@@ -314,6 +330,8 @@ export interface FileRoutesById {
   '/brand/campaigns/new': typeof BrandCampaignsNewRoute
   '/brand/campaigns/': typeof BrandCampaignsIndexRoute
   '/brand/campaigns/$id/edit': typeof BrandCampaignsIdEditRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/brand/campaigns/$id/': typeof BrandCampaignsIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -351,6 +369,8 @@ export interface FileRouteTypes {
     | '/brand/campaigns/new'
     | '/brand/campaigns/'
     | '/brand/campaigns/$id/edit'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/brand/campaigns/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -386,6 +406,8 @@ export interface FileRouteTypes {
     | '/brand/campaigns/new'
     | '/brand/campaigns'
     | '/brand/campaigns/$id/edit'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/brand/campaigns/$id'
   id:
     | '__root__'
@@ -421,6 +443,8 @@ export interface FileRouteTypes {
     | '/brand/campaigns/new'
     | '/brand/campaigns/'
     | '/brand/campaigns/$id/edit'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/brand/campaigns/$id/'
   fileRoutesById: FileRoutesById
 }
@@ -447,6 +471,8 @@ export interface RootRouteChildren {
   ProfileIndexRoute: typeof ProfileIndexRoute
   ApiGstValidateFormatRoute: typeof ApiGstValidateFormatRoute
   ApiGstVerificationStatusRoute: typeof ApiGstVerificationStatusRoute
+  LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
+  LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -682,6 +708,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BrandCampaignsIdEditRouteImport
       parentRoute: typeof BrandRouteRoute
     }
+    '/lovable/email/auth/preview': {
+      id: '/lovable/email/auth/preview'
+      path: '/lovable/email/auth/preview'
+      fullPath: '/lovable/email/auth/preview'
+      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/webhook': {
+      id: '/lovable/email/auth/webhook'
+      path: '/lovable/email/auth/webhook'
+      fullPath: '/lovable/email/auth/webhook'
+      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -750,6 +790,8 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileIndexRoute: ProfileIndexRoute,
   ApiGstValidateFormatRoute: ApiGstValidateFormatRoute,
   ApiGstVerificationStatusRoute: ApiGstVerificationStatusRoute,
+  LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
+  LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
