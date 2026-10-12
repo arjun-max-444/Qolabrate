@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { pageHead } from "@/lib/seo";
 import { dashboardFor, fetchRole } from "@/lib/roles";
+import { isBusinessEmail } from "@/lib/business-email";
 export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>): { mode: string; role?: "creator" | "brand" | undefined } => ({
     mode: typeof s["mode"] === "string" ? s["mode"] : "signin",
@@ -21,7 +22,7 @@ export const Route = createFileRoute("/auth")({
 function Auth() {
   const { mode: initial, role: initialRole } = Route.useSearch();
   const [mode, setMode] = useState(initial);
-  const [role, setRole] = useState<"creator" | "brand" | undefined>(initialRole);
+  const [role, setRole] = useState<"creator" | "brand" | undefined>(initialRole ?? (initial === "signin" ? "creator" : undefined));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -33,10 +34,18 @@ function Auth() {
   useEffect(() => {
     if (!user || mode === "setup") return;
     (async () => {
+      const { role: existingRole } = await fetchRole();
+      if (existingRole === "brand" && (user.app_metadata.provider !== "email" || !isBusinessEmail(user.email ?? ""))) {
+        await supabase.auth.signOut();
+        setRole("brand");
+        setError("Brands and agencies require an official business email and password. Personal-email accounts can't access the brand area.");
+        return;
+      }
       const pending = sessionStorage.getItem("qolabrate_signup_role");
       if (pending === "creator" || pending === "brand") {
         sessionStorage.removeItem("qolabrate_signup_role");
-        await supabase.rpc("choose_signup_role", { _role: pending });
+        const { error } = await supabase.rpc("choose_signup_role", { _role: pending });
+        if (error) { setError(error.message); return; }
       }
       const { role: r } = await fetchRole();
       navigate({ href: dashboardFor(r) });
@@ -50,6 +59,11 @@ function Auth() {
   }, []);
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    setNotice("");
+    if (role === "brand" && mode !== "setup" && !isBusinessEmail(email)) {
+      setError("Use your official company email. Personal or temporary email addresses aren't accepted for brands and agencies.");
+      return;
+    }
     setBusy(true);
     setError("");
     let err: string | undefined;
@@ -59,7 +73,7 @@ function Auth() {
         password,
         options: {
           data: { full_name: name, signup_role: role ?? "creator" },
-          emailRedirectTo: window.location.origin + "/account",
+          emailRedirectTo: window.location.origin,
         },
       });
       err = error?.message;
@@ -95,6 +109,12 @@ function Auth() {
                   ? "Choose your password."
                   : "Your next project starts here."}
           </h1>
+          {mode === "signin" && (
+            <div className="tab-row mb-4" aria-label="Account type">
+              <Button type="button" variant={role === "creator" ? "default" : "outline"} aria-pressed={role === "creator"} onClick={() => { setRole("creator"); setError(""); }}>Creator</Button>
+              <Button type="button" variant={role === "brand" ? "default" : "outline"} aria-pressed={role === "brand"} onClick={() => { setRole("brand"); setError(""); }}>Brand / Agency</Button>
+            </div>
+          )}
           <p>
             {mode === "recover"
               ? "Verify your email to set a new password. Existing account imports are available after your data is supplied."
@@ -119,7 +139,7 @@ function Auth() {
               <button type="button" className="section-link" onClick={() => setRole(undefined)}>change</button>
             </p>
           )}
-          {!["recover", "setup"].includes(mode) && (
+          {!["recover", "setup"].includes(mode) && role !== "brand" && (
             <>
               <Button
                 variant="outline"
@@ -129,7 +149,14 @@ function Auth() {
                   const result = await lovable.auth.signInWithOAuth("google", {
                     redirect_uri: window.location.origin + "/auth",
                   });
-                  if (result.error) setError(result.error.message);
+                  if (result.error) { setError(result.error.message); return; }
+                  if (result.redirected) return;
+                  const { role: signedInRole } = await fetchRole();
+                  if (signedInRole === "brand") {
+                    await supabase.auth.signOut();
+                    setRole("brand");
+                    setError("Brands and agencies must sign in with their official email and password.");
+                  }
                 }}
               >
                 Continue with Google
@@ -152,7 +179,7 @@ function Auth() {
             )}
             {mode !== "setup" && (
               <label className="form-field">
-                Email address
+                {role === "brand" ? "Official company email address" : "Email address"}
                 <input
                   className="field"
                   type="email"
