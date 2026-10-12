@@ -187,6 +187,7 @@ export type Database = {
           company_size: string
           created_at: string
           details: Json
+          email_check: string
           gst_format_status: string
           gst_verification_status: string
           gstin_protected: string
@@ -210,6 +211,7 @@ export type Database = {
           company_size?: string
           created_at?: string
           details?: Json
+          email_check?: string
           gst_format_status?: string
           gst_verification_status?: string
           gstin_protected?: string
@@ -233,6 +235,7 @@ export type Database = {
           company_size?: string
           created_at?: string
           details?: Json
+          email_check?: string
           gst_format_status?: string
           gst_verification_status?: string
           gstin_protected?: string
@@ -747,6 +750,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      brand_badges: {
+        Args: { _ids: string[] }
+        Returns: {
+          id: string
+          verified: boolean
+        }[]
+      }
       choose_signup_role: {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: Database["public"]["Enums"]["app_role"]

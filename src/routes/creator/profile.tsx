@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { categories } from "@/lib/marketplace-data";
 import { pageHead } from "@/lib/seo";
+import { clampCount, normalizeHandle, profileUrl } from "@/lib/social";
 import type { Json } from "@/integrations/supabase/types";
 
 export const Route = createFileRoute("/creator/profile")({
@@ -18,6 +19,7 @@ const tags = (s: string) => s.split(",").map((x) => x.trim()).filter(Boolean).sl
 function CreatorProfile() {
   const { user } = useAccount();
   const [f, setF] = useState({ name: "", headline: "", bio: "", skills: "", tools: "", languages: "", location: "", rate: "", currency: "INR", whatsapp: "", specialization: "" });
+  const [links, setLinks] = useState({ instagram: "", youtube: "" });
   const [cats, setCats] = useState<string[]>([]);
   const [exists, setExists] = useState(false);
   const [items, setItems] = useState<{ id: string; title: string; url: string; media_type: string }[]>([]);
@@ -47,6 +49,8 @@ function CreatorProfile() {
         skills: arr(cp?.skills), tools: arr(cp?.ai_tools), languages: arr(d["languages"]), location: cp?.location ?? "",
         rate: String(d["rate"] ?? ""), currency: String(d["currency"] ?? "INR"), specialization: cp?.specialization ?? "",
       });
+      const { data: soc } = await supabase.from("creator_social_accounts").select("platform,profile_url").eq("user_id", user.id);
+      setLinks({ instagram: soc?.find((x) => x.platform === "instagram")?.profile_url ?? "", youtube: soc?.find((x) => x.platform === "youtube")?.profile_url ?? "" });
       setCats(Array.isArray(d["categories"]) ? (d["categories"] as string[]) : []);
       await loadItems(user.id);
       setLoading(false);
@@ -56,7 +60,20 @@ function CreatorProfile() {
   async function save(e: React.FormEvent) {
     e.preventDefault();
     if (!user) return;
+    const socialRows = [];
+    for (const platform of ["instagram", "youtube"] as const) {
+      const raw = links[platform].trim();
+      if (!raw) continue;
+      const host = platform === "instagram" ? /^(https?:\/\/)?(www\.)?instagram\.com\//i : /^(https?:\/\/)?(www\.|m\.)?youtube\.com\//i;
+      const h = host.test(raw) ? normalizeHandle(platform, raw) : null;
+      if (!h) { toast.error(`Enter your official ${platform === "instagram" ? "instagram.com" : "youtube.com"} profile link`); return; }
+      socialRows.push({ user_id: user.id, platform, handle: h, profile_url: profileUrl(platform, h) });
+    }
     setBusy(true);
+    for (const r of socialRows) {
+      const { data: ex } = await supabase.from("creator_social_accounts").select("id,follower_count").eq("user_id", user.id).eq("platform", r.platform).maybeSingle();
+      await supabase.from("creator_social_accounts").upsert({ ...r, follower_count: clampCount(ex?.follower_count ?? 0) }, { onConflict: "user_id,platform" });
+    }
     const filled = [f.name, f.headline, f.bio, f.skills, f.location, f.rate, cats.length ? "x" : "", f.languages, items.length ? "x" : ""].filter(Boolean).length;
     const row = {
       specialization: f.specialization || cats[0] || "",
@@ -111,6 +128,9 @@ function CreatorProfile() {
             </div>
             <label className="form-field">Languages (comma separated)<input className="field" value={f.languages} onChange={set("languages")} /></label>
             <label className="form-field">Location<input className="field" value={f.location} onChange={set("location")} /></label>
+            <label className="form-field">Instagram profile link<input className="field" type="url" placeholder="https://www.instagram.com/yourhandle" value={links.instagram} onChange={(e) => setLinks((l) => ({ ...l, instagram: e.target.value }))} /></label>
+            <label className="form-field">YouTube channel link<input className="field" type="url" placeholder="https://www.youtube.com/@yourchannel" value={links.youtube} onChange={(e) => setLinks((l) => ({ ...l, youtube: e.target.value }))} /></label>
+            <small className="text-muted-foreground">Only official instagram.com and youtube.com links are accepted. Add follower counts on the Social accounts page.</small>
             <label className="form-field">WhatsApp (optional, shared only after you accept a deal)<input className="field" type="tel" value={f.whatsapp} onChange={set("whatsapp")} /></label>
             <Button type="submit" disabled={busy}>{busy ? "Saving…" : "Save profile"}</Button>
           </form>

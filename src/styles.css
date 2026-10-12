@@ -1043,3 +1043,6 @@ button.entry-card:hover { border-color: var(--primary); }
 .tab-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .bell-dot { position: absolute; top: -6px; right: -8px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 999px; font-size: 10px; line-height: 16px; text-align: center; background: var(--destructive); color: var(--destructive-foreground, var(--background)); }
 a.entry-card:hover { border-color: var(--primary); }
+.member-nav { border-bottom: 1px solid var(--border); background: var(--muted); }
+.member-nav .container { display: flex; gap: 1.25rem; overflow-x: auto; padding-top: 0.6rem; padding-bottom: 0.6rem; font-size: 0.875rem; font-weight: 600; white-space: nowrap; }
+.member-nav a:hover { color: var(--primary); }

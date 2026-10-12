@@ -50,6 +50,13 @@
       "when": 1791835879632,
       "tag": "0006_connect_column_grants",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1791837330747,
+      "tag": "0007_brand_email_check",
+      "breakpoints": true
     }
   ]
 }
