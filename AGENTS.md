@@ -12,3 +12,5 @@
 - Keep content pages in TanStack file routes, shared account state in AccountProvider, and pure marketplace examples and scoring in browser-safe library modules; this preserves deep links and SSR safety.
 - Persist private briefs, shortlists and account details in Cloud under owner RLS, and keep privileged roles in user_roles; never restore the source's client-selected admin access.
 - Use semantic global CSS tokens and shared Button controls for the marketplace redesign so presentation stays consistent.
+- Initialize matching directory rows in the account lifecycle and rank all candidates, including low-overlap discovery suggestions, so new accounts never depend on a second onboarding save.
+- Enforce brand business-email and email-provider requirements in account lifecycle functions as well as the sign-in UI, so hidden controls cannot bypass account creation rules.

@@ -39,7 +39,6 @@ export function suggestBrandsForCreator(c: Creator, brands: Brand[], limit = 8) 
   return brands
     .filter((b) => !c.user_id || b.user_id !== c.user_id)
     .map((b) => ({ brand: b, score: matchScore(c, b), reasons: reasons(c, b) }))
-    .filter((x) => x.score >= 25)
     .sort((a, b) => b.score - a.score)
     .slice(0, limit);
 }
@@ -47,7 +46,6 @@ export function suggestCreatorsForBrand(b: Brand, creators: Creator[], limit = 8
   return creators
     .filter((c) => !b.user_id || c.user_id !== b.user_id)
     .map((c) => ({ creator: c, score: matchScore(c, b), reasons: reasons(c, b) }))
-    .filter((x) => x.score >= 25)
     .sort((a, b) => b.score - a.score)
     .slice(0, limit);
 }

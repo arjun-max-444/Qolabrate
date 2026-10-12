@@ -128,16 +128,16 @@ export default function SuggestionsSidebar({ role }: { role: "creator" | "brand"
               <div className="suggestion-top">
                 {i.avatar ? <img src={i.avatar} alt="" className="suggestion-avatar" loading="lazy" /> : <span className="suggestion-avatar" />}
                 <div className="min-w-0 flex-1">
-                  <p className="suggestion-name">{i.name}{myRole === "admin" && i.demo && <span className="demo-badge">is_demo</span>}</p>
+                  <p className="suggestion-name">{i.name}{i.demo && <span className="demo-badge">Sample profile</span>}</p>
                   <p className="suggestion-sub">{i.sub}</p>
                 </div>
                 <strong className="suggestion-score">{i.score}%</strong>
               </div>
               {i.reasons.length > 0 && <p className="suggestion-sub">{i.reasons.join(" · ")}</p>}
               <div className="suggestion-actions">
-                <Button size="sm" variant="outline" onClick={() => navigate({ href: role === "creator" ? "/creator/inbox" : "/brand/inbox" })}>Message</Button>
-                <Button size="sm" disabled={sent.includes(i.id)} onClick={() => request(i.id)}>
-                  {sent.includes(i.id) ? "Sent" : role === "creator" ? "Request collab" : "Invite"}
+                <Button size="sm" variant="outline" onClick={() => navigate({ to: "/marketplace", search: { q: i.name } })}>Explore</Button>
+                <Button size="sm" disabled={Boolean(i.demo) || sent.includes(i.id)} onClick={() => request(i.id)}>
+                  {i.demo ? "Sample" : sent.includes(i.id) ? "Sent" : role === "creator" ? "Request collab" : "Invite"}
                 </Button>
               </div>
             </div>
