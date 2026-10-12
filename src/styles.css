@@ -1205,5 +1205,5 @@ a.entry-card:hover { border-color: var(--primary); }
   .cine-marquee { animation: none; flex-wrap: wrap; width: auto; justify-content: center; }
 }
 @media (max-width: 640px) { .cine-search input { flex: 1 1 calc(100% - 2rem); } }
-.cine { --primary: oklch(0.58 0.22 292); }
-.cine-display em, .cine h2 em, .cine-accent, .cine-link, .cine-step-n { color: oklch(0.74 0.16 292); }
+.cine { --primary: oklch(0.58 0.22 292); --primary-ink: oklch(0.74 0.16 292); }
+.cine-display em, .cine h2 em, .cine-accent, .cine-link, .cine-step-n { color: var(--primary-ink); }
