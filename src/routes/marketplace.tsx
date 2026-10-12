@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/compone
 import { creators } from "@/lib/marketplace-data";
 import { pageHead } from "@/lib/seo";
 import { LiveCreators } from "@/components/live-creators";
+import { DirectoryCreators } from "@/components/demo-directory";
 export const Route = createFileRoute("/marketplace")({
   validateSearch: (s: Record<string, unknown>) => ({ q: typeof s["q"] === "string" ? s["q"] : "" }),
   head: () =>
@@ -141,6 +142,7 @@ function Marketplace() {
           </div>
         </div>
         <LiveCreators query={query} />
+        <DirectoryCreators query={query} />
         {filtered.length ? (
           <div className="service-grid">
             {filtered.map((c) => (

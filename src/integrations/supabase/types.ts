@@ -267,6 +267,57 @@ export type Database = {
           },
         ]
       }
+      brands: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          budget: number | null
+          created_at: string | null
+          id: string
+          is_demo: boolean
+          languages: string[]
+          location: string
+          max_followers: number
+          min_followers: number
+          name: string
+          niches: string[]
+          platforms: string[]
+          user_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          budget?: number | null
+          created_at?: string | null
+          id?: string
+          is_demo?: boolean
+          languages?: string[]
+          location?: string
+          max_followers?: number
+          min_followers?: number
+          name?: string
+          niches?: string[]
+          platforms?: string[]
+          user_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          budget?: number | null
+          created_at?: string | null
+          id?: string
+          is_demo?: boolean
+          languages?: string[]
+          location?: string
+          max_followers?: number
+          min_followers?: number
+          name?: string
+          niches?: string[]
+          platforms?: string[]
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       campaigns: {
         Row: {
           brand_id: string
@@ -325,6 +376,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      collab_requests: {
+        Row: {
+          created_at: string | null
+          from_user: string
+          id: string
+          message: string
+          status: string
+          target_id: string
+          target_kind: string
+        }
+        Insert: {
+          created_at?: string | null
+          from_user: string
+          id?: string
+          message?: string
+          status?: string
+          target_id: string
+          target_kind: string
+        }
+        Update: {
+          created_at?: string | null
+          from_user?: string
+          id?: string
+          message?: string
+          status?: string
+          target_id?: string
+          target_kind?: string
+        }
+        Relationships: []
       }
       creator_profiles: {
         Row: {
@@ -416,6 +497,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      creators: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          engagement_rate: number
+          followers: number
+          handle: string | null
+          id: string
+          is_demo: boolean
+          languages: string[]
+          location: string
+          name: string
+          niches: string[]
+          platforms: string[]
+          user_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          engagement_rate?: number
+          followers?: number
+          handle?: string | null
+          id?: string
+          is_demo?: boolean
+          languages?: string[]
+          location?: string
+          name?: string
+          niches?: string[]
+          platforms?: string[]
+          user_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          engagement_rate?: number
+          followers?: number
+          handle?: string | null
+          id?: string
+          is_demo?: boolean
+          languages?: string[]
+          location?: string
+          name?: string
+          niches?: string[]
+          platforms?: string[]
+          user_id?: string | null
+        }
+        Relationships: []
       }
       legacy_identities: {
         Row: {

@@ -8,6 +8,7 @@ export const Route = createFileRoute("/creator/dashboard")({
   head: () => pageHead("Creator dashboard", "Track offers, applications and connected platforms."),
   component: () => (
     <RoleDashboard
+      role="creator"
       title="Creator dashboard"
       intro="Your profile, offers and applications at a glance."
       load={async (uid) => {
