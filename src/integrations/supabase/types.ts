@@ -191,6 +191,7 @@ export type Database = {
           gst_verification_status: string
           gstin_protected: string
           industry: string
+          is_agency: boolean
           logo_url: string | null
           rejection_reason: string | null
           representative_name: string
@@ -213,6 +214,7 @@ export type Database = {
           gst_verification_status?: string
           gstin_protected?: string
           industry?: string
+          is_agency?: boolean
           logo_url?: string | null
           rejection_reason?: string | null
           representative_name?: string
@@ -235,6 +237,7 @@ export type Database = {
           gst_verification_status?: string
           gstin_protected?: string
           industry?: string
+          is_agency?: boolean
           logo_url?: string | null
           rejection_reason?: string | null
           representative_name?: string
@@ -437,6 +440,7 @@ export type Database = {
           body: string
           created_at: string | null
           id: string
+          link: string
           read_at: string | null
           title: string
           user_id: string | null
@@ -445,6 +449,7 @@ export type Database = {
           body: string
           created_at?: string | null
           id?: string
+          link?: string
           read_at?: string | null
           title: string
           user_id?: string | null
@@ -453,6 +458,7 @@ export type Database = {
           body?: string
           created_at?: string | null
           id?: string
+          link?: string
           read_at?: string | null
           title?: string
           user_id?: string | null
@@ -568,6 +574,7 @@ export type Database = {
           email: string
           full_name: string
           id: string
+          whatsapp: string
         }
         Insert: {
           account_status?: string
@@ -576,6 +583,7 @@ export type Database = {
           email?: string
           full_name?: string
           id: string
+          whatsapp?: string
         }
         Update: {
           account_status?: string
@@ -584,6 +592,7 @@ export type Database = {
           email?: string
           full_name?: string
           id?: string
+          whatsapp?: string
         }
         Relationships: []
       }
@@ -742,12 +751,51 @@ export type Database = {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: Database["public"]["Enums"]["app_role"]
       }
+      deal_contacts: {
+        Args: { _id: string; _kind: string }
+        Returns: {
+          brand_email: string
+          brand_whatsapp: string
+          creator_email: string
+          creator_whatsapp: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      notify: {
+        Args: { _body: string; _link: string; _title: string; _user: string }
+        Returns: undefined
+      }
+      party_names: {
+        Args: { _ids: string[] }
+        Returns: {
+          id: string
+          name: string
+        }[]
+      }
+      public_creators: {
+        Args: { _id?: string }
+        Returns: {
+          bio: string
+          categories: Json
+          currency: string
+          full_name: string
+          headline: string
+          instagram: Json
+          languages: Json
+          location: string
+          rate: number
+          skills: Json
+          specialization: string
+          total_reach: number
+          user_id: string
+          youtube: Json
+        }[]
       }
     }
     Enums: {
