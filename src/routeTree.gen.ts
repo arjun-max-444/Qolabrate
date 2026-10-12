@@ -10,15 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AccountRouteImport } from './routes/account'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BriefRouteImport } from './routes/brief'
+import { Route as HealthRouteImport } from './routes/health'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as WorkspaceRouteImport } from './routes/workspace'
+import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as CreatorsIdRouteImport } from './routes/creators/$id'
+import { Route as ApiGstValidateFormatRouteImport } from './routes/api/gst/validate-format'
+import { Route as ApiGstVerificationStatusRouteImport } from './routes/api/gst/verification-status'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountRoute = AccountRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -31,6 +41,11 @@ const BriefRoute = BriefRouteImport.update({
   path: '/brief',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HealthRoute = HealthRouteImport.update({
+  id: '/health',
+  path: '/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MarketplaceRoute = MarketplaceRouteImport.update({
   id: '/marketplace',
   path: '/marketplace',
@@ -41,60 +56,122 @@ const WorkspaceRoute = WorkspaceRouteImport.update({
   path: '/workspace',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CreatorsIdRoute = CreatorsIdRouteImport.update({
   id: '/creators/$id',
   path: '/creators/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiGstValidateFormatRoute = ApiGstValidateFormatRouteImport.update({
+  id: '/api/gst/validate-format',
+  path: '/api/gst/validate-format',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiGstVerificationStatusRoute =
+  ApiGstVerificationStatusRouteImport.update({
+    id: '/api/gst/verification-status',
+    path: '/api/gst/verification-status',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/brief': typeof BriefRoute
+  '/health': typeof HealthRoute
   '/marketplace': typeof MarketplaceRoute
   '/workspace': typeof WorkspaceRoute
+  '/admin/login': typeof AdminLoginRoute
   '/creators/$id': typeof CreatorsIdRoute
+  '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
+  '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/brief': typeof BriefRoute
+  '/health': typeof HealthRoute
   '/marketplace': typeof MarketplaceRoute
   '/workspace': typeof WorkspaceRoute
+  '/admin/login': typeof AdminLoginRoute
   '/creators/$id': typeof CreatorsIdRoute
+  '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
+  '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/brief': typeof BriefRoute
+  '/health': typeof HealthRoute
   '/marketplace': typeof MarketplaceRoute
   '/workspace': typeof WorkspaceRoute
+  '/admin/login': typeof AdminLoginRoute
   '/creators/$id': typeof CreatorsIdRoute
+  '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
+  '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/brief' | '/marketplace' | '/workspace' | '/creators/$id'
+    | '/'
+    | '/account'
+    | '/auth'
+    | '/brief'
+    | '/health'
+    | '/marketplace'
+    | '/workspace'
+    | '/admin/login'
+    | '/creators/$id'
+    | '/api/gst/validate-format'
+    | '/api/gst/verification-status'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/brief' | '/marketplace' | '/workspace' | '/creators/$id'
+  to:
+    | '/'
+    | '/account'
+    | '/auth'
+    | '/brief'
+    | '/health'
+    | '/marketplace'
+    | '/workspace'
+    | '/admin/login'
+    | '/creators/$id'
+    | '/api/gst/validate-format'
+    | '/api/gst/verification-status'
   id:
     | '__root__'
     | '/'
+    | '/account'
     | '/auth'
     | '/brief'
+    | '/health'
     | '/marketplace'
     | '/workspace'
+    | '/admin/login'
     | '/creators/$id'
+    | '/api/gst/validate-format'
+    | '/api/gst/verification-status'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountRoute: typeof AccountRoute
   AuthRoute: typeof AuthRoute
   BriefRoute: typeof BriefRoute
+  HealthRoute: typeof HealthRoute
   MarketplaceRoute: typeof MarketplaceRoute
   WorkspaceRoute: typeof WorkspaceRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   CreatorsIdRoute: typeof CreatorsIdRoute
+  ApiGstValidateFormatRoute: typeof ApiGstValidateFormatRoute
+  ApiGstVerificationStatusRoute: typeof ApiGstVerificationStatusRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -104,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -120,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BriefRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/health': {
+      id: '/health'
+      path: '/health'
+      fullPath: '/health'
+      preLoaderRoute: typeof HealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/marketplace': {
       id: '/marketplace'
       path: '/marketplace'
@@ -134,6 +225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspaceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/creators/$id': {
       id: '/creators/$id'
       path: '/creators/$id'
@@ -141,16 +239,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreatorsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/gst/validate-format': {
+      id: '/api/gst/validate-format'
+      path: '/api/gst/validate-format'
+      fullPath: '/api/gst/validate-format'
+      preLoaderRoute: typeof ApiGstValidateFormatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/gst/verification-status': {
+      id: '/api/gst/verification-status'
+      path: '/api/gst/verification-status'
+      fullPath: '/api/gst/verification-status'
+      preLoaderRoute: typeof ApiGstVerificationStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountRoute: AccountRoute,
   AuthRoute: AuthRoute,
   BriefRoute: BriefRoute,
+  HealthRoute: HealthRoute,
   MarketplaceRoute: MarketplaceRoute,
   WorkspaceRoute: WorkspaceRoute,
+  AdminLoginRoute: AdminLoginRoute,
   CreatorsIdRoute: CreatorsIdRoute,
+  ApiGstValidateFormatRoute: ApiGstValidateFormatRoute,
+  ApiGstVerificationStatusRoute: ApiGstVerificationStatusRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
