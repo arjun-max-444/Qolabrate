@@ -1034,3 +1034,4 @@ button.entry-card:hover { border-color: var(--primary); }
 .entry-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
 .role-chooser { display: grid; gap: 0.75rem; margin-top: 1.5rem; }
 .skeleton-line { display: block; height: 2.5rem; border-radius: 6px; background: var(--muted); animation: pulse 1.5s ease-in-out infinite; }
+.entry-grid.three, .entry-actions { margin-bottom: 4rem; }
