@@ -1,16 +1,82 @@
 {
   "source": "code-archive",
   "capabilities": [
-    {"capability":"code and UI","source":"React Vite demo","outcome":"migrate to TanStack and redesign as QOLABRATE","status":"in_progress","next_action":"Implement and verify marketplace, briefs, profiles and account screens"},
-    {"capability":"schema","source":"10 source tables","outcome":"migrate with protected roles and explicit grants","status":"in_progress","next_action":"Apply Cloud schema"},
-    {"capability":"records","source":"no export; bundled fictional creators and briefs","outcome":"migrate bundled examples; existing records pending","status":"pending","next_action":"Request CSV or JSON table exports"},
-    {"capability":"auth identities","source":"email OTP; no user export","outcome":"migrate to Cloud verified email and password setup","status":"pending","next_action":"Request original user IDs, emails and profiles"},
-    {"capability":"authorization","source":"demo client-selected roles and insecure profile role schema","outcome":"replace with server-controlled separate role table and owner RLS","status":"in_progress","next_action":"Verify owner access boundaries"},
-    {"capability":"uploaded file bytes","source":"8 bundled images; local upload previews","outcome":"externalize bundled assets and use Cloud storage for account portfolio","status":"in_progress","next_action":"Upload bundled assets"},
-    {"capability":"external providers and secrets","source":"no payment, email, AI or GST provider integrated","outcome":"preserve deterministic matching and format validation; no official GST verification claimed","status":"not_applicable","next_action":null},
-    {"capability":"public endpoints","source":"health and GST format/status endpoints","outcome":"preserve original HTTP paths","status":"in_progress","next_action":"Create TanStack handlers"},
-    {"capability":"callbacks webhooks schedules","source":"none detected","outcome":"no external callers detected beyond utility API","status":"not_applicable","next_action":null},
-    {"capability":"cutover","source":"uploaded archive","outcome":"preview first; publication not requested","status":"pending","next_action":"User can publish after review"},
-    {"capability":"verification","source":"marketplace and brief demo flows","outcome":"verify public experience and Cloud writes","status":"in_progress","next_action":"Browser and selective tests"}
+    {
+      "capability": "code and UI",
+      "source": "React Vite demo",
+      "outcome": "migrate to TanStack and redesign as QOLABRATE",
+      "status": "implemented",
+      "next_action": "Public search, profile and brief flow verified; account write verification waits for a signed-up user"
+    },
+    {
+      "capability": "schema",
+      "source": "10 source tables",
+      "outcome": "migrate with protected roles and explicit grants",
+      "status": "implemented",
+      "next_action": "Source schema recreated securely in Cloud; five tests and database security review passed"
+    },
+    {
+      "capability": "records",
+      "source": "no export; bundled fictional creators and briefs",
+      "outcome": "migrate bundled examples; existing records pending",
+      "status": "pending",
+      "next_action": "Request CSV or JSON table exports"
+    },
+    {
+      "capability": "auth identities",
+      "source": "email OTP; no user export",
+      "outcome": "migrate to Cloud verified email and password setup",
+      "status": "pending",
+      "next_action": "Request original user IDs, emails and profiles"
+    },
+    {
+      "capability": "authorization",
+      "source": "demo client-selected roles and insecure profile role schema",
+      "outcome": "replace with server-controlled separate role table and owner RLS",
+      "status": "pending_verification",
+      "next_action": "Owner RLS and separate server-controlled roles implemented; verify two signed-in accounts after signup"
+    },
+    {
+      "capability": "uploaded file bytes",
+      "source": "8 bundled images; local upload previews",
+      "outcome": "externalize bundled assets and use Cloud storage for account portfolio",
+      "status": "implemented",
+      "next_action": "All eight bundled photos loaded; signed-in portfolio upload verification pending"
+    },
+    {
+      "capability": "external providers and secrets",
+      "source": "no payment, email, AI or GST provider integrated",
+      "outcome": "preserve deterministic matching and format validation; no official GST verification claimed",
+      "status": "not_applicable",
+      "next_action": null
+    },
+    {
+      "capability": "public endpoints",
+      "source": "health and GST format/status endpoints",
+      "outcome": "preserve original HTTP paths",
+      "status": "verified",
+      "next_action": null
+    },
+    {
+      "capability": "callbacks webhooks schedules",
+      "source": "none detected",
+      "outcome": "no external callers detected beyond utility API",
+      "status": "not_applicable",
+      "next_action": null
+    },
+    {
+      "capability": "cutover",
+      "source": "uploaded archive",
+      "outcome": "preview first; publication not requested",
+      "status": "pending",
+      "next_action": "User can publish after review"
+    },
+    {
+      "capability": "verification",
+      "source": "marketplace and brief demo flows",
+      "outcome": "verify public experience and Cloud writes",
+      "status": "pending",
+      "next_action": "Public browser flow, phone layout, five tests and build verified; sign up to test Cloud CRUD and uploads"
+    }
   ]
 }
