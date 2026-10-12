@@ -143,6 +143,18 @@ export function SiteShell({ children }: { children: ReactNode }) {
           )}
         </nav>
       </header>
+      {user && role && role !== "admin" && (
+        <nav className="member-nav" aria-label="Your account">
+          <div className="container">
+            {(role === "brand"
+              ? [["/brand/dashboard", "Dashboard"], ["/brand/profile", "Brand profile"], ["/brand/campaigns", "Campaigns"], ["/brand/campaigns/new", "New campaign"], ["/brand/inbox", "Inbox"], ["/marketplace", "Find creators"]]
+              : [["/creator/dashboard", "Dashboard"], ["/creator/profile", "My profile"], ["/creator/socials", "Social accounts"], ["/campaigns", "Campaigns"], ["/creator/inbox", "Inbox"]]
+            ).map(([href, label]) => (
+              <a key={href} href={href}>{label}</a>
+            ))}
+          </div>
+        </nav>
+      )}
       <nav className="category-nav">
         <div className="container">
           {categories.map((c) => (

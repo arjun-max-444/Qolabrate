@@ -19,6 +19,7 @@ function BrandProfile() {
   const [logo, setLogo] = useState("");
   const [logoPath, setLogoPath] = useState<string | null>(null);
   const [exists, setExists] = useState(false);
+  const [check, setCheck] = useState("unchecked");
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setF((d) => ({ ...d, [k]: e.target.value }));
@@ -34,6 +35,7 @@ function BrandProfile() {
         setF({ company_name: b.company_name, website: b.website, industry: b.industry, about: b.about, whatsapp: p?.whatsapp ?? "" });
         setAgency(b.is_agency);
         setLogoPath(b.logo_url);
+        setCheck(b.email_check);
         if (b.logo_url) setLogo((await supabase.storage.from("portfolio").createSignedUrl(b.logo_url, 3600)).data?.signedUrl ?? "");
       } else setF((d) => ({ ...d, whatsapp: p?.whatsapp ?? "" }));
       setLoading(false);
@@ -54,6 +56,13 @@ function BrandProfile() {
     if (!user) return;
     let website = f.website.trim();
     if (website && !/^https?:\/\//.test(website)) website = `https://${website}`;
+    try {
+      const u = new URL(website);
+      if (!/\.[a-z]{2,}$/i.test(u.hostname) || /(instagram|facebook|youtube|linkedin|linktr)\./i.test(u.hostname)) throw new Error();
+    } catch {
+      toast.error("Enter your official company website (e.g. https://yourbrand.com)");
+      return;
+    }
     const row = { company_name: f.company_name.slice(0, 120), website: website.slice(0, 200), industry: f.industry, about: f.about.slice(0, 2000), is_agency: agency, logo_url: logoPath };
     setBusy(true);
     const [r1, r2] = await Promise.all([
@@ -63,6 +72,8 @@ function BrandProfile() {
     setBusy(false);
     if (r1.error || r2.error) { toast.error("Could not save profile"); return; }
     setExists(true);
+    const { data: fresh } = await supabase.from("brand_profiles").select("email_check").eq("user_id", user.id).single();
+    if (fresh) setCheck(fresh.email_check);
     toast.success("Profile saved");
   }
 
@@ -73,7 +84,8 @@ function BrandProfile() {
         {loading ? <div className="skeleton-line mt-6" /> : (
           <form onSubmit={save} className="grid gap-4 mt-6">
             <label className="form-field">Company name<input className="field" required value={f.company_name} onChange={set("company_name")} /></label>
-            <label className="form-field">Website<input className="field" value={f.website} onChange={set("website")} /></label>
+            <label className="form-field">Official company website<input className="field" required type="text" placeholder="https://yourbrand.com" value={f.website} onChange={set("website")} /></label>
+            <EmailCheck status={check} email={user?.email ?? ""} />
             <label className="form-field">Industry
               <select className="field" value={f.industry} onChange={set("industry")}>
                 <option value="">Choose…</option>
@@ -92,5 +104,24 @@ function BrandProfile() {
         )}
       </main>
     </SiteShell>
+  );
+}
+
+const checkCopy: Record<string, [string, string]> = {
+  verified_domain: ["Verified", "Your sign-in email matches your company website domain."],
+  personal_email: ["Not verified", "Personal email providers (Gmail, Yahoo, Outlook…) can't be verified. Sign up with your official company email."],
+  duplicate_creator_email: ["Not verified", "This email is already used by a creator account. Use a separate official company email for your brand."],
+  domain_mismatch: ["Not verified", "Your email domain doesn't match your company website. Use an email on your website's domain."],
+  unchecked: ["Not verified yet", "Save your profile with your official website to check your email."],
+};
+function EmailCheck({ status, email }: { status: string; email: string }) {
+  const [label, text] = checkCopy[status] ?? checkCopy["unchecked"]!;
+  return (
+    <div className="notice">
+      <span className={`status-badge ${status === "verified_domain" ? "is-verified" : ""}`}>{label}</span>{" "}
+      <strong>{email}</strong>
+      <br />
+      <small>{text}</small>
+    </div>
   );
 }
