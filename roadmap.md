@@ -15,3 +15,5 @@
 - [x] Phase 4: applications, offers, inbox, in-app notifications, rate limits.
 - [ ] Email notifications: waiting for an email sending domain.
 - [ ] Phase 5: verified OAuth — waiting for Google consent-screen verification and Meta app review.
+- [x] Demo directory: 100 creators + 25 brands, matching scores, dashboard suggestions with onboarding, collab requests, Explore listing, admin-only demo badge.
+- [ ] Signed-in check of suggestions: waiting for a signed-up account.
