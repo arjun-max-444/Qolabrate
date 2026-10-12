@@ -98,6 +98,17 @@ function Auth() {
     setError(err ?? "");
     setBusy(false);
   }
+  if (user && mode !== "setup" && !error)
+    return (
+      <SiteShell>
+        <main className="container">
+          <section className="auth-wrap" role="status">
+            <h1>Opening your dashboard…</h1>
+            <div className="skeleton-block" style={{ height: 120 }} />
+          </section>
+        </main>
+      </SiteShell>
+    );
   return (
     <SiteShell>
       <main className="container">
