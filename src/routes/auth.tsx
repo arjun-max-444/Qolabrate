@@ -149,7 +149,7 @@ function Auth() {
                 onClick={async () => {
                   if (mode === "signup" && role) sessionStorage.setItem("qolabrate_signup_role", role);
                   const result = await lovable.auth.signInWithOAuth("google", {
-                    redirect_uri: window.location.origin + "/auth",
+                    redirect_uri: window.location.origin,
                   });
                   if (result.error) { setError(result.error.message); return; }
                   if (result.redirected) return;
