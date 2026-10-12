@@ -1035,3 +1035,11 @@ button.entry-card:hover { border-color: var(--primary); }
 .role-chooser { display: grid; gap: 0.75rem; margin-top: 1.5rem; }
 .skeleton-line { display: block; height: 2.5rem; border-radius: 6px; background: var(--muted); animation: pulse 1.5s ease-in-out infinite; }
 .entry-grid.three, .entry-actions { margin-bottom: 4rem; }
+.reach-chip { display: inline-flex; align-items: center; gap: 0.3rem; width: fit-content; padding: 0.15rem 0.55rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; background: var(--muted); color: var(--foreground); }
+.status-badge { display: inline-block; width: fit-content; padding: 0.1rem 0.5rem; border-radius: 999px; font-size: 0.72rem; font-weight: 600; text-transform: capitalize; background: var(--muted); color: var(--muted-foreground); }
+.status-badge.is-verified { background: color-mix(in oklab, var(--primary) 15%, transparent); color: var(--primary); }
+.chip { padding: 0.35rem 0.85rem; border: 1px solid var(--border); border-radius: 999px; font-size: 0.85rem; background: var(--background); cursor: pointer; }
+.chip.is-active { border-color: var(--primary); background: color-mix(in oklab, var(--primary) 12%, transparent); color: var(--primary); font-weight: 600; }
+.tab-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.bell-dot { position: absolute; top: -6px; right: -8px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 999px; font-size: 10px; line-height: 16px; text-align: center; background: var(--destructive); color: var(--destructive-foreground, var(--background)); }
+a.entry-card:hover { border-color: var(--primary); }
