@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { SiteShell, useAccount } from "@/components/site-shell";
+import SuggestionsSidebar from "@/components/SuggestionsSidebar";
 
 type Stat = { label: string; value: number | string };
 
@@ -8,11 +9,13 @@ export function RoleDashboard({
   intro,
   load,
   links,
+  role,
 }: {
   title: string;
   intro: string;
   load: (userId: string) => Promise<Stat[]>;
   links: ReactNode;
+  role?: "creator" | "brand";
 }) {
   const { user } = useAccount();
   const [stats, setStats] = useState<Stat[] | null>(null);
@@ -21,7 +24,8 @@ export function RoleDashboard({
   }, [user?.id]);
   return (
     <SiteShell>
-      <main className="container section">
+      <main className="container section dashboard-layout">
+        <div className="min-w-0">
         <h1 className="entry-title">{title}</h1>
         <p className="entry-lead">{intro}</p>
         <div className="entry-grid">
@@ -39,6 +43,8 @@ export function RoleDashboard({
           ))}
         </div>
         <div className="entry-actions">{links}</div>
+        </div>
+        {role && <SuggestionsSidebar role={role} />}
       </main>
     </SiteShell>
   );

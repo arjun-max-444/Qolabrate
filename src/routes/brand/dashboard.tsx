@@ -9,6 +9,7 @@ export const Route = createFileRoute("/brand/dashboard")({
   head: () => pageHead("Brand dashboard", "Manage campaigns, applications and offers to creators."),
   component: () => (
     <RoleDashboard
+      role="brand"
       title="Brand dashboard"
       intro="Campaigns, applications and offers in one place."
       load={async (uid) => {
