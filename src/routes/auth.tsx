@@ -7,6 +7,7 @@ import { lovable } from "@/integrations/lovable";
 import { pageHead } from "@/lib/seo";
 import { dashboardFor, fetchRole } from "@/lib/roles";
 import { isBusinessEmail } from "@/lib/business-email";
+import { sendWelcomeEmail } from "@/lib/emails.functions";
 export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>): { mode: string; role?: "creator" | "brand" | undefined } => ({
     mode: typeof s["mode"] === "string" ? s["mode"] : "signin",
@@ -48,9 +49,10 @@ function Auth() {
         if (error) { setError(error.message); return; }
       }
       const { role: r } = await fetchRole();
+      sendWelcomeEmail().catch(() => {});
       const next = sessionStorage.getItem("qolabrate_next");
       sessionStorage.removeItem("qolabrate_next");
-      navigate({ href: next && next.startsWith("/") && !next.startsWith("//") ? next : dashboardFor(r) });
+      navigate({ href: next && next.startsWith("/") && !next.startsWith("//") ? next : r === "creator" || !r ? "/profile" : dashboardFor(r), replace: true });
     })();
   }, [user, mode]);
   useEffect(() => {

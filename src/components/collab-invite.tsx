@@ -1,3 +1,4 @@
+import { sendCollabRequestEmail } from "@/lib/emails.functions";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Handshake, Plus, X } from "lucide-react";
@@ -34,6 +35,7 @@ export function InviteButton({ creatorId, creatorName, open: openToCollabs = tru
     setBusy(false);
     if (error) { toast.error(error.message); return; }
     toast.success("Collab request sent");
+    sendCollabRequestEmail({ data: { creatorId } }).catch(() => {});
     setOpen(false);
     setF({ plan: "project", title: "", brief: "", min: "", max: "", deadline: "", links: "", message: "" });
     setItems([""]);
