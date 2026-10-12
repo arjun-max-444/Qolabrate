@@ -55,11 +55,11 @@ function SocialCard({ platform }: { platform: Platform }) {
 
   async function fetchYoutube() {
     const h = normalizeHandle("youtube", handle);
-    if (!h) return toast.error("Enter a valid channel URL or @handle");
+    if (!h) { toast.error("Enter a valid channel URL or @handle"); return; }
     setBusy(true);
     const r = await lookup({ data: { handle: h } }).catch(() => ({ ok: false as const, error: "Lookup failed" }));
     setBusy(false);
-    if (!r.ok) return toast.error(r.error);
+    if (!r.ok) { toast.error(r.error); return; }
     setHandle(r.handle);
     setInfo({ title: r.title, avatar: r.avatar, videos: r.videoCount, hidden: r.hiddenSubscribers });
     if (r.subscriberCount !== null) setFollowers(String(r.subscriberCount));
@@ -69,12 +69,12 @@ function SocialCard({ platform }: { platform: Platform }) {
     e.preventDefault();
     if (!user) return;
     const h = normalizeHandle(platform, handle);
-    if (!h) return toast.error("Enter a valid handle or profile URL");
+    if (!h) { toast.error("Enter a valid handle or profile URL"); return; }
     setBusy(true);
     const row = { user_id: user.id, platform, handle: h, profile_url: profileUrl(platform, h), follower_count: clampCount(followers), avg_views: views ? clampCount(views) : null, last_synced_at: new Date().toISOString() };
     const { error } = await supabase.from("creator_social_accounts").upsert(row, { onConflict: "user_id,platform" });
     setBusy(false);
-    if (error) return toast.error("Could not save");
+    if (error) { toast.error("Could not save"); return; }
     setHandle(h);
     setSaved(true);
     toast.success("Saved");

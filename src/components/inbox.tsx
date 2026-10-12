@@ -41,7 +41,7 @@ export function Inbox({ side }: { side: "creator" | "brand" }) {
     const { error } = i.kind === "offer"
       ? await supabase.from("offers").update({ status }).eq("id", i.id)
       : await supabase.from("applications").update({ status }).eq("id", i.id);
-    if (error) return toast.error("Could not update");
+    if (error) { toast.error("Could not update"); return; }
     toast.success(`Marked ${status}`);
     load();
   }

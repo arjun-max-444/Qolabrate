@@ -33,7 +33,7 @@ function CampaignPage() {
     setBusy(true);
     const { data, error } = await supabase.from("applications").insert({ campaign_id: id, creator_id: user.id, pitch: pitch.slice(0, 3000), quote: quote ? Number(quote) : null }).select().single();
     setBusy(false);
-    if (error) return toast.error(error.code === "23505" ? "You already applied" : "Could not apply");
+    if (error) { toast.error(error.code === "23505" ? "You already applied" : "Could not apply"); return; }
     setMine(data);
     toast.success("Application sent");
   }

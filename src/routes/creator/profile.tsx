@@ -72,19 +72,19 @@ function CreatorProfile() {
       exists ? supabase.from("creator_profiles").update(row).eq("user_id", user.id) : supabase.from("creator_profiles").insert({ ...row, user_id: user.id }),
     ]);
     setBusy(false);
-    if (r1.error || r2.error) return toast.error("Could not save profile");
+    if (r1.error || r2.error) { toast.error("Could not save profile"); return; }
     setExists(true);
     toast.success("Profile saved");
   }
 
   async function upload(file: File) {
     if (!user) return;
-    if (file.size > 100 * 1024 * 1024) return toast.error("Files must be under 100 MB");
+    if (file.size > 100 * 1024 * 1024) { toast.error("Files must be under 100 MB"); return; }
     const kind = file.type.startsWith("video") ? "video" : file.type.startsWith("image") ? "image" : null;
-    if (!kind) return toast.error("Upload an image or video");
+    if (!kind) { toast.error("Upload an image or video"); return; }
     const path = `${user.id}/${crypto.randomUUID()}-${file.name.replace(/[^\w.-]/g, "_")}`;
     const up = await supabase.storage.from("portfolio").upload(path, file);
-    if (up.error) return toast.error("Upload failed");
+    if (up.error) { toast.error("Upload failed"); return; }
     await supabase.from("portfolio_items").insert({ user_id: user.id, storage_path: path, media_type: kind, title: file.name });
     loadItems(user.id);
   }

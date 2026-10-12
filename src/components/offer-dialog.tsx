@@ -31,7 +31,7 @@ export function OfferButton({ creatorId, creatorName, campaignId }: { creatorId:
       currency: cur,
     });
     setBusy(false);
-    if (error) return toast.error(error.message.includes("limit") ? error.message : "Could not send offer");
+    if (error) { toast.error(error.message.includes("limit") ? error.message : "Could not send offer"); return; }
     toast.success("Offer sent");
     setOpen(false);
     setMessage("");

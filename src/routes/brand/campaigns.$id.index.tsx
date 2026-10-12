@@ -42,7 +42,7 @@ function CampaignDetail() {
   useEffect(() => { load(); }, [id]);
   async function act(appId: string, status: string) {
     const { error } = await supabase.from("applications").update({ status }).eq("id", appId);
-    if (error) return toast.error("Could not update");
+    if (error) { toast.error("Could not update"); return; }
     load();
   }
   if (!c) return <SiteShell><main className="container section"><div className="skeleton-line" /></main></SiteShell>;

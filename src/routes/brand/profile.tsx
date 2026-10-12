@@ -41,10 +41,10 @@ function BrandProfile() {
   }, [user?.id]);
 
   async function uploadLogo(file: File) {
-    if (!user || !file.type.startsWith("image")) return toast.error("Choose an image");
+    if (!user || !file.type.startsWith("image")) { toast.error("Choose an image"); return; }
     const path = `${user.id}/logo-${Date.now()}`;
     const { error } = await supabase.storage.from("portfolio").upload(path, file);
-    if (error) return toast.error("Upload failed");
+    if (error) { toast.error("Upload failed"); return; }
     setLogoPath(path);
     setLogo(URL.createObjectURL(file));
   }
@@ -61,7 +61,7 @@ function BrandProfile() {
       supabase.from("profiles").update({ whatsapp: f.whatsapp.slice(0, 20) }).eq("id", user.id),
     ]);
     setBusy(false);
-    if (r1.error || r2.error) return toast.error("Could not save profile");
+    if (r1.error || r2.error) { toast.error("Could not save profile"); return; }
     setExists(true);
     toast.success("Profile saved");
   }

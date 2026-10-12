@@ -29,15 +29,15 @@ export function CampaignForm({ id }: { id?: string }) {
   async function save(e: React.FormEvent) {
     e.preventDefault();
     if (!user) return;
-    if (!platforms.length) return toast.error("Pick at least one platform");
+    if (!platforms.length) { toast.error("Pick at least one platform"); return; }
     const min = f.budget_min ? Number(f.budget_min) : null;
     const max = f.budget_max ? Number(f.budget_max) : null;
-    if (min !== null && max !== null && min > max) return toast.error("Minimum budget is above maximum");
+    if (min !== null && max !== null && min > max) { toast.error("Minimum budget is above maximum"); return; }
     const row = { title: f.title.slice(0, 140), description: f.description.slice(0, 5000), category: f.category, platforms, deliverables: f.deliverables.slice(0, 2000), min_followers: Math.max(0, Number(f.min_followers) || 0), budget_min: min, budget_max: max, currency: f.currency, deadline: f.deadline || null, status: f.status };
     setBusy(true);
     const res = id ? await supabase.from("campaigns").update(row).eq("id", id).select("id").single() : await supabase.from("campaigns").insert({ ...row, brand_id: user.id }).select("id").single();
     setBusy(false);
-    if (res.error || !res.data) return toast.error("Could not save campaign");
+    if (res.error || !res.data) { toast.error("Could not save campaign"); return; }
     toast.success("Campaign saved");
     navigate({ to: "/brand/campaigns/$id", params: { id: res.data.id } });
   }
