@@ -77,7 +77,7 @@ function Auth() {
         password,
         options: {
           data: { full_name: name, signup_role: role ?? "creator" },
-          emailRedirectTo: window.location.origin,
+          emailRedirectTo: window.location.origin + "/auth?mode=signin",
         },
       });
       err = error?.message;
@@ -95,6 +95,10 @@ function Auth() {
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       err = error?.message;
+      if (error && /confirm/i.test(error.message)) {
+        await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: window.location.origin + "/auth?mode=signin" } });
+        err = "Your email isn't verified yet. We've sent a new verification link — check your inbox (and spam/quarantine folder), click it, and you'll go straight to your profile.";
+      }
 
     }
     setError(err ?? "");
