@@ -19,7 +19,7 @@ export function validateGSTIN(value: string): GstinValidation {
   }
   let total = 0
   for (let index = 0; index < 14; index += 1) {
-    const valueIndex = GSTIN_CHARSET.indexOf(normalized[index])
+    const valueIndex = GSTIN_CHARSET.indexOf(normalized[index] ?? '')
     if (valueIndex < 0) return { valid: false, normalized, reason: 'GSTIN contains an unsupported character.' }
     const product = valueIndex * (index % 2 === 0 ? 1 : 2)
     total += Math.floor(product / 36) + (product % 36)

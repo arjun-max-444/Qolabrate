@@ -101,10 +101,10 @@ export const featuredCreators = creators.slice(0, 4)
 export function scoreCreator(creator: Creator, brief: Brief): MatchResult {
   const skillMatch = brief.requiredSkills.length ? brief.requiredSkills.filter((skill) => creator.skills.some((s) => s.toLowerCase().includes(skill.toLowerCase()) || skill.toLowerCase().includes(s.toLowerCase()))).length / brief.requiredSkills.length : 1
   const formatMatch = creator.formats.includes(brief.contentType) ? 1 : 0.25
-  const toolMatch = brief.requiredTools.length ? brief.requiredTools.filter((tool) => creator.tools.some((t) => t.toLowerCase().includes(tool.toLowerCase().split(' ')[0]))).length / brief.requiredTools.length : 1
+  const toolMatch = brief.requiredTools.length ? brief.requiredTools.filter((tool) => creator.tools.some((t) => t.toLowerCase().includes(tool.toLowerCase().split(' ')[0] ?? ''))).length / brief.requiredTools.length : 1
   const budgetMatch = brief.budgetMax ? creator.rate <= brief.budgetMax ? (brief.budgetMin && creator.rate >= brief.budgetMin ? 1 : 0.78) : 0.18 : 0.65
   const rightsHardFail = brief.commercialUse.includes('Paid') && !creator.commercialUse.includes('Paid')
-  const rightsMatch = rightsHardFail ? 0 : creator.commercialUse.includes(brief.commercialUse.split(' · ')[0]) || brief.commercialUse.includes('Organic') ? 1 : 0.55
+  const rightsMatch = rightsHardFail ? 0 : creator.commercialUse.includes(brief.commercialUse.split(' · ')[0] ?? '') || brief.commercialUse.includes('Organic') ? 1 : 0.55
   const breakdown = [
     { label: 'Skills + specialty', score: Math.round(skillMatch * 100), weight: 30 },
     { label: 'Format compatibility', score: Math.round(formatMatch * 100), weight: 20 },
@@ -120,7 +120,7 @@ export function scoreCreator(creator: Creator, brief: Brief): MatchResult {
     budgetMatch >= 0.78 ? 'Indicative rate sits inside or close to the brief range.' : 'Indicative rate may exceed the stated range.',
     rightsMatch === 1 ? 'Commercial-use terms appear compatible, subject to contract review.' : 'Commercial-use scope needs a contract review.'
   ]
-  return { creator, total, eligible: !rightsHardFail && formatMatch > 0 && total > 35, breakdown, reasons, mismatch: rightsHardFail ? 'Mandatory paid-media compatibility is not documented.' : undefined }
+  return { creator, total, eligible: !rightsHardFail && formatMatch > 0 && total > 35, breakdown, reasons, ...(rightsHardFail ? {mismatch: 'Mandatory paid-media compatibility is not documented.'} : {}) }
 }
 
 export function matchBrief(brief: Brief): MatchResult[] {
