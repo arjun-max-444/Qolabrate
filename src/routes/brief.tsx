@@ -35,7 +35,7 @@ function BriefBuilder() {
   const [step, setStep] = useState(0);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const { user } = useAccount();
+  const { user, role } = useAccount();
   const navigate = useNavigate();
   const update = (k: keyof Brief, v: string) => setDraft((d) => ({ ...d, [k]: v }));
   const field = (k: keyof Brief, label: string, placeholder = "") => (
@@ -51,7 +51,8 @@ function BriefBuilder() {
   );
   async function save(status: string) {
     if (!user) {
-      setError("Sign in to save this project. Your draft will remain here while you review it.");
+      sessionStorage.setItem("qolabrate_pending_brief", JSON.stringify(draft));
+      setError("Sign up as a brand to save this brief — we'll keep it as a draft campaign.");
       return;
     }
     if (!draft.idea.trim() || !draft.title.trim()) {
@@ -83,6 +84,11 @@ function BriefBuilder() {
           </span>
           <h1 className="mt-3">Give your idea a great start.</h1>
           <p>A clear brief brings the right people together.</p>
+          {role === "brand" && (
+            <Link to="/brand/campaigns/new" className="section-link mt-3">
+              Post a detailed campaign <ArrowRight size={14} />
+            </Link>
+          )}
         </div>
         <div className="form-layout">
           <aside className="steps">
@@ -254,8 +260,8 @@ function BriefBuilder() {
               <p className="error-text" role="alert">
                 {error}{" "}
                 {!user && (
-                  <Link to="/auth" search={{ mode: "signin" }}>
-                    Sign in
+                  <Link to="/auth" search={{ mode: "signup", role: "brand" }}>
+                    Join as a brand
                   </Link>
                 )}
               </p>
