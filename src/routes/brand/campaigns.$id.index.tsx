@@ -15,7 +15,7 @@ export const Route = createFileRoute("/brand/campaigns/$id/")({
   component: CampaignDetail,
 });
 
-export function suggestCreators(all: PublicCreator[], c: Pick<Tables<"campaigns">, "category" | "platforms" | "min_followers">) {
+function suggestCreators(all: PublicCreator[], c: Pick<Tables<"campaigns">, "category" | "platforms" | "min_followers">) {
   return all
     .filter((p) => (p.categories.includes(c.category) || p.specialization === c.category) && c.platforms.some((pl) => ((pl === "instagram" ? p.instagram : p.youtube)?.follower_count ?? -1) >= c.min_followers))
     .sort((a, b) => b.total_reach - a.total_reach);

@@ -19,15 +19,15 @@ export function Inbox({ side }: { side: "creator" | "brand" }) {
     if (!user) return;
     const offerQ = supabase.from("offers").select("*, campaigns(title)").eq(side === "creator" ? "creator_id" : "brand_id", user.id).order("created_at", { ascending: false });
     const appQ = side === "creator"
-      ? supabase.from("applications").select("*, campaigns!inner(title, brand_id)").eq("creator_id", user.id).order("created_at", { ascending: false })
-      : supabase.from("applications").select("*, campaigns!inner(title, brand_id)").eq("campaigns.brand_id", user.id).order("created_at", { ascending: false });
+      ? supabase.from("applications").select("*, campaigns!inner(title, brand_id, currency)").eq("creator_id", user.id).order("created_at", { ascending: false })
+      : supabase.from("applications").select("*, campaigns!inner(title, brand_id, currency)").eq("campaigns.brand_id", user.id).order("created_at", { ascending: false });
     const [{ data: offers }, { data: apps }] = await Promise.all([offerQ, appQ]);
     const ids = [...new Set([...(offers ?? []).map((o) => (side === "creator" ? o.brand_id : o.creator_id)), ...(apps ?? []).map((a) => (side === "creator" ? a.campaigns.brand_id : a.creator_id))])];
     const { data: names } = ids.length ? await supabase.rpc("party_names", { _ids: ids }) : { data: [] };
     const nm = new Map((names ?? []).map((n) => [n.id, n.name]));
     const list: Item[] = [
       ...(offers ?? []).map((o) => ({ id: o.id, kind: "offer" as const, status: o.status, other: nm.get(side === "creator" ? o.brand_id : o.creator_id) ?? "Member", title: o.campaigns?.title ?? "Direct offer", text: o.message, amount: o.budget, currency: o.currency, created_at: o.created_at })),
-      ...(apps ?? []).map((a) => ({ id: a.id, kind: "application" as const, status: a.status, other: nm.get(side === "creator" ? a.campaigns.brand_id : a.creator_id) ?? "Member", title: a.campaigns.title, text: a.pitch, amount: a.quote, currency: "INR", created_at: a.created_at })),
+      ...(apps ?? []).map((a) => ({ id: a.id, kind: "application" as const, status: a.status, other: nm.get(side === "creator" ? a.campaigns.brand_id : a.creator_id) ?? "Member", title: a.campaigns.title, text: a.pitch, amount: a.quote, currency: a.campaigns.currency, created_at: a.created_at })),
     ];
     setItems(list);
     for (const i of list.filter((x) => x.status === "accepted")) {

@@ -24,6 +24,8 @@ import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as BrandDashboardRouteImport } from './routes/brand/dashboard'
 import { Route as BrandInboxRouteImport } from './routes/brand/inbox'
 import { Route as BrandProfileRouteImport } from './routes/brand/profile'
+import { Route as CampaignsIndexRouteImport } from './routes/campaigns.index'
+import { Route as CampaignsIdRouteImport } from './routes/campaigns.$id'
 import { Route as CreatorDashboardRouteImport } from './routes/creator/dashboard'
 import { Route as CreatorInboxRouteImport } from './routes/creator/inbox'
 import { Route as CreatorProfileRouteImport } from './routes/creator/profile'
@@ -111,6 +113,16 @@ const BrandProfileRoute = BrandProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => BrandRouteRoute,
 } as any)
+const CampaignsIndexRoute = CampaignsIndexRouteImport.update({
+  id: '/campaigns/',
+  path: '/campaigns/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CampaignsIdRoute = CampaignsIdRouteImport.update({
+  id: '/campaigns/$id',
+  path: '/campaigns/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CreatorDashboardRoute = CreatorDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -184,11 +196,13 @@ export interface FileRoutesByFullPath {
   '/brand/dashboard': typeof BrandDashboardRoute
   '/brand/inbox': typeof BrandInboxRoute
   '/brand/profile': typeof BrandProfileRoute
+  '/campaigns/$id': typeof CampaignsIdRoute
   '/creator/dashboard': typeof CreatorDashboardRoute
   '/creator/inbox': typeof CreatorInboxRoute
   '/creator/profile': typeof CreatorProfileRoute
   '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
+  '/campaigns/': typeof CampaignsIndexRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
   '/brand/campaigns/new': typeof BrandCampaignsNewRoute
@@ -212,11 +226,13 @@ export interface FileRoutesByTo {
   '/brand/dashboard': typeof BrandDashboardRoute
   '/brand/inbox': typeof BrandInboxRoute
   '/brand/profile': typeof BrandProfileRoute
+  '/campaigns/$id': typeof CampaignsIdRoute
   '/creator/dashboard': typeof CreatorDashboardRoute
   '/creator/inbox': typeof CreatorInboxRoute
   '/creator/profile': typeof CreatorProfileRoute
   '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
+  '/campaigns': typeof CampaignsIndexRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
   '/brand/campaigns/new': typeof BrandCampaignsNewRoute
@@ -241,11 +257,13 @@ export interface FileRoutesById {
   '/brand/dashboard': typeof BrandDashboardRoute
   '/brand/inbox': typeof BrandInboxRoute
   '/brand/profile': typeof BrandProfileRoute
+  '/campaigns/$id': typeof CampaignsIdRoute
   '/creator/dashboard': typeof CreatorDashboardRoute
   '/creator/inbox': typeof CreatorInboxRoute
   '/creator/profile': typeof CreatorProfileRoute
   '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
+  '/campaigns/': typeof CampaignsIndexRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
   '/brand/campaigns/new': typeof BrandCampaignsNewRoute
@@ -271,11 +289,13 @@ export interface FileRouteTypes {
     | '/brand/dashboard'
     | '/brand/inbox'
     | '/brand/profile'
+    | '/campaigns/$id'
     | '/creator/dashboard'
     | '/creator/inbox'
     | '/creator/profile'
     | '/creator/socials'
     | '/creators/$id'
+    | '/campaigns/'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
     | '/brand/campaigns/new'
@@ -299,11 +319,13 @@ export interface FileRouteTypes {
     | '/brand/dashboard'
     | '/brand/inbox'
     | '/brand/profile'
+    | '/campaigns/$id'
     | '/creator/dashboard'
     | '/creator/inbox'
     | '/creator/profile'
     | '/creator/socials'
     | '/creators/$id'
+    | '/campaigns'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
     | '/brand/campaigns/new'
@@ -327,11 +349,13 @@ export interface FileRouteTypes {
     | '/brand/dashboard'
     | '/brand/inbox'
     | '/brand/profile'
+    | '/campaigns/$id'
     | '/creator/dashboard'
     | '/creator/inbox'
     | '/creator/profile'
     | '/creator/socials'
     | '/creators/$id'
+    | '/campaigns/'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
     | '/brand/campaigns/new'
@@ -353,7 +377,9 @@ export interface RootRouteChildren {
   MarketplaceRoute: typeof MarketplaceRoute
   WorkspaceRoute: typeof WorkspaceRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  CampaignsIdRoute: typeof CampaignsIdRoute
   CreatorsIdRoute: typeof CreatorsIdRoute
+  CampaignsIndexRoute: typeof CampaignsIndexRoute
   ApiGstValidateFormatRoute: typeof ApiGstValidateFormatRoute
   ApiGstVerificationStatusRoute: typeof ApiGstVerificationStatusRoute
 }
@@ -464,6 +490,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/brand/profile'
       preLoaderRoute: typeof BrandProfileRouteImport
       parentRoute: typeof BrandRouteRoute
+    }
+    '/campaigns/': {
+      id: '/campaigns/'
+      path: '/campaigns'
+      fullPath: '/campaigns/'
+      preLoaderRoute: typeof CampaignsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/campaigns/$id': {
+      id: '/campaigns/$id'
+      path: '/campaigns/$id'
+      fullPath: '/campaigns/$id'
+      preLoaderRoute: typeof CampaignsIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/creator/dashboard': {
       id: '/creator/dashboard'
@@ -600,7 +640,9 @@ const rootRouteChildren: RootRouteChildren = {
   MarketplaceRoute: MarketplaceRoute,
   WorkspaceRoute: WorkspaceRoute,
   AdminLoginRoute: AdminLoginRoute,
+  CampaignsIdRoute: CampaignsIdRoute,
   CreatorsIdRoute: CreatorsIdRoute,
+  CampaignsIndexRoute: CampaignsIndexRoute,
   ApiGstValidateFormatRoute: ApiGstValidateFormatRoute,
   ApiGstVerificationStatusRoute: ApiGstVerificationStatusRoute,
 }
