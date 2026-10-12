@@ -1,7 +1,5 @@
-import { Link } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import { SiteShell, useAccount } from "@/components/site-shell";
-import { supabase } from "@/integrations/supabase/client";
 
 type Stat = { label: string; value: number | string };
 
@@ -47,4 +45,3 @@ export function RoleDashboard({
 }
 
 export const count = async (q: PromiseLike<{ count: number | null }>) => (await q).count ?? 0;
-export { supabase, Link };
