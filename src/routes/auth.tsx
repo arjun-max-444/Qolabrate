@@ -7,7 +7,7 @@ import { lovable } from "@/integrations/lovable";
 import { pageHead } from "@/lib/seo";
 import { dashboardFor, fetchRole } from "@/lib/roles";
 export const Route = createFileRoute("/auth")({
-  validateSearch: (s: Record<string, unknown>): { mode: string; role?: "creator" | "brand" } => ({
+  validateSearch: (s: Record<string, unknown>): { mode: string; role?: "creator" | "brand" | undefined } => ({
     mode: typeof s["mode"] === "string" ? s["mode"] : "signin",
     role: s["role"] === "creator" || s["role"] === "brand" ? (s["role"] as "creator" | "brand") : undefined,
   }),
