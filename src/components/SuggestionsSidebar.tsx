@@ -79,7 +79,7 @@ export function MatchOnboarding({ role, initial, onSaved }: { role: "creator" | 
 }
 
 export default function SuggestionsSidebar({ role }: { role: "creator" | "brand" }) {
-  const { user, role: myRole } = useAccount();
+  const { user } = useAccount();
   const navigate = useNavigate();
   const [me, setMe] = useState<Creator | Brand | null | undefined>(undefined);
   const [items, setItems] = useState<Item[]>([]);

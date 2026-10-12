@@ -1,5 +1,6 @@
 import { redirect } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
+import { isBusinessEmail } from "@/lib/business-email";
 
 export type AppRole = "creator" | "brand" | "admin";
 
@@ -24,7 +25,7 @@ export async function requireRole(role: "creator" | "brand") {
   if (current !== role) throw redirect({ href: dashboardFor(current) });
   if (role === "brand") {
     const { data } = await supabase.auth.getUser();
-    if (data.user?.app_metadata.provider !== "email") {
+    if (data.user?.app_metadata.provider !== "email" || !isBusinessEmail(data.user?.email ?? "")) {
       await supabase.auth.signOut();
       throw redirect({ to: "/auth", search: { mode: "signin", role: "brand" } });
     }

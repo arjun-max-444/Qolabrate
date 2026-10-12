@@ -16,8 +16,9 @@
 - [ ] Email notifications: waiting for an email sending domain.
 - [ ] Phase 5: verified OAuth — waiting for Google consent-screen verification and Meta app review.
 - [x] Demo directory: 100 creators + 25 brands, matching scores, dashboard suggestions with onboarding, collab requests, Explore listing, admin-only demo badge.
-- [ ] Restrict brand signup/sign-in to official email; keep Google for creators only.
+- [x] Restrict brand signup/sign-in to official email; keep Google for creators only.
 - [x] Hide the public Lovable badge.
-- [ ] Show suggestions immediately for new creator and brand accounts.
-- [ ] Apply cinematic colors to account and marketplace pages.
-- [ ] Verify signed-in suggestions and account flows.
+- [x] Show suggestions immediately for new creator and brand accounts, including campaign discovery fallbacks.
+- [x] Apply cinematic colors to account and marketplace pages.
+- [x] Verify signed-in creator dashboard/home suggestions, brand signup rejection, and nine tests.
+- [ ] Signed-in brand validation: needs an official-email brand account approved for testing.

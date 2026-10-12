@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 import { money, type PublicCreator } from "@/lib/social";
 import { pageHead } from "@/lib/seo";
+import { suggestCreatorsForBrand, type Creator } from "@/lib/matching";
 
 export const Route = createFileRoute("/brand/campaigns/$id/")({
   head: () => pageHead("Campaign", "Review applications and suggested creators for your campaign."),
@@ -16,9 +17,10 @@ export const Route = createFileRoute("/brand/campaigns/$id/")({
 });
 
 function suggestCreators(all: PublicCreator[], c: Pick<Tables<"campaigns">, "category" | "platforms" | "min_followers">) {
-  return all
-    .filter((p) => (p.categories.includes(c.category) || p.specialization === c.category) && c.platforms.some((pl) => ((pl === "instagram" ? p.instagram : p.youtube)?.follower_count ?? -1) >= c.min_followers))
-    .sort((a, b) => b.total_reach - a.total_reach);
+  const score = (p: PublicCreator) =>
+    (p.categories.some((cat) => cat.toLowerCase() === c.category.toLowerCase()) || p.specialization.toLowerCase() === c.category.toLowerCase() ? 50 : 0) +
+    (c.platforms.some((pl) => ((pl.toLowerCase() === "instagram" ? p.instagram : p.youtube)?.follower_count ?? -1) >= c.min_followers) ? 30 : 0);
+  return [...all].sort((a, b) => score(b) - score(a) || b.total_reach - a.total_reach).slice(0, 8);
 }
 
 function CampaignDetail() {
@@ -27,6 +29,7 @@ function CampaignDetail() {
   const [tab, setTab] = useState<"apps" | "suggested">("apps");
   const [apps, setApps] = useState<(Tables<"applications"> & { name: string })[] | null>(null);
   const [suggested, setSuggested] = useState<PublicCreator[] | null>(null);
+  const [directory, setDirectory] = useState<Creator[]>([]);
   async function load() {
     const { data } = await supabase.from("campaigns").select("*").eq("id", id).single();
     setC(data);
@@ -37,6 +40,9 @@ function CampaignDetail() {
     if (data) {
       const { data: all } = await supabase.rpc("public_creators", {});
       setSuggested(suggestCreators((all ?? []) as unknown as PublicCreator[], data));
+      const { data: entries } = await supabase.from("creators").select("*");
+      const realIds = new Set((all ?? []).map((p) => p.user_id));
+      setDirectory(suggestCreatorsForBrand({ id: data.id, user_id: data.brand_id, name: data.title, niches: [data.category], platforms: data.platforms, min_followers: data.min_followers, max_followers: 10000000, location: "", languages: [] }, ((entries ?? []) as Creator[]).filter((p) => !p.user_id || !realIds.has(p.user_id))).map((p) => p.creator));
     }
   }
   useEffect(() => { load(); }, [id]);
@@ -69,11 +75,18 @@ function CampaignDetail() {
               </div>
             ))}</div>
           )
-        ) : suggested === null ? <div className="skeleton-line mt-6" /> : suggested.length === 0 ? <p className="text-muted-foreground mt-6">No creators match yet.</p> : (
+        ) : suggested === null ? <div className="skeleton-line mt-6" /> : suggested.length === 0 && directory.length === 0 ? <p className="text-muted-foreground mt-6">No creators available yet.</p> : (
           <div className="entry-grid">{suggested.map((p) => (
             <div key={p.user_id} className="entry-card">
               <strong>{p.full_name || "Creator"}</strong><span>{p.headline || p.specialization}</span><ReachChip reach={p.total_reach} />
               <div className="flex gap-2"><Button asChild size="sm" variant="outline"><Link to="/creators/$id" params={{ id: p.user_id }}>View profile</Link></Button><OfferButton creatorId={p.user_id} creatorName={p.full_name} campaignId={c.id} /></div>
+            </div>
+          ))}{directory.slice(0, Math.max(0, 8 - suggested.length)).map((p) => (
+            <div key={p.id} className="entry-card">
+              <strong>{p.name}</strong><span>{p.niches.join(" · ")}</span><ReachChip reach={p.followers} />
+              {p.is_demo && <span className="status-badge">Sample profile</span>}
+              <Button asChild size="sm" variant="outline"><Link to="/marketplace" search={{ q: p.name }}>Explore</Link></Button>
+              {p.user_id && !p.is_demo && <OfferButton creatorId={p.user_id} creatorName={p.name} campaignId={c.id} />}
             </div>
           ))}</div>
         )}

@@ -35,10 +35,10 @@ function Auth() {
     if (!user || mode === "setup") return;
     (async () => {
       const { role: existingRole } = await fetchRole();
-      if (existingRole === "brand" && user.app_metadata.provider !== "email") {
+      if (existingRole === "brand" && (user.app_metadata.provider !== "email" || !isBusinessEmail(user.email ?? ""))) {
         await supabase.auth.signOut();
         setRole("brand");
-        setError("Brands and agencies must sign in with their official email and password.");
+        setError("Brands and agencies require an official business email and password. Personal-email accounts can't access the brand area.");
         return;
       }
       const pending = sessionStorage.getItem("qolabrate_signup_role");
