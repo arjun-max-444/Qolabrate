@@ -1,0 +1,11 @@
+DROP POLICY IF EXISTS collab_reviews_read ON public.collab_reviews;
+CREATE POLICY collab_reviews_party_read ON public.collab_reviews FOR SELECT TO authenticated USING (public.is_collab_party(collab_id));
+REVOKE SELECT ON public.collab_reviews FROM anon;
+DROP POLICY IF EXISTS collab_settings_read ON public.collab_settings;
+CREATE POLICY collab_settings_signed_in_read ON public.collab_settings FOR SELECT TO authenticated USING (auth.uid() IS NOT NULL);
+REVOKE SELECT ON public.collab_settings FROM anon;
+DROP POLICY IF EXISTS creators_read ON public.creators;
+CREATE POLICY creators_signed_in_read ON public.creators FOR SELECT TO authenticated USING (auth.uid() IS NOT NULL);
+REVOKE SELECT ON public.creators FROM anon;
+DROP POLICY IF EXISTS avatars_read ON storage.objects;
+CREATE POLICY avatars_signed_in_read ON storage.objects FOR SELECT TO authenticated USING (bucket_id = 'avatars' AND auth.uid() IS NOT NULL);
