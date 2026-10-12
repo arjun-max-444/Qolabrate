@@ -1013,3 +1013,25 @@ select {
     height: 12px;
   }
 }
+
+/* Role entry pages & dashboards */
+.role-menu { position: relative; cursor: pointer; }
+.role-menu summary { list-style: none; }
+.role-menu summary::-webkit-details-marker { display: none; }
+.role-menu-list { position: absolute; right: 0; top: calc(100% + 0.5rem); z-index: 40; display: grid; min-width: 11rem; padding: 0.5rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--background); box-shadow: 0 8px 24px color-mix(in oklab, var(--foreground) 12%, transparent); }
+.role-menu-list a { padding: 0.5rem 0.75rem; border-radius: calc(var(--radius) - 2px); }
+.role-menu-list a:hover { background: var(--muted); }
+.entry-hero { max-width: 44rem; padding: 3rem 0 2rem; }
+.entry-title { font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
+.entry-lead { margin: 1rem 0 1.5rem; font-size: 1.125rem; color: var(--muted-foreground); }
+.entry-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); margin-top: 1.5rem; }
+.entry-card { display: grid; gap: 0.4rem; padding: 1.25rem; text-align: left; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); color: var(--card-foreground); }
+.entry-card h2 { font-size: 1.125rem; font-weight: 700; }
+.entry-card p, .entry-card span { color: var(--muted-foreground); }
+button.entry-card { cursor: pointer; transition: border-color 0.15s; }
+button.entry-card:hover { border-color: var(--primary); }
+.stat-value { font-size: 2rem; font-weight: 700; color: var(--foreground); }
+.entry-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+.role-chooser { display: grid; gap: 0.75rem; margin-top: 1.5rem; }
+.skeleton-line { display: block; height: 2.5rem; border-radius: 6px; background: var(--muted); animation: pulse 1.5s ease-in-out infinite; }
+.entry-grid.three, .entry-actions { margin-bottom: 4rem; }

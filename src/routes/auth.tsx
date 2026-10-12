@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { pageHead } from "@/lib/seo";
+import { dashboardFor, fetchRole } from "@/lib/roles";
 export const Route = createFileRoute("/auth")({
-  validateSearch: (s: Record<string, unknown>) => ({
+  validateSearch: (s: Record<string, unknown>): { mode: string; role?: "creator" | "brand" | undefined } => ({
     mode: typeof s["mode"] === "string" ? s["mode"] : "signin",
+    role: s["role"] === "creator" || s["role"] === "brand" ? (s["role"] as "creator" | "brand") : undefined,
   }),
   head: () =>
     pageHead(
@@ -17,8 +19,9 @@ export const Route = createFileRoute("/auth")({
   component: Auth,
 });
 function Auth() {
-  const { mode: initial } = Route.useSearch();
+  const { mode: initial, role: initialRole } = Route.useSearch();
   const [mode, setMode] = useState(initial);
+  const [role, setRole] = useState<"creator" | "brand" | undefined>(initialRole);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -28,7 +31,16 @@ function Auth() {
   const { user } = useAccount();
   const navigate = useNavigate();
   useEffect(() => {
-    if (user && mode !== "setup") navigate({ to: "/account" });
+    if (!user || mode === "setup") return;
+    (async () => {
+      const pending = sessionStorage.getItem("qolabrate_signup_role");
+      if (pending === "creator" || pending === "brand") {
+        sessionStorage.removeItem("qolabrate_signup_role");
+        await supabase.rpc("choose_signup_role", { _role: pending });
+      }
+      const { role: r } = await fetchRole();
+      navigate({ href: dashboardFor(r) });
+    })();
   }, [user, mode]);
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event) => {
@@ -46,7 +58,7 @@ function Auth() {
         email,
         password,
         options: {
-          data: { full_name: name },
+          data: { full_name: name, signup_role: role ?? "creator" },
           emailRedirectTo: window.location.origin + "/account",
         },
       });
@@ -65,7 +77,7 @@ function Auth() {
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       err = error?.message;
-      if (!error) navigate({ to: "/workspace" });
+
     }
     setError(err ?? "");
     setBusy(false);
@@ -88,14 +100,34 @@ function Auth() {
               ? "Verify your email to set a new password. Existing account imports are available after your data is supplied."
               : "Connect with exceptional creative talent."}
           </p>
+          {mode === "signup" && !role ? (
+            <div className="role-chooser">
+              <button type="button" className="entry-card" onClick={() => setRole("creator")}>
+                <h2>I'm a Creator</h2>
+                <p>Showcase work, get offers, apply to campaigns.</p>
+              </button>
+              <button type="button" className="entry-card" onClick={() => setRole("brand")}>
+                <h2>I'm a Brand or Agency</h2>
+                <p>Find creators, post campaigns, send offers.</p>
+              </button>
+            </div>
+          ) : (
+          <>
+          {mode === "signup" && role && (
+            <p className="notice">
+              Signing up as a {role === "brand" ? "brand or agency" : "creator"} ·{" "}
+              <button type="button" className="section-link" onClick={() => setRole(undefined)}>change</button>
+            </p>
+          )}
           {!["recover", "setup"].includes(mode) && (
             <>
               <Button
                 variant="outline"
                 className="full"
                 onClick={async () => {
+                  if (mode === "signup" && role) sessionStorage.setItem("qolabrate_signup_role", role);
                   const result = await lovable.auth.signInWithOAuth("google", {
-                    redirect_uri: window.location.origin + "/account",
+                    redirect_uri: window.location.origin + "/auth",
                   });
                   if (result.error) setError(result.error.message);
                 }}
@@ -167,6 +199,8 @@ function Auth() {
                       : "Sign in"}
             </Button>
           </form>
+          </>
+          )}
           <div className="flex justify-between mt-4">
             <Button
               variant="link"

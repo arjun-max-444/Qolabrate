@@ -12,11 +12,17 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BrandRouteRouteImport } from './routes/brand/route'
 import { Route as BriefRouteImport } from './routes/brief'
+import { Route as CreatorRouteRouteImport } from './routes/creator/route'
+import { Route as ForBrandsRouteImport } from './routes/for-brands'
+import { Route as ForCreatorsRouteImport } from './routes/for-creators'
 import { Route as HealthRouteImport } from './routes/health'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as BrandDashboardRouteImport } from './routes/brand/dashboard'
+import { Route as CreatorDashboardRouteImport } from './routes/creator/dashboard'
 import { Route as CreatorsIdRouteImport } from './routes/creators/$id'
 import { Route as ApiGstValidateFormatRouteImport } from './routes/api/gst/validate-format'
 import { Route as ApiGstVerificationStatusRouteImport } from './routes/api/gst/verification-status'
@@ -36,9 +42,29 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BrandRouteRoute = BrandRouteRouteImport.update({
+  id: '/brand',
+  path: '/brand',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BriefRoute = BriefRouteImport.update({
   id: '/brief',
   path: '/brief',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreatorRouteRoute = CreatorRouteRouteImport.update({
+  id: '/creator',
+  path: '/creator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForBrandsRoute = ForBrandsRouteImport.update({
+  id: '/for-brands',
+  path: '/for-brands',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForCreatorsRoute = ForCreatorsRouteImport.update({
+  id: '/for-creators',
+  path: '/for-creators',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HealthRoute = HealthRouteImport.update({
@@ -61,6 +87,16 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BrandDashboardRoute = BrandDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => BrandRouteRoute,
+} as any)
+const CreatorDashboardRoute = CreatorDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => CreatorRouteRoute,
+} as any)
 const CreatorsIdRoute = CreatorsIdRouteImport.update({
   id: '/creators/$id',
   path: '/creators/$id',
@@ -80,26 +116,38 @@ const ApiGstVerificationStatusRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/brand': typeof BrandRouteRouteWithChildren
+  '/creator': typeof CreatorRouteRouteWithChildren
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/brief': typeof BriefRoute
+  '/for-brands': typeof ForBrandsRoute
+  '/for-creators': typeof ForCreatorsRoute
   '/health': typeof HealthRoute
   '/marketplace': typeof MarketplaceRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
+  '/brand/dashboard': typeof BrandDashboardRoute
+  '/creator/dashboard': typeof CreatorDashboardRoute
   '/creators/$id': typeof CreatorsIdRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/brand': typeof BrandRouteRouteWithChildren
+  '/creator': typeof CreatorRouteRouteWithChildren
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/brief': typeof BriefRoute
+  '/for-brands': typeof ForBrandsRoute
+  '/for-creators': typeof ForCreatorsRoute
   '/health': typeof HealthRoute
   '/marketplace': typeof MarketplaceRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
+  '/brand/dashboard': typeof BrandDashboardRoute
+  '/creator/dashboard': typeof CreatorDashboardRoute
   '/creators/$id': typeof CreatorsIdRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
@@ -107,13 +155,19 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/brand': typeof BrandRouteRouteWithChildren
+  '/creator': typeof CreatorRouteRouteWithChildren
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/brief': typeof BriefRoute
+  '/for-brands': typeof ForBrandsRoute
+  '/for-creators': typeof ForCreatorsRoute
   '/health': typeof HealthRoute
   '/marketplace': typeof MarketplaceRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
+  '/brand/dashboard': typeof BrandDashboardRoute
+  '/creator/dashboard': typeof CreatorDashboardRoute
   '/creators/$id': typeof CreatorsIdRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
@@ -122,39 +176,57 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/brand'
+    | '/creator'
     | '/account'
     | '/auth'
     | '/brief'
+    | '/for-brands'
+    | '/for-creators'
     | '/health'
     | '/marketplace'
     | '/workspace'
     | '/admin/login'
+    | '/brand/dashboard'
+    | '/creator/dashboard'
     | '/creators/$id'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/brand'
+    | '/creator'
     | '/account'
     | '/auth'
     | '/brief'
+    | '/for-brands'
+    | '/for-creators'
     | '/health'
     | '/marketplace'
     | '/workspace'
     | '/admin/login'
+    | '/brand/dashboard'
+    | '/creator/dashboard'
     | '/creators/$id'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
   id:
     | '__root__'
     | '/'
+    | '/brand'
+    | '/creator'
     | '/account'
     | '/auth'
     | '/brief'
+    | '/for-brands'
+    | '/for-creators'
     | '/health'
     | '/marketplace'
     | '/workspace'
     | '/admin/login'
+    | '/brand/dashboard'
+    | '/creator/dashboard'
     | '/creators/$id'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
@@ -162,9 +234,13 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BrandRouteRoute: typeof BrandRouteRouteWithChildren
+  CreatorRouteRoute: typeof CreatorRouteRouteWithChildren
   AccountRoute: typeof AccountRoute
   AuthRoute: typeof AuthRoute
   BriefRoute: typeof BriefRoute
+  ForBrandsRoute: typeof ForBrandsRoute
+  ForCreatorsRoute: typeof ForCreatorsRoute
   HealthRoute: typeof HealthRoute
   MarketplaceRoute: typeof MarketplaceRoute
   WorkspaceRoute: typeof WorkspaceRoute
@@ -197,11 +273,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/brand': {
+      id: '/brand'
+      path: '/brand'
+      fullPath: '/brand'
+      preLoaderRoute: typeof BrandRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/brief': {
       id: '/brief'
       path: '/brief'
       fullPath: '/brief'
       preLoaderRoute: typeof BriefRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/creator': {
+      id: '/creator'
+      path: '/creator'
+      fullPath: '/creator'
+      preLoaderRoute: typeof CreatorRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/for-brands': {
+      id: '/for-brands'
+      path: '/for-brands'
+      fullPath: '/for-brands'
+      preLoaderRoute: typeof ForBrandsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/for-creators': {
+      id: '/for-creators'
+      path: '/for-creators'
+      fullPath: '/for-creators'
+      preLoaderRoute: typeof ForCreatorsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/health': {
@@ -232,6 +336,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/brand/dashboard': {
+      id: '/brand/dashboard'
+      path: '/dashboard'
+      fullPath: '/brand/dashboard'
+      preLoaderRoute: typeof BrandDashboardRouteImport
+      parentRoute: typeof BrandRouteRoute
+    }
+    '/creator/dashboard': {
+      id: '/creator/dashboard'
+      path: '/dashboard'
+      fullPath: '/creator/dashboard'
+      preLoaderRoute: typeof CreatorDashboardRouteImport
+      parentRoute: typeof CreatorRouteRoute
+    }
     '/creators/$id': {
       id: '/creators/$id'
       path: '/creators/$id'
@@ -256,11 +374,39 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface BrandRouteRouteChildren {
+  BrandDashboardRoute: typeof BrandDashboardRoute
+}
+
+const BrandRouteRouteChildren: BrandRouteRouteChildren = {
+  BrandDashboardRoute: BrandDashboardRoute,
+}
+
+const BrandRouteRouteWithChildren = BrandRouteRoute._addFileChildren(
+  BrandRouteRouteChildren,
+)
+
+interface CreatorRouteRouteChildren {
+  CreatorDashboardRoute: typeof CreatorDashboardRoute
+}
+
+const CreatorRouteRouteChildren: CreatorRouteRouteChildren = {
+  CreatorDashboardRoute: CreatorDashboardRoute,
+}
+
+const CreatorRouteRouteWithChildren = CreatorRouteRoute._addFileChildren(
+  CreatorRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BrandRouteRoute: BrandRouteRouteWithChildren,
+  CreatorRouteRoute: CreatorRouteRouteWithChildren,
   AccountRoute: AccountRoute,
   AuthRoute: AuthRoute,
   BriefRoute: BriefRoute,
+  ForBrandsRoute: ForBrandsRoute,
+  ForCreatorsRoute: ForCreatorsRoute,
   HealthRoute: HealthRoute,
   MarketplaceRoute: MarketplaceRoute,
   WorkspaceRoute: WorkspaceRoute,
