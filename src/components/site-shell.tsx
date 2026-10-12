@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { Search, ArrowUpRight, LogOut, ChevronDown } from "lucide-react";
+import { NotificationBell } from "@/components/notification-bell";
 import { dashboardFor, type AppRole } from "@/lib/roles";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
@@ -101,6 +102,9 @@ export function SiteShell({ children }: { children: ReactNode }) {
           <Link to="/marketplace" search={{ q: "" }} className="extra-link">
             Explore
           </Link>
+          <Link to="/campaigns" className="extra-link">
+            Campaigns
+          </Link>
           <details className="seller-link role-menu">
             <summary>
               Join as <ChevronDown size={12} className="inline" />
@@ -113,6 +117,8 @@ export function SiteShell({ children }: { children: ReactNode }) {
           {user ? (
             <>
               <a href={dashboardFor(role)}>Dashboard</a>
+              {role !== "admin" && <a href={role === "brand" ? "/brand/inbox" : "/creator/inbox"} className="extra-link">Inbox</a>}
+              <NotificationBell userId={user.id} />
               <Button
                 size="icon"
                 variant="ghost"

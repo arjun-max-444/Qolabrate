@@ -14,10 +14,14 @@ import { Button } from "@/components/ui/button";
 import { currency } from "@/components/service-card";
 import { creators } from "@/lib/marketplace-data";
 import { pageHead } from "@/lib/seo";
+import { LiveCreatorProfile } from "@/components/live-creators";
 export const Route = createFileRoute("/creators/$id")({
   loader: ({ params }) => {
     const c = creators.find((c) => c.id === params.id);
-    if (!c) throw notFound();
+    if (!c) {
+      if (/^[0-9a-f-]{36}$/i.test(params.id)) return null;
+      throw notFound();
+    }
     return c;
   },
   head: ({ loaderData }) =>
@@ -29,6 +33,11 @@ export const Route = createFileRoute("/creators/$id")({
 });
 function Profile() {
   const c = Route.useLoaderData();
+  const { id } = Route.useParams();
+  if (!c) return <LiveCreatorProfile id={id} />;
+  return <SampleProfile c={c} />;
+}
+function SampleProfile({ c }: { c: (typeof creators)[number] }) {
   const { saved, toggle } = useAccount();
   const [index, setIndex] = useState(0);
   const work = c.work[index];

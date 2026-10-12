@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { creators } from "@/lib/marketplace-data";
 import { pageHead } from "@/lib/seo";
+import { LiveCreators } from "@/components/live-creators";
 export const Route = createFileRoute("/marketplace")({
   validateSearch: (s: Record<string, unknown>) => ({ q: typeof s["q"] === "string" ? s["q"] : "" }),
   head: () =>
@@ -139,6 +140,7 @@ function Marketplace() {
             </select>
           </div>
         </div>
+        <LiveCreators query={query} />
         {filtered.length ? (
           <div className="service-grid">
             {filtered.map((c) => (
