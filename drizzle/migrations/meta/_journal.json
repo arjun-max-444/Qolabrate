@@ -15,6 +15,13 @@
       "when": 1791828798370,
       "tag": "0001_portfolio_storage_permissions",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791828999698,
+      "tag": "0002_restrict_account_verification_fields",
+      "breakpoints": true
     }
   ]
 }
