@@ -100,6 +100,51 @@ export type Database = {
           },
         ]
       }
+      applications: {
+        Row: {
+          campaign_id: string
+          created_at: string
+          creator_id: string
+          id: string
+          pitch: string
+          quote: number | null
+          status: string
+        }
+        Insert: {
+          campaign_id: string
+          created_at?: string
+          creator_id: string
+          id?: string
+          pitch?: string
+          quote?: number | null
+          status?: string
+        }
+        Update: {
+          campaign_id?: string
+          created_at?: string
+          creator_id?: string
+          id?: string
+          pitch?: string
+          quote?: number | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "applications_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "applications_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       brand_documents: {
         Row: {
           created_at: string | null
@@ -134,6 +179,7 @@ export type Database = {
       }
       brand_profiles: {
         Row: {
+          about: string
           approval_status: string
           business_address: string
           business_email: string
@@ -145,6 +191,7 @@ export type Database = {
           gst_verification_status: string
           gstin_protected: string
           industry: string
+          logo_url: string | null
           rejection_reason: string | null
           representative_name: string
           reviewed_at: string | null
@@ -154,6 +201,7 @@ export type Database = {
           website: string
         }
         Insert: {
+          about?: string
           approval_status?: string
           business_address?: string
           business_email?: string
@@ -165,6 +213,7 @@ export type Database = {
           gst_verification_status?: string
           gstin_protected?: string
           industry?: string
+          logo_url?: string | null
           rejection_reason?: string | null
           representative_name?: string
           reviewed_at?: string | null
@@ -174,6 +223,7 @@ export type Database = {
           website?: string
         }
         Update: {
+          about?: string
           approval_status?: string
           business_address?: string
           business_email?: string
@@ -185,6 +235,7 @@ export type Database = {
           gst_verification_status?: string
           gstin_protected?: string
           industry?: string
+          logo_url?: string | null
           rejection_reason?: string | null
           representative_name?: string
           reviewed_at?: string | null
@@ -205,6 +256,65 @@ export type Database = {
             foreignKeyName: "brand_profiles_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaigns: {
+        Row: {
+          brand_id: string
+          budget_max: number | null
+          budget_min: number | null
+          category: string
+          created_at: string
+          currency: string
+          deadline: string | null
+          deliverables: string
+          description: string
+          id: string
+          min_followers: number
+          platforms: string[]
+          status: string
+          title: string
+        }
+        Insert: {
+          brand_id: string
+          budget_max?: number | null
+          budget_min?: number | null
+          category?: string
+          created_at?: string
+          currency?: string
+          deadline?: string | null
+          deliverables?: string
+          description?: string
+          id?: string
+          min_followers?: number
+          platforms?: string[]
+          status?: string
+          title: string
+        }
+        Update: {
+          brand_id?: string
+          budget_max?: number | null
+          budget_min?: number | null
+          category?: string
+          created_at?: string
+          currency?: string
+          deadline?: string | null
+          deliverables?: string
+          description?: string
+          id?: string
+          min_followers?: number
+          platforms?: string[]
+          status?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaigns_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -252,6 +362,50 @@ export type Database = {
             foreignKeyName: "creator_profiles_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      creator_social_accounts: {
+        Row: {
+          avg_views: number | null
+          follower_count: number
+          handle: string
+          id: string
+          last_synced_at: string | null
+          platform: string
+          profile_url: string
+          user_id: string
+          verified: boolean
+        }
+        Insert: {
+          avg_views?: number | null
+          follower_count?: number
+          handle?: string
+          id?: string
+          last_synced_at?: string | null
+          platform: string
+          profile_url?: string
+          user_id: string
+          verified?: boolean
+        }
+        Update: {
+          avg_views?: number | null
+          follower_count?: number
+          handle?: string
+          id?: string
+          last_synced_at?: string | null
+          platform?: string
+          profile_url?: string
+          user_id?: string
+          verified?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "creator_social_accounts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -307,6 +461,64 @@ export type Database = {
           {
             foreignKeyName: "notifications_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      offers: {
+        Row: {
+          brand_id: string
+          budget: number | null
+          campaign_id: string | null
+          created_at: string
+          creator_id: string
+          currency: string
+          id: string
+          message: string
+          status: string
+        }
+        Insert: {
+          brand_id: string
+          budget?: number | null
+          campaign_id?: string | null
+          created_at?: string
+          creator_id: string
+          currency?: string
+          id?: string
+          message?: string
+          status?: string
+        }
+        Update: {
+          brand_id?: string
+          budget?: number | null
+          campaign_id?: string | null
+          created_at?: string
+          creator_id?: string
+          currency?: string
+          id?: string
+          message?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offers_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "offers_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "offers_creator_id_fkey"
+            columns: ["creator_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -526,6 +738,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      choose_signup_role: {
+        Args: { _role: Database["public"]["Enums"]["app_role"] }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
