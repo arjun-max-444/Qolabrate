@@ -8,7 +8,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Toaster, toast } from "sonner";
 import { ProfileMenu } from "@/components/profile-menu";
-import { categories } from "@/lib/marketplace-data";
 const AccountContext = createContext<{
   user: User | null;
   role: AppRole | null;
@@ -148,102 +147,6 @@ export function SiteShell({ children }: { children: ReactNode }) {
           </div>
         </nav>
       )}
-      {children}
-      <Toaster position="bottom-right" />
-    </AccountContext.Provider>
-  );
-}
-export function SiteShell({ children }: { children: ReactNode }) {
-  const { user, role } = useAccount();
-  const [query, setQuery] = useState("");
-  const navigate = useNavigate();
-  return (
-    <>
-      <header className="container site-header">
-        <Link to="/" className="wordmark">
-          QOLABRATE<span>.</span>
-        </Link>
-        <form
-          className="header-search"
-          onSubmit={(e) => {
-            e.preventDefault();
-            navigate({ to: "/marketplace", search: { q: query } });
-          }}
-        >
-          <input
-            aria-label="Search services"
-            placeholder="What service are you looking for?"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <Button size="icon" type="submit" aria-label="Search">
-            <Search />
-          </Button>
-        </form>
-        <nav className="header-links">
-          <Link to="/brief" className="extra-link">
-            Qolabrate Pro <ArrowUpRight size={12} className="inline" />
-          </Link>
-          <Link to="/marketplace" search={{ q: "" }} className="extra-link">
-            Explore
-          </Link>
-          <Link to="/campaigns" className="extra-link">
-            Campaigns
-          </Link>
-          <details className="seller-link role-menu">
-            <summary>
-              Join as <ChevronDown size={12} className="inline" />
-            </summary>
-            <div className="role-menu-list">
-              <Link to="/for-creators">For Creators</Link>
-              <Link to="/for-brands">For Brands</Link>
-            </div>
-          </details>
-          {user ? (
-            <>
-              <a href={dashboardFor(role)}>Dashboard</a>
-              {role !== "admin" && <a href={role === "brand" ? "/brand/inbox" : "/creator/inbox"} className="extra-link">Inbox</a>}
-              <NotificationBell userId={user.id} />
-              <ProfileMenu userId={user.id} role={role} email={user.email ?? ""} />
-            </>
-          ) : (
-            <>
-              <Link to="/auth" search={{ mode: "signin" }}>
-                Sign in
-              </Link>
-              <Button asChild variant="outline" className="join-button">
-                <Link to="/auth" search={{ mode: "signup" }}>
-                  Join
-                </Link>
-              </Button>
-            </>
-          )}
-        </nav>
-      </header>
-      {user && role && role !== "admin" && (
-        <nav className="member-nav" aria-label="Your account">
-          <div className="container">
-            {(role === "brand"
-              ? [["/brand/dashboard", "Dashboard"], ["/collabs", "Sent requests"], ["/brand/profile", "Brand profile"], ["/brand/campaigns", "Campaigns"], ["/brand/campaigns/new", "New campaign"], ["/brand/inbox", "Inbox"], ["/marketplace", "Find creators"]]
-              : [["/creator/dashboard", "Dashboard"], ["/collabs", "Collab invitations"], ["/creator/profile", "My profile"], ["/creator/socials", "Social accounts"], ["/campaigns", "Campaigns"], ["/creator/inbox", "Inbox"]]
-            ).map(([href, label]) => (
-              <a key={href} href={href}>{label}</a>
-            ))}
-          </div>
-        </nav>
-      )}
-      <nav className="category-nav">
-        <div className="container">
-          {categories.map((c) => (
-            <Link key={c} to="/marketplace" search={{ q: c }}>
-              {c}
-            </Link>
-          ))}
-          <Link to="/marketplace" search={{ q: "" }}>
-            All services <ArrowUpRight size={12} className="inline" />
-          </Link>
-        </div>
-      </nav>
       {children}
       <footer className="footer">
         <div className="container footer-inner">
