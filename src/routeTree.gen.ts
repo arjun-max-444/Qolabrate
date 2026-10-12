@@ -22,7 +22,11 @@ import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as BrandDashboardRouteImport } from './routes/brand/dashboard'
+import { Route as BrandInboxRouteImport } from './routes/brand/inbox'
 import { Route as CreatorDashboardRouteImport } from './routes/creator/dashboard'
+import { Route as CreatorInboxRouteImport } from './routes/creator/inbox'
+import { Route as CreatorProfileRouteImport } from './routes/creator/profile'
+import { Route as CreatorSocialsRouteImport } from './routes/creator/socials'
 import { Route as CreatorsIdRouteImport } from './routes/creators/$id'
 import { Route as ApiGstValidateFormatRouteImport } from './routes/api/gst/validate-format'
 import { Route as ApiGstVerificationStatusRouteImport } from './routes/api/gst/verification-status'
@@ -92,9 +96,29 @@ const BrandDashboardRoute = BrandDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => BrandRouteRoute,
 } as any)
+const BrandInboxRoute = BrandInboxRouteImport.update({
+  id: '/inbox',
+  path: '/inbox',
+  getParentRoute: () => BrandRouteRoute,
+} as any)
 const CreatorDashboardRoute = CreatorDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => CreatorRouteRoute,
+} as any)
+const CreatorInboxRoute = CreatorInboxRouteImport.update({
+  id: '/inbox',
+  path: '/inbox',
+  getParentRoute: () => CreatorRouteRoute,
+} as any)
+const CreatorProfileRoute = CreatorProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => CreatorRouteRoute,
+} as any)
+const CreatorSocialsRoute = CreatorSocialsRouteImport.update({
+  id: '/socials',
+  path: '/socials',
   getParentRoute: () => CreatorRouteRoute,
 } as any)
 const CreatorsIdRoute = CreatorsIdRouteImport.update({
@@ -128,7 +152,11 @@ export interface FileRoutesByFullPath {
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
   '/brand/dashboard': typeof BrandDashboardRoute
+  '/brand/inbox': typeof BrandInboxRoute
   '/creator/dashboard': typeof CreatorDashboardRoute
+  '/creator/inbox': typeof CreatorInboxRoute
+  '/creator/profile': typeof CreatorProfileRoute
+  '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
@@ -147,7 +175,11 @@ export interface FileRoutesByTo {
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
   '/brand/dashboard': typeof BrandDashboardRoute
+  '/brand/inbox': typeof BrandInboxRoute
   '/creator/dashboard': typeof CreatorDashboardRoute
+  '/creator/inbox': typeof CreatorInboxRoute
+  '/creator/profile': typeof CreatorProfileRoute
+  '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
@@ -167,7 +199,11 @@ export interface FileRoutesById {
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
   '/brand/dashboard': typeof BrandDashboardRoute
+  '/brand/inbox': typeof BrandInboxRoute
   '/creator/dashboard': typeof CreatorDashboardRoute
+  '/creator/inbox': typeof CreatorInboxRoute
+  '/creator/profile': typeof CreatorProfileRoute
+  '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
@@ -188,7 +224,11 @@ export interface FileRouteTypes {
     | '/workspace'
     | '/admin/login'
     | '/brand/dashboard'
+    | '/brand/inbox'
     | '/creator/dashboard'
+    | '/creator/inbox'
+    | '/creator/profile'
+    | '/creator/socials'
     | '/creators/$id'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
@@ -207,7 +247,11 @@ export interface FileRouteTypes {
     | '/workspace'
     | '/admin/login'
     | '/brand/dashboard'
+    | '/brand/inbox'
     | '/creator/dashboard'
+    | '/creator/inbox'
+    | '/creator/profile'
+    | '/creator/socials'
     | '/creators/$id'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
@@ -226,7 +270,11 @@ export interface FileRouteTypes {
     | '/workspace'
     | '/admin/login'
     | '/brand/dashboard'
+    | '/brand/inbox'
     | '/creator/dashboard'
+    | '/creator/inbox'
+    | '/creator/profile'
+    | '/creator/socials'
     | '/creators/$id'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
@@ -343,11 +391,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BrandDashboardRouteImport
       parentRoute: typeof BrandRouteRoute
     }
+    '/brand/inbox': {
+      id: '/brand/inbox'
+      path: '/inbox'
+      fullPath: '/brand/inbox'
+      preLoaderRoute: typeof BrandInboxRouteImport
+      parentRoute: typeof BrandRouteRoute
+    }
     '/creator/dashboard': {
       id: '/creator/dashboard'
       path: '/dashboard'
       fullPath: '/creator/dashboard'
       preLoaderRoute: typeof CreatorDashboardRouteImport
+      parentRoute: typeof CreatorRouteRoute
+    }
+    '/creator/inbox': {
+      id: '/creator/inbox'
+      path: '/inbox'
+      fullPath: '/creator/inbox'
+      preLoaderRoute: typeof CreatorInboxRouteImport
+      parentRoute: typeof CreatorRouteRoute
+    }
+    '/creator/profile': {
+      id: '/creator/profile'
+      path: '/profile'
+      fullPath: '/creator/profile'
+      preLoaderRoute: typeof CreatorProfileRouteImport
+      parentRoute: typeof CreatorRouteRoute
+    }
+    '/creator/socials': {
+      id: '/creator/socials'
+      path: '/socials'
+      fullPath: '/creator/socials'
+      preLoaderRoute: typeof CreatorSocialsRouteImport
       parentRoute: typeof CreatorRouteRoute
     }
     '/creators/$id': {
@@ -376,10 +452,12 @@ declare module '@tanstack/react-router' {
 
 interface BrandRouteRouteChildren {
   BrandDashboardRoute: typeof BrandDashboardRoute
+  BrandInboxRoute: typeof BrandInboxRoute
 }
 
 const BrandRouteRouteChildren: BrandRouteRouteChildren = {
   BrandDashboardRoute: BrandDashboardRoute,
+  BrandInboxRoute: BrandInboxRoute,
 }
 
 const BrandRouteRouteWithChildren = BrandRouteRoute._addFileChildren(
@@ -388,10 +466,16 @@ const BrandRouteRouteWithChildren = BrandRouteRoute._addFileChildren(
 
 interface CreatorRouteRouteChildren {
   CreatorDashboardRoute: typeof CreatorDashboardRoute
+  CreatorInboxRoute: typeof CreatorInboxRoute
+  CreatorProfileRoute: typeof CreatorProfileRoute
+  CreatorSocialsRoute: typeof CreatorSocialsRoute
 }
 
 const CreatorRouteRouteChildren: CreatorRouteRouteChildren = {
   CreatorDashboardRoute: CreatorDashboardRoute,
+  CreatorInboxRoute: CreatorInboxRoute,
+  CreatorProfileRoute: CreatorProfileRoute,
+  CreatorSocialsRoute: CreatorSocialsRoute,
 }
 
 const CreatorRouteRouteWithChildren = CreatorRouteRoute._addFileChildren(
