@@ -34,6 +34,7 @@ import { Route as CreatorProfileRouteImport } from './routes/creator/profile'
 import { Route as CreatorSocialsRouteImport } from './routes/creator/socials'
 import { Route as CreatorsIdRouteImport } from './routes/creators/$id'
 import { Route as ProfileIndexRouteImport } from './routes/profile.index'
+import { Route as ProfileEditRouteImport } from './routes/profile.edit'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as ApiGstValidateFormatRouteImport } from './routes/api/gst/validate-format'
 import { Route as ApiGstVerificationStatusRouteImport } from './routes/api/gst/verification-status'
@@ -167,6 +168,11 @@ const ProfileIndexRoute = ProfileIndexRouteImport.update({
   path: '/profile/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileEditRoute = ProfileEditRouteImport.update({
+  id: '/profile/edit',
+  path: '/profile/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UUsernameRoute = UUsernameRouteImport.update({
   id: '/u/$username',
   path: '/u/$username',
@@ -227,6 +233,7 @@ export interface FileRoutesByFullPath {
   '/creator/profile': typeof CreatorProfileRoute
   '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
+  '/profile/edit': typeof ProfileEditRoute
   '/u/$username': typeof UUsernameRoute
   '/campaigns/': typeof CampaignsIndexRoute
   '/collabs/': typeof CollabsIndexRoute
@@ -261,6 +268,7 @@ export interface FileRoutesByTo {
   '/creator/profile': typeof CreatorProfileRoute
   '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
+  '/profile/edit': typeof ProfileEditRoute
   '/u/$username': typeof UUsernameRoute
   '/campaigns': typeof CampaignsIndexRoute
   '/collabs': typeof CollabsIndexRoute
@@ -296,6 +304,7 @@ export interface FileRoutesById {
   '/creator/profile': typeof CreatorProfileRoute
   '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
+  '/profile/edit': typeof ProfileEditRoute
   '/u/$username': typeof UUsernameRoute
   '/campaigns/': typeof CampaignsIndexRoute
   '/collabs/': typeof CollabsIndexRoute
@@ -332,6 +341,7 @@ export interface FileRouteTypes {
     | '/creator/profile'
     | '/creator/socials'
     | '/creators/$id'
+    | '/profile/edit'
     | '/u/$username'
     | '/campaigns/'
     | '/collabs/'
@@ -366,6 +376,7 @@ export interface FileRouteTypes {
     | '/creator/profile'
     | '/creator/socials'
     | '/creators/$id'
+    | '/profile/edit'
     | '/u/$username'
     | '/campaigns'
     | '/collabs'
@@ -400,6 +411,7 @@ export interface FileRouteTypes {
     | '/creator/profile'
     | '/creator/socials'
     | '/creators/$id'
+    | '/profile/edit'
     | '/u/$username'
     | '/campaigns/'
     | '/collabs/'
@@ -428,6 +440,7 @@ export interface RootRouteChildren {
   CampaignsIdRoute: typeof CampaignsIdRoute
   CollabsIdRoute: typeof CollabsIdRoute
   CreatorsIdRoute: typeof CreatorsIdRoute
+  ProfileEditRoute: typeof ProfileEditRoute
   UUsernameRoute: typeof UUsernameRoute
   CampaignsIndexRoute: typeof CampaignsIndexRoute
   CollabsIndexRoute: typeof CollabsIndexRoute
@@ -613,6 +626,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile/edit': {
+      id: '/profile/edit'
+      path: '/profile/edit'
+      fullPath: '/profile/edit'
+      preLoaderRoute: typeof ProfileEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/u/$username': {
       id: '/u/$username'
       path: '/u/$username'
@@ -723,6 +743,7 @@ const rootRouteChildren: RootRouteChildren = {
   CampaignsIdRoute: CampaignsIdRoute,
   CollabsIdRoute: CollabsIdRoute,
   CreatorsIdRoute: CreatorsIdRoute,
+  ProfileEditRoute: ProfileEditRoute,
   UUsernameRoute: UUsernameRoute,
   CampaignsIndexRoute: CampaignsIndexRoute,
   CollabsIndexRoute: CollabsIndexRoute,

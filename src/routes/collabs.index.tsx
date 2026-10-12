@@ -85,7 +85,7 @@ function Collabs() {
                     <strong className="text-lg">{c.title}</strong>
                     <span className={`status-pill status-${c.status}`}>{c.cancel_reason === "expired" ? "expired" : c.status}</span>
                   </div>
-                  <span>{planLabel(c.plan_type)} · {usdRange(c.budget_min, c.budget_max)}{c.deadline && ` · due ${c.deadline}`} · {isBrand ? "to" : "from"} <a className="underline" href={`/u/id/${other}`}>{names[other] ?? "Member"}</a></span>
+                  <span>{planLabel(c.plan_type)} · {usdRange(c.budget_min, c.budget_max)}{c.deadline && ` · due ${c.deadline}`} · {isBrand ? "to" : "from"} <a className="underline" href={`/u/${other}`}>{names[other] ?? "Member"}</a></span>
                   <p className="line-clamp-3 whitespace-pre-line">{c.brief}</p>
                   {c.status === "countered" && (
                     <p className="notice">Counter: {usdRange(c.counter_budget_min, c.counter_budget_max)}{c.counter_deadline && ` · due ${c.counter_deadline}`}{c.counter_note && ` — ${c.counter_note}`}</p>

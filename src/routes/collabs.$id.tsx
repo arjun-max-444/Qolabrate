@@ -126,7 +126,7 @@ function Workspace() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="entry-title">{c.title}</h1>
-            <p className="text-muted-foreground">With <a className="underline" href={`/u/id/${other}`}>{names[other] ?? "Member"}</a></p>
+            <p className="text-muted-foreground">With <a className="underline" href={`/u/${other}`}>{names[other] ?? "Member"}</a></p>
           </div>
           <div className="flex gap-2">
             <Button size="sm" variant="ghost" onClick={toggleBlock}><Ban /> {blocked ? "Unblock" : "Block"}</Button>
