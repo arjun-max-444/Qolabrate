@@ -1051,6 +1051,7 @@ a.entry-card:hover { border-color: var(--primary); }
 .member-nav { border-bottom: 1px solid var(--border); background: var(--muted); }
 .member-nav .container { display: flex; gap: 1.25rem; overflow-x: auto; padding-top: 0.6rem; padding-bottom: 0.6rem; font-size: 0.875rem; font-weight: 600; white-space: nowrap; }
 .member-nav a:hover { color: var(--primary); }
+.member-nav + main, .member-nav + * > main { padding-top: 1.5rem; }
 
 .dashboard-layout { display: grid; gap: 2rem; }
 @media (min-width: 1024px) { .dashboard-layout { grid-template-columns: minmax(0,1fr) 22rem; align-items: start; } }
