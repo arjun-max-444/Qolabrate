@@ -1,14 +1,11 @@
 # Qolabrate
 
-unzip the file run the project , make chnages according to you run project , rename the site as QOLABRATE REDSIGN THE UI as https://www.fiverr.com/
 
-This project was built with [Lovable](https://lovable.dev).
 
-**Live app**: https://qolabrate.lovable.app
+**Live app**: https://qolabrate.chinmaipilot.in
 
 ## Build with Lovable
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/3e20920f-d9b2-4083-bb16-ade641bd312a).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
 - **Stay in sync**: every change made in Lovable is committed straight to this repository.
