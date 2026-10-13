@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useAccount } from "@/components/site-shell";
-import { Search, Pause, Play, BadgeCheck, ArrowRight, Star } from "lucide-react";
+import { Search, Pause, Play, ArrowRight, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CineFooter, CineNav, LazyVideo, Reveal } from "@/components/cinematic";
 import { HomeMatches } from "@/components/home-matches";
@@ -138,7 +138,6 @@ function Home() {
               <article key={c.id} className="cine-card">
                 <Link to="/creators/$id" params={{ id: c.id }} className="cine-card-media" aria-label={`View ${c.name}'s portfolio`}>
                   <LazyVideo hover src={clip(i + 1)} poster={c.work[0]?.image} label={`${c.name} preview`} />
-                  {c.trust === "Evidence reviewed" && <span className="cine-badge"><BadgeCheck size={12} /> Portfolio reviewed</span>}
                 </Link>
                 <div className="cine-card-body">
                   <div className="cine-card-who">
@@ -192,11 +191,6 @@ function Home() {
         {/* 8. Trust */}
         <Reveal className="cine-section cine-wrap">
           <div className="cine-trust">
-            <div>
-              <BadgeCheck className="cine-accent" />
-              <h3>Portfolio reviewed</h3>
-              <p className="cine-muted">This badge means our team checked the creator's evidence — project files, workflow notes or client references — for the work shown. It confirms the work is theirs, not a quality rating.</p>
-            </div>
             <div>
               <span className="cine-accent cine-serif cine-big">$</span>
               <h3>Project-based pricing</h3>

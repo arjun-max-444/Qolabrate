@@ -87,7 +87,6 @@ function SampleProfile({ c }: { c: (typeof creators)[number] }) {
                 ["Format", `${work.contentType} · ${work.aspectRatio}`],
                 ["Role", work.role],
                 ["Tools", work.tools.join(", ")],
-                ["Portfolio evidence", work.verification],
               ].map(([label, value]) => (
                 <div key={label}>
                   <small>{label}</small>
@@ -114,7 +113,6 @@ function SampleProfile({ c }: { c: (typeof creators)[number] }) {
             </div>
           </section>
           <aside className="profile-sidebar">
-            <span className="status-tag">{c.trust}</span>
             <h2>{c.name}</h2>
             <p className="flex items-center gap-2">
               <MapPin size={14} />

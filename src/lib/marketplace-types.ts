@@ -1,5 +1,4 @@
 export type ContentType = 'Video' | 'Image' | 'Animation' | 'Campaign'
-export type TrustStatus = 'Self-reported' | 'Evidence submitted' | 'Evidence reviewed'
 
 export interface PortfolioItem {
   id: string
@@ -14,7 +13,6 @@ export interface PortfolioItem {
   workflow: string[]
   role: string
   licensing: string
-  verification: TrustStatus
 }
 
 export interface Creator {
@@ -31,7 +29,6 @@ export interface Creator {
   rate: number
   availability: string
   commercialUse: string
-  trust: TrustStatus
   work: PortfolioItem[]
 }
 
