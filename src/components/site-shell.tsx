@@ -105,6 +105,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
           <Link to="/campaigns" className="extra-link">
             Campaigns
           </Link>
+          {!user && (
           <details className="seller-link role-menu">
             <summary>
               Join as <ChevronDown size={12} className="inline" />
@@ -114,10 +115,10 @@ export function SiteShell({ children }: { children: ReactNode }) {
               <Link to="/for-brands">For Brands</Link>
             </div>
           </details>
+          )}
           {user ? (
             <>
-              <a href={dashboardFor(role)}>Dashboard</a>
-              {role !== "admin" && <a href={role === "brand" ? "/brand/inbox" : "/creator/inbox"} className="extra-link">Inbox</a>}
+              {(!role || role === "admin") && <a href={dashboardFor(role)}>Dashboard</a>}
               <NotificationBell userId={user.id} />
               <ProfileMenu userId={user.id} role={role} email={user.email ?? ""} />
             </>
