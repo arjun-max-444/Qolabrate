@@ -92,6 +92,13 @@
       "when": 1791843913103,
       "tag": "0012_restrict_reviews_settings_avatars_creators",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1791850594985,
+      "tag": "0013_lock_account_role",
+      "breakpoints": true
     }
   ]
 }
