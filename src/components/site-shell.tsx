@@ -102,9 +102,9 @@ export function SiteShell({ children }: { children: ReactNode }) {
           <Link to="/marketplace" search={{ q: "" }} className="extra-link">
             Explore
           </Link>
-          <Link to="/campaigns" className="extra-link">
+          {role !== "creator" && <Link to="/campaigns" className="extra-link">
             Campaigns
-          </Link>
+          </Link>}
           {!user && (
           <details className="seller-link role-menu">
             <summary>
