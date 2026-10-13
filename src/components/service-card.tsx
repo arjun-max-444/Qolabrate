@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Heart, Star, BadgeCheck } from "lucide-react";
+import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAccount } from "./site-shell";
 import type { Creator } from "@/lib/marketplace-types";
@@ -46,18 +46,10 @@ export function ServiceCard({ creator: c }: { creator: Creator }) {
         <Link to="/creators/$id" params={{ id: c.id }}>
           {c.name}
         </Link>
-        {c.trust === "Evidence reviewed" && <BadgeCheck size={12} className="text-primary" />}
-        <small>
-          {c.trust === "Evidence reviewed" ? "Portfolio reviewed" : "Independent creator"}
-        </small>
       </div>
       <Link to="/creators/$id" params={{ id: c.id }} className="service-description">
         {serviceTitle(c)}
       </Link>
-      <div className="service-meta">
-        <Star size={12} fill="currentColor" />
-        <b>{c.trust === "Evidence reviewed" ? "Evidence reviewed" : "Portfolio available"}</b>
-      </div>
       <div className="price-row">
         <span>Starting at</span>
         <b>{currency(c.rate)}</b>
