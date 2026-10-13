@@ -1,3 +1,4 @@
+import { useRoleGate } from "@/lib/use-role-gate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { SiteShell, useAccount } from "@/components/site-shell";
@@ -14,6 +15,7 @@ export const Route = createFileRoute("/campaigns/")({
 });
 
 function CampaignsPage() {
+  useRoleGate(["creator"]);
   const { user } = useAccount();
   const [rows, setRows] = useState<Tables<"campaigns">[] | null>(null);
   const [cat, setCat] = useState("");

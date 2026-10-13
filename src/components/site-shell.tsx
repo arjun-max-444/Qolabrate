@@ -96,13 +96,13 @@ export function SiteShell({ children }: { children: ReactNode }) {
           </Button>
         </form>
         <nav className="header-links">
-          <Link to="/brief" className="extra-link">
+          {role !== "creator" && <Link to="/brief" className="extra-link">
             Qolabrate Pro <ArrowUpRight size={12} className="inline" />
-          </Link>
+          </Link>}
           <Link to="/marketplace" search={{ q: "" }} className="extra-link">
             Explore
           </Link>
-          {role !== "creator" && <Link to="/campaigns" className="extra-link">
+          {!user && <Link to="/campaigns" className="extra-link">
             Campaigns
           </Link>}
           {!user && (

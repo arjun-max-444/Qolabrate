@@ -1,3 +1,4 @@
+import { useRoleGate } from "@/lib/use-role-gate";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Sparkles, ArrowRight, Check } from "lucide-react";
@@ -31,6 +32,7 @@ const empty: Brief = {
   status: "Draft",
 };
 function BriefBuilder() {
+  useRoleGate(["brand"]);
   const [draft, setDraft] = useState(empty);
   const [step, setStep] = useState(0);
   const [error, setError] = useState("");

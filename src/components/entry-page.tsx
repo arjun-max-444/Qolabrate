@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { useRoleGate } from "@/lib/use-role-gate";
 import { SiteShell } from "@/components/site-shell";
 import { Button } from "@/components/ui/button";
 
@@ -15,6 +16,8 @@ export function EntryPage({
   benefits: { title: string; body: string }[];
   cta: string;
 }) {
+  // Join pages are for visitors; signed-in members go to their own area.
+  useRoleGate([]);
   return (
     <SiteShell>
       <main className="container section">
