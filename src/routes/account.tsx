@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Upload, Check, ArrowRight } from "lucide-react";
 import { SiteShell, useAccount } from "@/components/site-shell";
@@ -16,8 +16,15 @@ export const Route = createFileRoute("/account")({
   component: Account,
 });
 function Account() {
-  const { user } = useAccount();
-  const [kind, setKind] = useState("creator");
+  const { user, role } = useAccount();
+  // Each account has one role; never show the other role's form.
+  const kind = role === "brand" ? "brand" : "creator";
+  const navigate = useNavigate();
+  // One profile editor per role — send people to theirs instead of a second, overlapping form.
+  useEffect(() => {
+    if (user && role === "creator") navigate({ to: "/creator/profile", replace: true });
+    if (user && role === "brand") navigate({ to: "/brand/profile", replace: true });
+  }, [user?.id, role]);
   const [step, setStep] = useState(0);
   const [draft, setDraft] = useState<{
     name: string;
@@ -222,24 +229,7 @@ function Account() {
               <p>{user.email}</p>
             </div>
             <div className="flex gap-2 mb-7">
-              <Button
-                variant={kind === "creator" ? "default" : "outline"}
-                onClick={() => {
-                  setKind("creator");
-                  setStep(0);
-                }}
-              >
-                Creator
-              </Button>
-              <Button
-                variant={kind === "brand" ? "default" : "outline"}
-                onClick={() => {
-                  setKind("brand");
-                  setStep(0);
-                }}
-              >
-                Brand / agency
-              </Button>
+              <span className="status-pill">{kind === "brand" ? "Brand / agency account" : "Creator account"}</span>
               <Button asChild variant="ghost">
                 <Link to="/workspace">My projects</Link>
               </Button>

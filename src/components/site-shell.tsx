@@ -102,9 +102,10 @@ export function SiteShell({ children }: { children: ReactNode }) {
           <Link to="/marketplace" search={{ q: "" }} className="extra-link">
             Explore
           </Link>
-          <Link to="/campaigns" className="extra-link">
+          {role !== "creator" && <Link to="/campaigns" className="extra-link">
             Campaigns
-          </Link>
+          </Link>}
+          {!user && (
           <details className="seller-link role-menu">
             <summary>
               Join as <ChevronDown size={12} className="inline" />
@@ -114,10 +115,10 @@ export function SiteShell({ children }: { children: ReactNode }) {
               <Link to="/for-brands">For Brands</Link>
             </div>
           </details>
+          )}
           {user ? (
             <>
-              <a href={dashboardFor(role)}>Dashboard</a>
-              {role !== "admin" && <a href={role === "brand" ? "/brand/inbox" : "/creator/inbox"} className="extra-link">Inbox</a>}
+              {(!role || role === "admin") && <a href={dashboardFor(role)}>Dashboard</a>}
               <NotificationBell userId={user.id} />
               <ProfileMenu userId={user.id} role={role} email={user.email ?? ""} />
             </>
@@ -140,7 +141,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
           <div className="container">
             {(role === "brand"
               ? [["/brand/dashboard", "Dashboard"], ["/collabs", "Sent requests"], ["/brand/profile", "Brand profile"], ["/brand/campaigns", "Campaigns"], ["/brand/campaigns/new", "New campaign"], ["/brand/inbox", "Inbox"], ["/marketplace", "Find creators"]]
-              : [["/creator/dashboard", "Dashboard"], ["/collabs", "Collab invitations"], ["/creator/profile", "My profile"], ["/creator/socials", "Social accounts"], ["/campaigns", "Campaigns"], ["/creator/inbox", "Inbox"]]
+              : [["/creator/dashboard", "Dashboard"], ["/collabs", "Collab invitations"], ["/profile", "My profile"], ["/creator/profile", "Edit details"], ["/creator/socials", "Social accounts"], ["/campaigns", "Campaigns"], ["/creator/inbox", "Inbox"]]
             ).map(([href, label]) => (
               <a key={href} href={href}>{label}</a>
             ))}
