@@ -1384,3 +1384,4 @@ body { font-family: "Montserrat", Arial, sans-serif; }
 .q-ai-pack ul { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; gap: .4rem; font-size: 13px; }
 .q-ai-pack li { display: flex; gap: .4rem; align-items: center; }
 @media (max-width: 800px) { .q-ai-hero, .q-ai-packages { grid-template-columns: 1fr; } .q-ai-portfolio { grid-template-columns: 1fr 1fr; } }
+.q-ai-body .q-pill { padding: 0 .6rem; min-width: 0; font-size: 13px; }
