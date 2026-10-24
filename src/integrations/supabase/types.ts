@@ -341,6 +341,35 @@ export type Database = {
           },
         ]
       }
+      brand_subscriptions: {
+        Row: {
+          plan: string
+          renews_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          plan?: string
+          renews_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          plan?: string
+          renews_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "brand_subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       brands: {
         Row: {
           avatar_url: string | null
@@ -846,6 +875,47 @@ export type Database = {
             foreignKeyName: "creator_profiles_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      creator_projects: {
+        Row: {
+          client: string
+          created_at: string
+          description: string
+          id: string
+          link: string
+          title: string
+          user_id: string
+          year: number | null
+        }
+        Insert: {
+          client?: string
+          created_at?: string
+          description?: string
+          id?: string
+          link?: string
+          title: string
+          user_id: string
+          year?: number | null
+        }
+        Update: {
+          client?: string
+          created_at?: string
+          description?: string
+          id?: string
+          link?: string
+          title?: string
+          user_id?: string
+          year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "creator_projects_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },

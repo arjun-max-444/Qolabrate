@@ -1,6 +1,7 @@
 import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { CreatorProjectsEditor } from "@/components/creator-projects";
 import { SiteShell, useAccount } from "@/components/site-shell";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/profile-view";
@@ -154,6 +155,7 @@ function EditProfile() {
             </div>
           </form>
         )}
+        {!loading && isCreator && user && <CreatorProjectsEditor userId={user.id} />}
       </main>
     </SiteShell>
   );

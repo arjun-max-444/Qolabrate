@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BillingRouteImport } from './routes/billing'
 import { Route as BrandRouteRouteImport } from './routes/brand/route'
 import { Route as BriefRouteImport } from './routes/brief'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -24,7 +25,9 @@ import { Route as HealthRouteImport } from './routes/health'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as MessagesRouteImport } from './routes/messages'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as WorkspaceRouteImport } from './routes/workspace'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AiCreatorsIndexRouteImport } from './routes/ai-creators.index'
 import { Route as AiCreatorsIdRouteImport } from './routes/ai-creators.$id'
@@ -73,6 +76,11 @@ const AccountRoute = AccountRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BillingRoute = BillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BrandRouteRoute = BrandRouteRouteImport.update({
@@ -130,9 +138,19 @@ const MessagesRoute = MessagesRouteImport.update({
   path: '/messages',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorkspaceRoute = WorkspaceRouteImport.update({
   id: '/workspace',
   path: '/workspace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -290,6 +308,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
+  '/billing': typeof BillingRoute
   '/brief': typeof BriefRoute
   '/contact': typeof ContactRoute
   '/features': typeof FeaturesRoute
@@ -299,6 +318,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof HomeRoute
   '/marketplace': typeof MarketplaceRoute
   '/messages': typeof MessagesRoute
+  '/notifications': typeof NotificationsRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
   '/ai-creators/$id': typeof AiCreatorsIdRoute
@@ -315,6 +335,7 @@ export interface FileRoutesByFullPath {
   '/orders/$id': typeof OrdersIdRoute
   '/profile/edit': typeof ProfileEditRoute
   '/u/$username': typeof UUsernameRoute
+  '/admin/': typeof AdminIndexRoute
   '/ai-creators/': typeof AiCreatorsIndexRoute
   '/campaigns/': typeof CampaignsIndexRoute
   '/collabs/': typeof CollabsIndexRoute
@@ -337,6 +358,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
+  '/billing': typeof BillingRoute
   '/brief': typeof BriefRoute
   '/contact': typeof ContactRoute
   '/features': typeof FeaturesRoute
@@ -346,6 +368,7 @@ export interface FileRoutesByTo {
   '/home': typeof HomeRoute
   '/marketplace': typeof MarketplaceRoute
   '/messages': typeof MessagesRoute
+  '/notifications': typeof NotificationsRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
   '/ai-creators/$id': typeof AiCreatorsIdRoute
@@ -362,6 +385,7 @@ export interface FileRoutesByTo {
   '/orders/$id': typeof OrdersIdRoute
   '/profile/edit': typeof ProfileEditRoute
   '/u/$username': typeof UUsernameRoute
+  '/admin': typeof AdminIndexRoute
   '/ai-creators': typeof AiCreatorsIndexRoute
   '/campaigns': typeof CampaignsIndexRoute
   '/collabs': typeof CollabsIndexRoute
@@ -385,6 +409,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
+  '/billing': typeof BillingRoute
   '/brief': typeof BriefRoute
   '/contact': typeof ContactRoute
   '/features': typeof FeaturesRoute
@@ -394,6 +419,7 @@ export interface FileRoutesById {
   '/home': typeof HomeRoute
   '/marketplace': typeof MarketplaceRoute
   '/messages': typeof MessagesRoute
+  '/notifications': typeof NotificationsRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
   '/ai-creators/$id': typeof AiCreatorsIdRoute
@@ -410,6 +436,7 @@ export interface FileRoutesById {
   '/orders/$id': typeof OrdersIdRoute
   '/profile/edit': typeof ProfileEditRoute
   '/u/$username': typeof UUsernameRoute
+  '/admin/': typeof AdminIndexRoute
   '/ai-creators/': typeof AiCreatorsIndexRoute
   '/campaigns/': typeof CampaignsIndexRoute
   '/collabs/': typeof CollabsIndexRoute
@@ -434,6 +461,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/account'
     | '/auth'
+    | '/billing'
     | '/brief'
     | '/contact'
     | '/features'
@@ -443,6 +471,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/marketplace'
     | '/messages'
+    | '/notifications'
     | '/workspace'
     | '/admin/login'
     | '/ai-creators/$id'
@@ -459,6 +488,7 @@ export interface FileRouteTypes {
     | '/orders/$id'
     | '/profile/edit'
     | '/u/$username'
+    | '/admin/'
     | '/ai-creators/'
     | '/campaigns/'
     | '/collabs/'
@@ -481,6 +511,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/account'
     | '/auth'
+    | '/billing'
     | '/brief'
     | '/contact'
     | '/features'
@@ -490,6 +521,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/marketplace'
     | '/messages'
+    | '/notifications'
     | '/workspace'
     | '/admin/login'
     | '/ai-creators/$id'
@@ -506,6 +538,7 @@ export interface FileRouteTypes {
     | '/orders/$id'
     | '/profile/edit'
     | '/u/$username'
+    | '/admin'
     | '/ai-creators'
     | '/campaigns'
     | '/collabs'
@@ -528,6 +561,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/account'
     | '/auth'
+    | '/billing'
     | '/brief'
     | '/contact'
     | '/features'
@@ -537,6 +571,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/marketplace'
     | '/messages'
+    | '/notifications'
     | '/workspace'
     | '/admin/login'
     | '/ai-creators/$id'
@@ -553,6 +588,7 @@ export interface FileRouteTypes {
     | '/orders/$id'
     | '/profile/edit'
     | '/u/$username'
+    | '/admin/'
     | '/ai-creators/'
     | '/campaigns/'
     | '/collabs/'
@@ -576,6 +612,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AccountRoute: typeof AccountRoute
   AuthRoute: typeof AuthRoute
+  BillingRoute: typeof BillingRoute
   BriefRoute: typeof BriefRoute
   ContactRoute: typeof ContactRoute
   FeaturesRoute: typeof FeaturesRoute
@@ -585,6 +622,7 @@ export interface RootRouteChildren {
   HomeRoute: typeof HomeRoute
   MarketplaceRoute: typeof MarketplaceRoute
   MessagesRoute: typeof MessagesRoute
+  NotificationsRoute: typeof NotificationsRoute
   WorkspaceRoute: typeof WorkspaceRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AiCreatorsIdRoute: typeof AiCreatorsIdRoute
@@ -594,6 +632,7 @@ export interface RootRouteChildren {
   OrdersIdRoute: typeof OrdersIdRoute
   ProfileEditRoute: typeof ProfileEditRoute
   UUsernameRoute: typeof UUsernameRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   AiCreatorsIndexRoute: typeof AiCreatorsIndexRoute
   CampaignsIndexRoute: typeof CampaignsIndexRoute
   CollabsIndexRoute: typeof CollabsIndexRoute
@@ -634,6 +673,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/billing': {
+      id: '/billing'
+      path: '/billing'
+      fullPath: '/billing'
+      preLoaderRoute: typeof BillingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/brand': {
@@ -713,11 +759,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/workspace': {
       id: '/workspace'
       path: '/workspace'
       fullPath: '/workspace'
       preLoaderRoute: typeof WorkspaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/login': {
@@ -975,6 +1035,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AccountRoute: AccountRoute,
   AuthRoute: AuthRoute,
+  BillingRoute: BillingRoute,
   BriefRoute: BriefRoute,
   ContactRoute: ContactRoute,
   FeaturesRoute: FeaturesRoute,
@@ -984,6 +1045,7 @@ const rootRouteChildren: RootRouteChildren = {
   HomeRoute: HomeRoute,
   MarketplaceRoute: MarketplaceRoute,
   MessagesRoute: MessagesRoute,
+  NotificationsRoute: NotificationsRoute,
   WorkspaceRoute: WorkspaceRoute,
   AdminLoginRoute: AdminLoginRoute,
   AiCreatorsIdRoute: AiCreatorsIdRoute,
@@ -993,6 +1055,7 @@ const rootRouteChildren: RootRouteChildren = {
   OrdersIdRoute: OrdersIdRoute,
   ProfileEditRoute: ProfileEditRoute,
   UUsernameRoute: UUsernameRoute,
+  AdminIndexRoute: AdminIndexRoute,
   AiCreatorsIndexRoute: AiCreatorsIndexRoute,
   CampaignsIndexRoute: CampaignsIndexRoute,
   CollabsIndexRoute: CollabsIndexRoute,
