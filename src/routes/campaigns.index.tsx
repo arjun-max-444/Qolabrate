@@ -32,10 +32,9 @@ function CampaignsPage() {
   );
   const visible = user ? shown : shown.slice(0, 3);
   const demos = demoCampaigns.filter((c) => (!cat || c.category === cat) && (!platform || c.platforms.includes(platform)) && (!minBudget || c.budget_max >= Number(minBudget)));
-  const Shell = user && role ? ({ children }: { children: React.ReactNode }) => <FeedShell wide>{children}</FeedShell> : SiteShell;
-  return (
-    <Shell>
-      <main className={user && role ? "section" : "container section"}>
+  const inApp = !!user && !!role;
+  const content = (
+      <main className={inApp ? "section" : "container section"}>
         <h1 className="entry-title">Open campaigns</h1>
         <p className="entry-lead">Brands looking for creators right now.</p>
         <div className="filters">
@@ -78,6 +77,6 @@ function CampaignsPage() {
           </div>
         )}
       </main>
-    </Shell>
   );
+  return inApp ? <FeedShell wide>{content}</FeedShell> : <SiteShell>{content}</SiteShell>;
 }
