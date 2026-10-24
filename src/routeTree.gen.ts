@@ -40,6 +40,8 @@ import { Route as CreatorInboxRouteImport } from './routes/creator/inbox'
 import { Route as CreatorProfileRouteImport } from './routes/creator/profile'
 import { Route as CreatorSocialsRouteImport } from './routes/creator/socials'
 import { Route as CreatorsIdRouteImport } from './routes/creators/$id'
+import { Route as OrdersIndexRouteImport } from './routes/orders.index'
+import { Route as OrdersIdRouteImport } from './routes/orders.$id'
 import { Route as ProfileIndexRouteImport } from './routes/profile.index'
 import { Route as ProfileEditRouteImport } from './routes/profile.edit'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
@@ -208,6 +210,16 @@ const CreatorsIdRoute = CreatorsIdRouteImport.update({
   path: '/creators/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrdersIndexRoute = OrdersIndexRouteImport.update({
+  id: '/orders/',
+  path: '/orders/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrdersIdRoute = OrdersIdRouteImport.update({
+  id: '/orders/$id',
+  path: '/orders/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileIndexRoute = ProfileIndexRouteImport.update({
   id: '/profile/',
   path: '/profile/',
@@ -300,11 +312,13 @@ export interface FileRoutesByFullPath {
   '/creator/profile': typeof CreatorProfileRoute
   '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
+  '/orders/$id': typeof OrdersIdRoute
   '/profile/edit': typeof ProfileEditRoute
   '/u/$username': typeof UUsernameRoute
   '/ai-creators/': typeof AiCreatorsIndexRoute
   '/campaigns/': typeof CampaignsIndexRoute
   '/collabs/': typeof CollabsIndexRoute
+  '/orders/': typeof OrdersIndexRoute
   '/profile/': typeof ProfileIndexRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
@@ -345,11 +359,13 @@ export interface FileRoutesByTo {
   '/creator/profile': typeof CreatorProfileRoute
   '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
+  '/orders/$id': typeof OrdersIdRoute
   '/profile/edit': typeof ProfileEditRoute
   '/u/$username': typeof UUsernameRoute
   '/ai-creators': typeof AiCreatorsIndexRoute
   '/campaigns': typeof CampaignsIndexRoute
   '/collabs': typeof CollabsIndexRoute
+  '/orders': typeof OrdersIndexRoute
   '/profile': typeof ProfileIndexRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
@@ -391,11 +407,13 @@ export interface FileRoutesById {
   '/creator/profile': typeof CreatorProfileRoute
   '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
+  '/orders/$id': typeof OrdersIdRoute
   '/profile/edit': typeof ProfileEditRoute
   '/u/$username': typeof UUsernameRoute
   '/ai-creators/': typeof AiCreatorsIndexRoute
   '/campaigns/': typeof CampaignsIndexRoute
   '/collabs/': typeof CollabsIndexRoute
+  '/orders/': typeof OrdersIndexRoute
   '/profile/': typeof ProfileIndexRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
@@ -438,11 +456,13 @@ export interface FileRouteTypes {
     | '/creator/profile'
     | '/creator/socials'
     | '/creators/$id'
+    | '/orders/$id'
     | '/profile/edit'
     | '/u/$username'
     | '/ai-creators/'
     | '/campaigns/'
     | '/collabs/'
+    | '/orders/'
     | '/profile/'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
@@ -483,11 +503,13 @@ export interface FileRouteTypes {
     | '/creator/profile'
     | '/creator/socials'
     | '/creators/$id'
+    | '/orders/$id'
     | '/profile/edit'
     | '/u/$username'
     | '/ai-creators'
     | '/campaigns'
     | '/collabs'
+    | '/orders'
     | '/profile'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
@@ -528,11 +550,13 @@ export interface FileRouteTypes {
     | '/creator/profile'
     | '/creator/socials'
     | '/creators/$id'
+    | '/orders/$id'
     | '/profile/edit'
     | '/u/$username'
     | '/ai-creators/'
     | '/campaigns/'
     | '/collabs/'
+    | '/orders/'
     | '/profile/'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
@@ -567,11 +591,13 @@ export interface RootRouteChildren {
   CampaignsIdRoute: typeof CampaignsIdRoute
   CollabsIdRoute: typeof CollabsIdRoute
   CreatorsIdRoute: typeof CreatorsIdRoute
+  OrdersIdRoute: typeof OrdersIdRoute
   ProfileEditRoute: typeof ProfileEditRoute
   UUsernameRoute: typeof UUsernameRoute
   AiCreatorsIndexRoute: typeof AiCreatorsIndexRoute
   CampaignsIndexRoute: typeof CampaignsIndexRoute
   CollabsIndexRoute: typeof CollabsIndexRoute
+  OrdersIndexRoute: typeof OrdersIndexRoute
   ProfileIndexRoute: typeof ProfileIndexRoute
   ApiGstValidateFormatRoute: typeof ApiGstValidateFormatRoute
   ApiGstVerificationStatusRoute: typeof ApiGstVerificationStatusRoute
@@ -799,6 +825,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreatorsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/orders/': {
+      id: '/orders/'
+      path: '/orders'
+      fullPath: '/orders/'
+      preLoaderRoute: typeof OrdersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/orders/$id': {
+      id: '/orders/$id'
+      path: '/orders/$id'
+      fullPath: '/orders/$id'
+      preLoaderRoute: typeof OrdersIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile/': {
       id: '/profile/'
       path: '/profile'
@@ -950,11 +990,13 @@ const rootRouteChildren: RootRouteChildren = {
   CampaignsIdRoute: CampaignsIdRoute,
   CollabsIdRoute: CollabsIdRoute,
   CreatorsIdRoute: CreatorsIdRoute,
+  OrdersIdRoute: OrdersIdRoute,
   ProfileEditRoute: ProfileEditRoute,
   UUsernameRoute: UUsernameRoute,
   AiCreatorsIndexRoute: AiCreatorsIndexRoute,
   CampaignsIndexRoute: CampaignsIndexRoute,
   CollabsIndexRoute: CollabsIndexRoute,
+  OrdersIndexRoute: OrdersIndexRoute,
   ProfileIndexRoute: ProfileIndexRoute,
   ApiGstValidateFormatRoute: ApiGstValidateFormatRoute,
   ApiGstVerificationStatusRoute: ApiGstVerificationStatusRoute,

@@ -100,6 +100,80 @@ export type Database = {
           },
         ]
       }
+      ai_orders: {
+        Row: {
+          brand_id: string
+          brief: string
+          completed_at: string | null
+          created_at: string
+          creator_id: string
+          delivery: Json | null
+          fee: number
+          id: string
+          package_name: string
+          package_price: number
+          paid_at: string | null
+          rating: number | null
+          review: string | null
+          revision_note: string | null
+          revisions_allowed: number
+          revisions_used: number
+          status: string
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          brand_id: string
+          brief: string
+          completed_at?: string | null
+          created_at?: string
+          creator_id: string
+          delivery?: Json | null
+          fee: number
+          id?: string
+          package_name: string
+          package_price: number
+          paid_at?: string | null
+          rating?: number | null
+          review?: string | null
+          revision_note?: string | null
+          revisions_allowed?: number
+          revisions_used?: number
+          status?: string
+          total: number
+          updated_at?: string
+        }
+        Update: {
+          brand_id?: string
+          brief?: string
+          completed_at?: string | null
+          created_at?: string
+          creator_id?: string
+          delivery?: Json | null
+          fee?: number
+          id?: string
+          package_name?: string
+          package_price?: number
+          paid_at?: string | null
+          rating?: number | null
+          review?: string | null
+          revision_note?: string | null
+          revisions_allowed?: number
+          revisions_used?: number
+          status?: string
+          total?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_orders_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       applications: {
         Row: {
           campaign_id: string
