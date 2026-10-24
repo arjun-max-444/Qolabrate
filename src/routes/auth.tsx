@@ -182,31 +182,6 @@ function Auth() {
               <button type="button" className="section-link" onClick={() => setRole(undefined)}>change</button>
             </p>
           )}
-          {!["recover", "setup"].includes(mode) && role !== "brand" && (
-            <>
-              <Button
-                variant="outline"
-                className="full"
-                onClick={async () => {
-                  if (mode === "signup" && role) sessionStorage.setItem("qolabrate_signup_role", role);
-                  const result = await lovable.auth.signInWithOAuth("google", {
-                    redirect_uri: window.location.origin,
-                  });
-                  if (result.error) { setError(result.error.message); return; }
-                  if (result.redirected) return;
-                  const { role: signedInRole } = await fetchRole();
-                  if (signedInRole === "brand") {
-                    await supabase.auth.signOut();
-                    setRole("brand");
-                    setError("Brands and agencies must sign in with their official email and password.");
-                  }
-                }}
-              >
-                Continue with Google
-              </Button>
-              <div className="divider">or continue with email</div>
-            </>
-          )}
           <form onSubmit={submit}>
             {mode === "signup" && (
               <label className="form-field">

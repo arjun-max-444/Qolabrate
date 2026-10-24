@@ -54,14 +54,10 @@ function Home() {
                 <Link to="/auth" search={{ mode: "signup", role: "creator" }} className="q-pill q-pill-dark q-pill-lg">
                   <span className="q-chev"><ChevronRight size={16} /></span> Join as Creator
                 </Link>
-                <Link to="/auth" search={{ mode: "signup", role: "creator" }} className="q-pill q-pill-light q-pill-lg">
-                  <GoogleMark /> Continue with Google
+                <Link to="/auth" search={{ mode: "signup", role: "brand" }} className="q-pill q-pill-light q-pill-lg">
+                  <Building2 size={18} /> Join as Brand
                 </Link>
               </div>
-              <div className="q-or">or</div>
-              <Link to="/auth" search={{ mode: "signup", role: "brand" }} className="q-pill q-pill-light q-pill-lg">
-                <Building2 size={18} /> Join as Brand
-              </Link>
             </div>
             <div className="q-art" aria-hidden="true">
               <div className="q-art-circle" />
