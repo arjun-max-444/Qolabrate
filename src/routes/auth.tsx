@@ -25,6 +25,8 @@ function Auth() {
   const [mode, setMode] = useState(initial === "continue" ? "signin" : initial);
   const [role, setRole] = useState<"creator" | "brand" | undefined>(initialRole ?? (initial === "signin" || initial === "continue" ? "creator" : undefined));
   const [email, setEmail] = useState("");
+  // Remember the last account used on this device and prefill it at sign-in.
+  useEffect(() => { const last = localStorage.getItem("qolabrate_last_email"); if (last) setEmail(last); }, []);
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
@@ -67,6 +69,7 @@ function Auth() {
         if (error) { setChecking(false); setError(error.message); return; }
       }
       const { role: r } = await fetchRole();
+      if (user.email) localStorage.setItem("qolabrate_last_email", user.email);
       sendWelcomeEmail().catch(() => {});
       // New accounts finish their profile first, even when a "next" destination is stored;
       // complete profiles continue to their stored destination or their own area.
@@ -125,6 +128,7 @@ function Auth() {
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       err = error?.message;
+      if (!error) localStorage.setItem("qolabrate_last_email", email);
       if (error && /confirm/i.test(error.message)) {
         await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: window.location.origin + "/auth?mode=continue" } });
         err = "Your email isn't verified yet. We've sent a new verification link — check your inbox (and spam/quarantine folder), click it, and you'll go straight to your profile.";
@@ -301,9 +305,6 @@ function Auth() {
               Forgot password?
             </Button>
           </div>
-          <Link to="/marketplace" search={{ q: "" }} className="section-link mt-6">
-            Continue exploring
-          </Link>
         </section>
       </main>
     </SiteShell>

@@ -134,6 +134,7 @@ function EditProfile() {
               <label className="form-field">Industry<input className="field" maxLength={80} value={f.industry} onChange={set("industry")} /></label>
             </>}
             <label className="form-field">{role === "brand" ? "About the company" : "Bio"}<textarea className="field" rows={4} required={welcome} maxLength={2000} value={f.bio} onChange={set("bio")} /></label>
+            {!welcome && <>
             <label className="form-field">Location<input className="field" maxLength={120} value={f.location} onChange={set("location")} /></label>
             <label className="form-field">{role === "brand" ? "Focus areas" : "Skills"} (comma separated)<input className="field" value={f.skills} onChange={set("skills")} /></label>
             {isCreator && <label className="form-field">Tools (comma separated)<input className="field" value={f.tools} onChange={set("tools")} placeholder="Runway, Midjourney, Blender" /></label>}
@@ -152,6 +153,7 @@ function EditProfile() {
                 </div>
               </fieldset>
             )}
+            </>}
             <div className="flex gap-2">
               <Button type="submit" disabled={busy || taken}>{busy ? "Saving…" : welcome ? "Finish setup" : "Save"}</Button>
               {!welcome && <Button asChild variant="outline"><Link to="/profile">Cancel</Link></Button>}
