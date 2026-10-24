@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Globe, MapPin, Star } from "lucide-react";
+import { BadgeCheck, Globe, MapPin, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { InviteButton } from "@/components/collab-invite";
 import { CreatorProjects } from "@/components/creator-projects";
