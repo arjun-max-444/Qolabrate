@@ -75,7 +75,7 @@ function Comments({ postId, myId }: { postId: string; myId: string }) {
       ))}
       <form
         style={{ display: "flex", gap: ".5rem", marginTop: ".5rem" }}
-        onSubmit={(e) => { e.preventDefault(); const err = postError(text); if (err) return toast.error(err); add.mutate(text.trim()); }}
+        onSubmit={(e) => { e.preventDefault(); const err = postError(text); if (err) { toast.error(err); return; } add.mutate(text.trim()); }}
       >
         <input aria-label="Write a comment" placeholder="Write a comment…" maxLength={POST_LIMIT} value={text} onChange={(e) => setText(e.target.value)}
           style={{ flex: 1, border: "1px solid var(--border)", borderRadius: 999, padding: ".45rem .9rem", fontSize: 14, background: "var(--background)" }} />
@@ -94,6 +94,7 @@ function Feed() {
   const [term, setTerm] = useState("");
   const [openPost, setOpenPost] = useState<string | null>(null);
   const signedIn = !!user && !!role;
+  const inbox = role === "brand" ? "/brand/inbox" : "/creator/inbox";
 
   const me = useQuery({
     queryKey: ["feed", "me", user?.id],
@@ -254,7 +255,7 @@ function Feed() {
           <div style={{ padding: "2.5rem 1.5rem", textAlign: "center" }}>
             <h2 style={{ fontSize: "1.3rem", fontWeight: 700 }}>Join the conversation</h2>
             <p style={{ color: "var(--muted-foreground)", margin: ".6rem 0 1.2rem" }}>Sign in to see posts from 200+ creators and brands, like, follow and share your own updates.</p>
-            <Link to="/auth" className="q-pill q-pill-dark">Sign in</Link>
+            <Link to="/auth" search={{ mode: "signin" }} className="q-pill q-pill-dark">Sign in</Link>
           </div>
         ) : (
           <>

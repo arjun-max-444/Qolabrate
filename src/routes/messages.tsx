@@ -9,7 +9,7 @@ import { pageHead } from "@/lib/seo";
 import { conversations, MESSAGE_LIMIT, messageError, timeAgo, type DirectMessage } from "@/lib/feed";
 
 export const Route = createFileRoute("/messages")({
-  validateSearch: (s: Record<string, unknown>): { to?: string } => (typeof s.to === "string" ? { to: s.to } : {}),
+  validateSearch: (s: Record<string, unknown>): { to?: string } => (typeof s["to"] === "string" ? { to: s["to"] } : {}),
   head: () => pageHead("Messages", "Private direct messages between Qolabrate creators and brands."),
   component: Messages,
 });
@@ -93,7 +93,7 @@ function Messages() {
       <div style={{ padding: "4rem 1.5rem", textAlign: "center" }}>
         <h1 style={{ fontSize: "1.4rem", fontWeight: 700 }}>Messages</h1>
         <p style={{ color: "var(--muted-foreground)", margin: ".6rem 0 1.2rem" }}>Sign in to send private messages to creators and brands.</p>
-        <Link to="/auth" className="q-pill q-pill-dark">Sign in</Link>
+        <Link to="/auth" search={{ mode: "signin" }} className="q-pill q-pill-dark">Sign in</Link>
       </div>
     );
   }
@@ -161,7 +161,7 @@ function Messages() {
               <div ref={endRef} />
             </div>
             <form style={{ display: "flex", gap: ".5rem", padding: ".8rem 1.2rem", borderTop: "1px solid var(--border)" }}
-              onSubmit={(e) => { e.preventDefault(); const err = messageError(text); if (err) return toast.error(err); send.mutate(text.trim()); }}>
+              onSubmit={(e) => { e.preventDefault(); const err = messageError(text); if (err) { toast.error(err); return; } send.mutate(text.trim()); }}>
               <input aria-label="Write a message" placeholder="Write a message…" maxLength={MESSAGE_LIMIT} value={text} onChange={(e) => setText(e.target.value)}
                 style={{ flex: 1, border: "1px solid var(--border)", borderRadius: 999, padding: ".55rem 1rem", fontSize: 14, background: "var(--background)" }} />
               <button type="submit" disabled={!myId || send.isPending || to === myId} className="q-pill q-pill-dark" style={{ height: 38 }}>Send</button>
