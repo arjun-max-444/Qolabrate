@@ -13,3 +13,6 @@ Decisions (user, latest): keep human creators alongside AI personas; one account
 - [ ] Social redesign stage 3: Explore people search [done], like/comment notifications [done], photo posts + profile pictures [done], video posts [pending].
 - [ ] Email inbox from zip: overlaps with Messages — waiting on user whether a separate inbox is wanted.
 - [ ] Contact email: waiting on the real address (placeholder hello@qolabrate.chinmaipilot.in).
+- [x] Shortlist rename, demo bios + pictures + auto-replies, trending campaigns, creator streak/on-time rate, previous works on feed profiles.
+- [ ] Portfolio uploads shown on feed profiles (portfolio files are private to owner today).
+- [ ] "Brand account issues" — waiting on user to say what breaks.

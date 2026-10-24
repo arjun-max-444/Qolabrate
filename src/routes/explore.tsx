@@ -12,7 +12,7 @@ export const Route = createFileRoute("/explore")({
 });
 
 type Kind = "all" | "creator" | "brand";
-type Person = { id: string; handle: string; display_name: string; kind: string; bio: string | null; is_demo: boolean };
+type Person = { id: string; handle: string; display_name: string; kind: string; bio: string | null; is_demo: boolean; avatar_path: string | null };
 
 function Explore() {
   const { signedIn, myId } = useFeedMe();
@@ -25,7 +25,7 @@ function Explore() {
     queryKey: ["feed", "explore", term, kind],
     enabled: signedIn,
     queryFn: async () => {
-      let req = supabase.from("feed_profiles").select("id, handle, display_name, kind, bio, is_demo").order("display_name").limit(40);
+      let req = supabase.from("feed_profiles").select("id, handle, display_name, kind, bio, is_demo, avatar_path").order("display_name").limit(40);
       if (kind !== "all") req = req.eq("kind", kind);
       if (term) req = req.or(`display_name.ilike.%${term}%,handle.ilike.%${term}%`);
       const { data, error } = await req;
@@ -61,7 +61,7 @@ function Explore() {
       ) : (
         (people.data ?? []).map((p) => (
           <div key={p.id} className="q-person">
-            <Link to="/p/$handle" params={{ handle: p.handle }}><Avatar name={p.display_name} /></Link>
+            <Link to="/p/$handle" params={{ handle: p.handle }}><Avatar name={p.display_name} path={p.avatar_path} /></Link>
             <Link to="/p/$handle" params={{ handle: p.handle }} style={{ flex: 1, minWidth: 0 }}>
               <b>{p.display_name}</b> <small className="q-muted">@{p.handle} · {p.kind === "brand" ? "Brand" : "Creator"}{p.is_demo ? " · Demo" : ""}</small>
               {p.bio && <p className="q-muted" style={{ fontSize: 14, margin: "2px 0 0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.bio}</p>}
