@@ -99,6 +99,13 @@
       "when": 1791850594985,
       "tag": "0013_lock_account_role",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1792828142954,
+      "tag": "0014_social_feed",
+      "breakpoints": true
     }
   ]
 }
