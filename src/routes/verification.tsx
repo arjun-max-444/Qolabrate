@@ -96,10 +96,10 @@ function VerificationPage() {
 function SkillsSection({ userId, rows, editable, onChange }: { userId: string; rows: any[]; editable: boolean; onChange: () => void }) {
   const [f, setF] = useState({ name: "", level: "intermediate", years: "1", tools: "", link: "" });
   async function add() {
-    if (f.name.trim().length < 2) return toast.error("Enter a skill name");
-    if (f.link && !/^https?:\/\//.test(f.link)) return toast.error("Link must start with https://");
+    if (f.name.trim().length < 2) { toast.error("Enter a skill name"); return; }
+    if (f.link && !/^https?:\/\//.test(f.link)) { toast.error("Link must start with https://"); return; }
     const { error } = await supabase.from("creator_skills").insert({ user_id: userId, name: f.name.trim().slice(0, 60), level: f.level, years: Math.min(50, Math.max(0, Number(f.years) || 0)), tools: f.tools.split(",").map((t) => t.trim()).filter(Boolean).slice(0, 20), link: f.link.trim() });
-    if (error) return toast.error("Could not add skill");
+    if (error) { toast.error("Could not add skill"); return; }
     setF({ name: "", level: "intermediate", years: "1", tools: "", link: "" }); onChange();
   }
   return (
@@ -117,7 +117,7 @@ function SkillsSection({ userId, rows, editable, onChange }: { userId: string; r
         <div className="grid gap-2 mt-2" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))" }}>
           <input className="field" placeholder="Skill, e.g. AI filmmaking" list="skill-ideas" value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} />
           <datalist id="skill-ideas">{["AI filmmaking", "AI video generation", "AI animation", "AI image generation", "AI advertising", "AI storytelling", "Motion graphics", "Video editing", "Prompt engineering", "AI character design", "3D and visual effects", "Social media content"].map((s) => <option key={s} value={s} />)}</datalist>
-          <select className="field" value={f.level} onChange={(e) => setF({ ...f, level: e.target.value })}>{SKILL_LEVELS.map((l) => <option key={l} value={l}>{l[0].toUpperCase() + l.slice(1)}</option>)}</select>
+          <select className="field" value={f.level} onChange={(e) => setF({ ...f, level: e.target.value })}>{SKILL_LEVELS.map((l) => <option key={l} value={l}>{l.charAt(0).toUpperCase() + l.slice(1)}</option>)}</select>
           <input className="field" type="number" min={0} max={50} placeholder="Years" value={f.years} onChange={(e) => setF({ ...f, years: e.target.value })} />
           <input className="field" placeholder="Tools (Gemini, Runway…)" value={f.tools} onChange={(e) => setF({ ...f, tools: e.target.value })} />
           <input className="field" placeholder="Supporting link (optional)" value={f.link} onChange={(e) => setF({ ...f, link: e.target.value })} />
@@ -133,21 +133,21 @@ function EvidenceSection({ userId, rows, editable, skills, onChange }: { userId:
   const [file, setFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
   async function add() {
-    if (f.title.trim().length < 2) return toast.error("Give this evidence a title");
-    if (!file && !/^https?:\/\//.test(f.url)) return toast.error("Add a file or an https:// link");
-    if (!f.permission) return toast.error("Confirm you have permission to share this work");
-    if (file && !ALLOWED_MIME.includes(file.type)) return toast.error("Use an image, video (MP4/WebM/MOV) or PDF");
-    if (file && file.size > MAX_FILE_BYTES) return toast.error("Files must be 25 MB or smaller");
+    if (f.title.trim().length < 2) { toast.error("Give this evidence a title"); return; }
+    if (!file && !/^https?:\/\//.test(f.url)) { toast.error("Add a file or an https:// link"); return; }
+    if (!f.permission) { toast.error("Confirm you have permission to share this work"); return; }
+    if (file && !ALLOWED_MIME.includes(file.type)) { toast.error("Use an image, video (MP4/WebM/MOV) or PDF"); return; }
+    if (file && file.size > MAX_FILE_BYTES) { toast.error("Files must be 25 MB or smaller"); return; }
     setBusy(true);
     let path: string | null = null;
     if (file) {
       path = `${userId}/${crypto.randomUUID()}-${file.name.replace(/[^\w.-]/g, "_").slice(-80)}`;
       const { error } = await supabase.storage.from("verification-evidence").upload(path, file, { contentType: file.type });
-      if (error) { setBusy(false); return toast.error("Upload failed"); }
+      if (error) { setBusy(false); toast.error("Upload failed"); return; }
     }
     const { error } = await supabase.from("creator_verification_evidence").insert({ creator_id: userId, evidence_type: f.type as any, title: f.title.trim().slice(0, 120), url: f.url.trim(), storage_path: path, file_name: file?.name.slice(0, 200) ?? "", related_skill: f.skill, permission_to_share: true });
     setBusy(false);
-    if (error) return toast.error("Could not save evidence");
+    if (error) { toast.error("Could not save evidence"); return; }
     setF({ type: "portfolio", title: "", url: "", skill: "", permission: false }); setFile(null); onChange();
   }
   async function remove(e: any) {

@@ -45,7 +45,7 @@ function ReviewPage() {
   }
 
   const d = q.data;
-  const report = d?.reports[0]?.report as Record<string, any> | undefined;
+  const report = d?.reports[0]?.report as any;
   const st = d?.request.status as VerificationStatus | undefined;
   const acts = st ? adminActions(st) : [];
   return (
