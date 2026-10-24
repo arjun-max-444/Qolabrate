@@ -133,7 +133,7 @@ function FeedProfile() {
             </div>
             {p.is_demo && !mine && <p className="q-muted" style={{ fontSize: 13, marginTop: ".6rem" }}>Demo accounts can be followed but don't reply to messages.</p>}
             {role === "brand" && p.kind === "creator" && !p.is_demo && (
-              <Link to="/marketplace" className="q-link-btn" style={{ display: "inline-block", marginTop: ".6rem" }}>Find this creator in the marketplace to request a collaboration</Link>
+              <Link to="/marketplace" search={{ q: p.display_name }} className="q-link-btn" style={{ display: "inline-block", marginTop: ".6rem" }}>Find this creator in the marketplace to request a collaboration</Link>
             )}
           </section>
 
