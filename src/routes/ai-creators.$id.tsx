@@ -84,14 +84,14 @@ function Profile() {
 
 function OrderForm({ creatorId, packages }: { creatorId: string; packages: { name: string; price: number }[] }) {
   const navigate = useNavigate();
-  const [pkg, setPkg] = useState(packages[0].name);
+  const [pkg, setPkg] = useState(packages[0]?.name ?? "");
   const [brief, setBrief] = useState("");
   const [busy, setBusy] = useState(false);
-  const price = priceBreakdown(packages.find((p) => p.name === pkg)!.price);
+  const price = priceBreakdown((packages.find((p) => p.name === pkg) ?? packages[0]!).price);
   const err = validateBrief(brief);
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (err) return toast.error(err);
+    if (err) { toast.error(err); return; }
     setBusy(true);
     try {
       const { id } = await createOrder({ data: { creatorId, packageName: pkg, brief } });

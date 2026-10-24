@@ -28,7 +28,7 @@ function Orders() {
       <PublicNav />
       <main className="q-wrap" style={{ padding: "2rem 0 4rem" }}>
         <h1 style={{ fontSize: 36, fontWeight: 800 }}>My orders</h1>
-        {!user ? <p><Link to="/auth" className="q-pill q-pill-dark">Sign in to see your orders</Link></p>
+        {!user ? <p><Link to="/auth" search={{ mode: "signin", role: "brand" }} className="q-pill q-pill-dark">Sign in to see your orders</Link></p>
           : q.isLoading ? <p>Loading…</p>
           : !q.data?.length ? <p style={{ color: "var(--muted-foreground)" }}>No orders yet. <Link to="/ai-creators" style={{ textDecoration: "underline" }}>Browse AI creators</Link>.</p>
           : (

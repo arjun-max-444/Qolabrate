@@ -33,7 +33,7 @@ function OrderPage() {
     },
   });
 
-  if (!user) return <Shell><Link to="/auth" className="q-pill q-pill-dark">Sign in to view this order</Link></Shell>;
+  if (!user) return <Shell><Link to="/auth" search={{ mode: "signin", role: "brand" }} className="q-pill q-pill-dark">Sign in to view this order</Link></Shell>;
   if (q.isLoading) return <Shell><p>Loading…</p></Shell>;
   const o = q.data;
   if (!o) return <Shell><p>Order not found.</p><Link to="/orders" className="q-pill q-pill-light">All orders</Link></Shell>;
