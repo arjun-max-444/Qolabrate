@@ -1,8 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { Home as HomeIcon, Search, Bell, Mail, Users, Bookmark, User, PenSquare, MessageCircle, Repeat2, Heart, Share } from "lucide-react";
 import { useAccount } from "@/components/site-shell";
+import { supabase } from "@/integrations/supabase/client";
 import { pageHead } from "@/lib/seo";
+import { POST_LIMIT, postError, timeAgo } from "@/lib/feed";
 import film from "@/assets/feed-film.jpg";
 import campaign from "@/assets/feed-campaign.jpg";
 import product from "@/assets/feed-product.jpg";
@@ -12,25 +16,127 @@ export const Route = createFileRoute("/home")({
   component: Feed,
 });
 
-type Post = { id: string; name: string; handle: string; time: string; text: string; img?: string; c: number; r: number; l: number };
-const samplePosts: Post[] = [
-  { id: "1", name: "Qolabrate", handle: "qolabrate", time: "2h", text: "Discover amazing AI creators, creative talent and innovative brands — all in one place. Build, collaborate and create what's next. #AI #Creators #Brands", c: 12, r: 28, l: 156 },
-  { id: "2", name: "AI Filmmaker", handle: "aifilmmaker", time: "3h", text: "Just finished a new AI short film. Here's a quick preview — love how AI is changing the way we tell stories.", img: film, c: 8, r: 24, l: 112 },
-  { id: "3", name: "Creative Studio", handle: "creativestudio", time: "5h", text: "We're looking for AI animators for an exciting brand campaign. DM us if you're interested!", img: campaign, c: 21, r: 42, l: 189 },
-  { id: "4", name: "Brand Creators", handle: "brandcreators", time: "8h", text: "Launching a new sneaker campaign and looking for talent in AI video, animation and generative art.", img: product, c: 17, r: 9, l: 94 },
-];
-const trends = [["Technology", "AI Video", "12.4K"], ["Creative", "AI Animation", "8.7K"], ["Brands", "Creative Campaigns", "6.2K"], ["Creators", "Generative AI", "5.1K"], ["Business", "Collaboration", "4.3K"]];
-const follows = [["Q.", "AI Animators Hub", "aianimatorhub"], ["B", "Brand Creators", "brandcreators"], ["C", "Generative Studio", "genstudio"]];
+const images: Record<string, string> = { film, campaign, product };
+const trends = [["Technology", "AI Video"], ["Creative", "AI Animation"], ["Brands", "Campaign"], ["Creators", "Generative"], ["Business", "Collaboration"]];
+
+type FeedPost = {
+  id: string;
+  body: string;
+  image_key: string | null;
+  created_at: string;
+  author: { id: string; handle: string; display_name: string; kind: string; is_demo: boolean };
+  feed_likes: { count: number }[];
+};
 
 function Feed() {
   const { user, role } = useAccount();
+  const qc = useQueryClient();
   const [tab, setTab] = useState<"foryou" | "following">("foryou");
-  const [liked, setLiked] = useState<string[]>([]);
   const [draft, setDraft] = useState("");
-  const [mine, setMine] = useState<Post[]>([]);
+  const [search, setSearch] = useState("");
+  const [term, setTerm] = useState("");
   const inbox = role === "brand" ? "/brand/inbox" : "/creator/inbox";
-  const initial = (user?.email ?? "Q").slice(0, 1).toUpperCase();
-  const posts = tab === "foryou" ? [...mine, ...samplePosts] : mine;
+  const signedIn = !!user && !!role;
+
+  const me = useQuery({
+    queryKey: ["feed", "me", user?.id],
+    enabled: signedIn,
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("ensure_feed_profile");
+      if (error) throw error;
+      return data as string;
+    },
+  });
+  const myId = me.data;
+
+  const follows = useQuery({
+    queryKey: ["feed", "follows", myId],
+    enabled: !!myId,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("feed_follows").select("followee_id").eq("follower_id", myId!);
+      if (error) throw error;
+      return data.map((r) => r.followee_id);
+    },
+  });
+  const following = follows.data ?? [];
+
+  const likes = useQuery({
+    queryKey: ["feed", "likes", myId],
+    enabled: !!myId,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("feed_likes").select("post_id").eq("profile_id", myId!);
+      if (error) throw error;
+      return new Set(data.map((r) => r.post_id));
+    },
+  });
+  const liked = likes.data ?? new Set<string>();
+
+  const posts = useQuery({
+    queryKey: ["feed", "posts", tab, term, tab === "following" ? following.join(",") : "", myId],
+    enabled: signedIn && (tab === "foryou" || follows.isSuccess),
+    queryFn: async () => {
+      let q = supabase
+        .from("feed_posts")
+        .select("id, body, image_key, created_at, author:feed_profiles!inner(id, handle, display_name, kind, is_demo), feed_likes(count)")
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (tab === "following") q = q.in("author_id", [...following, myId!]);
+      if (term) q = q.ilike("body", `%${term.replace(/[%_]/g, "")}%`);
+      const { data, error } = await q;
+      if (error) throw error;
+      return data as unknown as FeedPost[];
+    },
+  });
+
+  const suggestions = useQuery({
+    queryKey: ["feed", "suggest", myId, role],
+    enabled: !!myId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("feed_profiles")
+        .select("id, handle, display_name, kind")
+        .eq("is_demo", true)
+        .eq("kind", role === "brand" ? "creator" : "brand")
+        .limit(40);
+      if (error) throw error;
+      return data;
+    },
+  });
+  const whoToFollow = (suggestions.data ?? []).filter((p) => !following.includes(p.id)).slice(0, 4);
+
+  const refresh = () => qc.invalidateQueries({ queryKey: ["feed"] });
+
+  const publish = useMutation({
+    mutationFn: async (body: string) => {
+      const { error } = await supabase.from("feed_posts").insert({ author_id: myId!, body });
+      if (error) throw error;
+    },
+    onSuccess: () => { setDraft(""); refresh(); toast.success("Posted"); },
+    onError: () => toast.error("Could not publish your post"),
+  });
+
+  const toggleLike = useMutation({
+    mutationFn: async (postId: string) => {
+      const { error } = liked.has(postId)
+        ? await supabase.from("feed_likes").delete().eq("post_id", postId).eq("profile_id", myId!)
+        : await supabase.from("feed_likes").insert({ post_id: postId, profile_id: myId! });
+      if (error) throw error;
+    },
+    onSuccess: refresh,
+    onError: () => toast.error("Could not update like"),
+  });
+
+  const toggleFollow = useMutation({
+    mutationFn: async (profileId: string) => {
+      const { error } = following.includes(profileId)
+        ? await supabase.from("feed_follows").delete().eq("follower_id", myId!).eq("followee_id", profileId)
+        : await supabase.from("feed_follows").insert({ follower_id: myId!, followee_id: profileId });
+      if (error) throw error;
+    },
+    onSuccess: refresh,
+    onError: () => toast.error("Could not update follow"),
+  });
+
   const nav = [
     { to: "/home", icon: HomeIcon, label: "Home" },
     { to: "/ai-creators", icon: Search, label: "Explore" },
@@ -40,6 +146,13 @@ function Feed() {
     { to: "/account", icon: Bookmark, label: "Bookmarks" },
     { to: user ? "/profile" : "/auth", icon: User, label: "Profile" },
   ] as const;
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const err = postError(draft);
+    if (err) return toast.error(err);
+    publish.mutate(draft.trim());
+  };
 
   return (
     <div className="q-feed">
@@ -56,48 +169,85 @@ function Feed() {
           <button role="tab" aria-selected={tab === "foryou"} onClick={() => setTab("foryou")}>For You</button>
           <button role="tab" aria-selected={tab === "following"} onClick={() => setTab("following")}>Following</button>
         </div>
-        <form id="composer" className="q-composer" onSubmit={(e) => { e.preventDefault(); if (!draft.trim()) return; setMine([{ id: crypto.randomUUID(), name: "You", handle: "you", time: "now", text: draft.trim(), c: 0, r: 0, l: 0 }, ...mine]); setDraft(""); }}>
-          <div className="q-av">{initial}</div>
-          <div style={{ flex: 1 }}>
-            <textarea rows={1} aria-label="What's happening?" placeholder="What's happening?" value={draft} onChange={(e) => setDraft(e.target.value)} />
-            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: ".6rem" }}>
-              <button type="submit" className="q-pill q-pill-dark" style={{ height: 38 }}>Post</button>
-            </div>
+
+        {!signedIn ? (
+          <div style={{ padding: "2.5rem 1.5rem", textAlign: "center" }}>
+            <h2 style={{ fontSize: "1.3rem", fontWeight: 700 }}>Join the conversation</h2>
+            <p style={{ color: "var(--muted-foreground)", margin: ".6rem 0 1.2rem" }}>Sign in to see posts from 200+ creators and brands, like, follow and share your own updates.</p>
+            <Link to="/auth" className="q-pill q-pill-dark">Sign in</Link>
           </div>
-        </form>
-        {posts.length === 0 && <p style={{ padding: "2rem", color: "var(--muted-foreground)" }}>Nothing here yet — follow creators and brands to fill this tab.</p>}
-        {posts.map((p) => (
-          <article key={p.id} className="q-post">
-            <div className="q-av">{p.name.slice(0, 1)}</div>
-            <div style={{ minWidth: 0, flex: 1 }}>
-              <div className="q-post-head"><b>{p.name}</b><span>@{p.handle} · {p.time}</span></div>
-              <p>{p.text}</p>
-              {p.img && <img src={p.img} alt="" loading="lazy" width={1280} height={720} />}
-              <div className="q-post-actions">
-                <button aria-label="Comments"><MessageCircle size={16} />{p.c}</button>
-                <button aria-label="Reposts"><Repeat2 size={16} />{p.r}</button>
-                <button aria-label="Like" aria-pressed={liked.includes(p.id)} onClick={() => setLiked(liked.includes(p.id) ? liked.filter((x) => x !== p.id) : [...liked, p.id])}>
-                  <Heart size={16} fill={liked.includes(p.id) ? "currentColor" : "none"} />{p.l + (liked.includes(p.id) ? 1 : 0)}
-                </button>
-                <button aria-label="Share"><Share size={16} /></button>
+        ) : (
+          <>
+            <form id="composer" className="q-composer" onSubmit={submit}>
+              <div className="q-av">{(user?.email ?? "Q").slice(0, 1).toUpperCase()}</div>
+              <div style={{ flex: 1 }}>
+                <textarea rows={2} maxLength={POST_LIMIT} aria-label="What's happening?" placeholder="What's happening?" value={draft} onChange={(e) => setDraft(e.target.value)} />
+                <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: ".8rem", marginTop: ".6rem" }}>
+                  <small style={{ color: "var(--muted-foreground)" }}>{draft.length}/{POST_LIMIT}</small>
+                  <button type="submit" disabled={!myId || publish.isPending} className="q-pill q-pill-dark" style={{ height: 38 }}>Post</button>
+                </div>
               </div>
-            </div>
-          </article>
-        ))}
+            </form>
+            {me.isError && <p style={{ padding: "1.5rem", color: "var(--destructive)" }}>We couldn't set up your feed profile. Please refresh.</p>}
+            {term && <p style={{ padding: ".8rem 1.2rem", fontSize: 14 }}>Results for “{term}” · <button onClick={() => { setTerm(""); setSearch(""); }} style={{ textDecoration: "underline" }}>Clear</button></p>}
+            {posts.isLoading && <p style={{ padding: "2rem", color: "var(--muted-foreground)" }}>Loading posts…</p>}
+            {posts.data?.length === 0 && <p style={{ padding: "2rem", color: "var(--muted-foreground)" }}>{tab === "following" ? "Nothing here yet — follow creators and brands to fill this tab." : "No posts found."}</p>}
+            {posts.data?.map((p) => {
+              const isLiked = liked.has(p.id);
+              const mine = p.author.id === myId;
+              return (
+                <article key={p.id} className="q-post">
+                  <div className="q-av">{p.author.display_name.slice(0, 1)}</div>
+                  <div style={{ minWidth: 0, flex: 1 }}>
+                    <div className="q-post-head">
+                      <b>{p.author.display_name}</b>
+                      <span>@{p.author.handle} · {timeAgo(p.created_at)}{p.author.kind === "brand" ? " · Brand" : ""}{p.author.is_demo ? " · Demo" : ""}</span>
+                      {!mine && (
+                        <button className="q-pill q-pill-light" style={{ marginLeft: "auto", height: 28, fontSize: 12 }} onClick={() => toggleFollow.mutate(p.author.id)}>
+                          {following.includes(p.author.id) ? "Following" : "Follow"}
+                        </button>
+                      )}
+                    </div>
+                    <p>{p.body}</p>
+                    {p.image_key && images[p.image_key] && <img src={images[p.image_key]} alt="" loading="lazy" width={1280} height={720} />}
+                    <div className="q-post-actions">
+                      <button aria-label="Comments" disabled><MessageCircle size={16} /></button>
+                      <button aria-label="Reposts" disabled><Repeat2 size={16} /></button>
+                      <button aria-label="Like" aria-pressed={isLiked} onClick={() => toggleLike.mutate(p.id)}>
+                        <Heart size={16} fill={isLiked ? "currentColor" : "none"} />{p.feed_likes[0]?.count ?? 0}
+                      </button>
+                      <button aria-label="Share" onClick={() => { void navigator.clipboard?.writeText(p.body); toast("Post text copied"); }}><Share size={16} /></button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </>
+        )}
       </main>
 
       <aside className="q-rail" aria-label="Trends and suggestions">
-        <form className="q-search" role="search" onSubmit={(e) => e.preventDefault()}>
-          <Search size={16} /><input aria-label="Search Qolabrate" placeholder="Search Qolabrate…" />
+        <form className="q-search" role="search" onSubmit={(e) => { e.preventDefault(); setTerm(search.trim()); setTab("foryou"); }}>
+          <Search size={16} /><input aria-label="Search Qolabrate" placeholder="Search posts…" value={search} onChange={(e) => setSearch(e.target.value)} />
         </form>
         <h2>What's happening</h2>
-        {trends.map(([cat, tag, n]) => (
-          <Link key={tag} to="/marketplace" search={{ q: tag ?? "" }} className="q-trend"><small>{cat} · Trending</small><b>{tag}</b><small>{n} posts</small></Link>
+        {trends.map(([cat, tag]) => (
+          <button key={tag} type="button" className="q-trend" style={{ textAlign: "left", width: "100%" }} onClick={() => { setSearch(tag!); setTerm(tag!); setTab("foryou"); }}>
+            <small>{cat} · Trending</small><b>{tag}</b>
+          </button>
         ))}
-        <h2>Who to follow</h2>
-        {follows.map(([i, name, h]) => (
-          <div key={h} className="q-follow"><div className="q-av">{i}</div><div><b style={{ fontSize: 14 }}>{name}</b><br /><small style={{ color: "var(--muted-foreground)" }}>@{h}</small></div><button className="q-pill q-pill-light">Follow</button></div>
-        ))}
+        {signedIn && whoToFollow.length > 0 && (
+          <>
+            <h2>Who to follow</h2>
+            {whoToFollow.map((p) => (
+              <div key={p.id} className="q-follow">
+                <div className="q-av">{p.display_name.slice(0, 1)}</div>
+                <div><b style={{ fontSize: 14 }}>{p.display_name}</b><br /><small style={{ color: "var(--muted-foreground)" }}>@{p.handle}</small></div>
+                <button className="q-pill q-pill-light" onClick={() => toggleFollow.mutate(p.id)}>Follow</button>
+              </div>
+            ))}
+          </>
+        )}
       </aside>
     </div>
   );
