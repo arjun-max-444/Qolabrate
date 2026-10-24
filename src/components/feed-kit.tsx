@@ -9,6 +9,7 @@ import {
 import { useAccount } from "@/components/site-shell";
 import { supabase } from "@/integrations/supabase/client";
 import { POST_LIMIT, REPORT_REASONS, postError, timeAgo } from "@/lib/feed";
+import { professionalPortrait } from "@/lib/professional-creators";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent,
   DropdownMenuSubTrigger, DropdownMenuTrigger,
@@ -162,7 +163,7 @@ export function useMediaUrl(path: string | null | undefined) {
 
 export function Avatar({ name, size = 42, path }: { name: string; size?: number; path?: string | null | undefined }) {
   const remote = useMediaUrl(path);
-  const url = path?.startsWith("asset:") ? demoFaces[path.slice(6)] : remote;
+  const url = path?.startsWith("asset:") && demoFaces[path.slice(6)] ? professionalPortrait(name) : remote;
   if (url) return <img className="q-av" src={url} alt="" width={size} height={size} style={{ width: size, height: size, objectFit: "cover" }} />;
   return <div className="q-av" style={{ width: size, height: size, fontSize: size / 3 }} aria-hidden>{name.slice(0, 1).toUpperCase()}</div>;
 }
@@ -439,7 +440,10 @@ export function FeedShell({ children, rail }: { children: ReactNode; rail?: Reac
   return (
     <div className="q-feed">
       <aside className="q-side" aria-label="App navigation">
-        <Link to="/home" className="q-logo"><b>Qolabrate.</b></Link>
+        <div className="q-side-brand">
+          <Link to="/home" className="q-logo"><b>Qolabrate.</b></Link>
+          {signedIn && <p className="q-account-type" aria-label="Account type">{isBrand ? "Brand / Agency" : role === "creator" ? "Creator" : "Admin"}{isAdmin && role !== "admin" ? " · Admin" : ""}</p>}
+        </div>
         <Link to="/home" className="q-side-link" aria-label="Home" activeOptions={{ exact: true, includeSearch: false }}><HomeIcon size={22} /><span>Home</span></Link>
         <Link to="/explore" className="q-side-link" aria-label="Explore"><Search size={22} /><span>Explore</span></Link>
         {isBrand

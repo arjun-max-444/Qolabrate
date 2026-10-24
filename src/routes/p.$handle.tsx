@@ -7,6 +7,7 @@ import { useAccount } from "@/components/site-shell";
 import { supabase } from "@/integrations/supabase/client";
 import { pageHead } from "@/lib/seo";
 import { FEED_PAGE } from "@/lib/feed";
+import { professionalDemoProfile } from "@/lib/professional-creators";
 import { Avatar, FeedRail, FeedShell, POST_SELECT, PostList, PostSkeleton, VerifiedMark, useFeedMe, useSocial, useVerified, type FeedPost } from "@/components/feed-kit";
 
 export const Route = createFileRoute("/p/$handle")({
@@ -40,6 +41,7 @@ function FeedProfile() {
     },
   });
   const p = person.data;
+  const demo = p?.is_demo && p.kind === "creator" ? professionalDemoProfile(p.handle) : null;
   const qc = useQueryClient();
   const [uploading, setUploading] = useState(false);
   async function changePhoto(f: File) {
@@ -147,7 +149,13 @@ function FeedProfile() {
             <p className="q-muted" style={{ fontSize: 14 }}>
               @{p.handle} · <span className="q-chip">{p.kind === "brand" ? "Brand" : "Creator"}</span>{p.is_demo ? " · Demo account" : ""}
             </p>
-            {p.bio && <p style={{ marginTop: ".7rem", fontSize: 15, lineHeight: 1.5 }}>{p.bio}</p>}
+            {demo && <p className="font-semibold text-sm mt-3">{demo.title} · {demo.location}</p>}
+            {(demo?.bio || p.bio) && <p style={{ marginTop: ".7rem", fontSize: 15, lineHeight: 1.5 }}>{demo?.bio ?? p.bio}</p>}
+            {demo && <div className="grid gap-3 mt-4">
+              <div><h2 className="text-sm font-semibold">Skills</h2><div className="flex flex-wrap gap-2 mt-2">{demo.skills.map((skill) => <span key={skill} className="q-chip">{skill}</span>)}</div></div>
+              <div><h2 className="text-sm font-semibold">Tools</h2><p className="q-muted text-sm mt-1">{demo.tools.join(" · ")}</p></div>
+              <div><h2 className="text-sm font-semibold">Sample portfolio</h2><p className="text-sm mt-2 font-medium">{demo.project}</p><p className="q-muted text-sm mt-1">{demo.description}</p><p className="q-muted text-xs mt-2">Fictional demo profile and AI-generated portrait. Portfolio describes sample work, not verified client projects.</p></div>
+            </div>}
             <div className="q-stats">
               <button onClick={() => setTab("following")}><b>{stats.data?.following ?? "–"}</b> Following</button>
               <button onClick={() => setTab("followers")}><b>{stats.data?.followers ?? "–"}</b> Followers</button>
