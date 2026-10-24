@@ -1350,7 +1350,11 @@ body { font-family: "Montserrat", Arial, sans-serif; }
 /* Feed (X-style) */
 .q-feed { display: grid; grid-template-columns: 250px minmax(0, 620px) 320px; justify-content: center; min-height: 100vh; background: var(--background); color: var(--foreground); }
 .q-side { position: sticky; top: 0; height: 100vh; padding: 1.5rem 1.25rem; display: flex; flex-direction: column; gap: .25rem; }
-.q-side .q-logo { font-size: 24px; margin-bottom: 1.5rem; }
+.q-side .q-logo { font-size: 24px; letter-spacing: 0; }
+.q-side-brand { margin-bottom: 1rem; }
+.q-account-type { margin-top: .35rem; font-size: 12px; font-weight: 600; color: var(--muted-foreground); }
+@media (max-width: 1100px) { .q-account-type { display: none; } }
+@media (max-width: 640px) { .q-side-brand { display: none; } }
 .q-side-link { display: flex; align-items: center; gap: 1rem; padding: .75rem 1rem; border-radius: 999px; font-size: 15px; font-weight: 500; }
 .q-side-link:hover { background: var(--surface); }
 .q-side-link[data-status="active"] { font-weight: 700; }
