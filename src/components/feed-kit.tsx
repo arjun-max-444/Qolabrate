@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
   Home as HomeIcon, Search, Bell, Mail, Users, Bookmark, User, PenSquare, MessageCircle, Repeat2, Heart, Share,
-  MoreHorizontal, BadgeCheck, Settings, Inbox, UserPlus,
+  MoreHorizontal, BadgeCheck, Settings, Megaphone, Sparkles, Bot, Handshake,
 } from "lucide-react";
 import { useAccount } from "@/components/site-shell";
 import { supabase } from "@/integrations/supabase/client";
@@ -379,20 +379,24 @@ export function FeedRail({ myId, social }: { myId: string | undefined; social: S
 export function FeedShell({ children, rail }: { children: ReactNode; rail?: ReactNode }) {
   const { user, role } = useAccount();
   const { myHandle } = useFeedMe();
-  const inbox = role === "brand" ? "/brand/inbox" : "/creator/inbox";
+  const isBrand = role === "brand";
   const signedIn = !!user && !!role;
   return (
     <div className="q-feed">
       <aside className="q-side" aria-label="App navigation">
         <Link to="/home" className="q-logo"><b>Qolabrate.</b></Link>
         <Link to="/home" className="q-side-link" aria-label="Home" activeOptions={{ exact: true, includeSearch: false }}><HomeIcon size={22} /><span>Home</span></Link>
-        <Link to="/ai-creators" className="q-side-link" aria-label="Explore"><Search size={22} /><span>Explore</span></Link>
-        <Link to="/home" search={{ tab: "following" }} className="q-side-link q-side-extra" aria-label="Following" activeOptions={{ includeSearch: true }}><UserPlus size={22} /><span>Following</span></Link>
-        <Link to="/messages" className="q-side-link" aria-label="Messages"><Mail size={22} /><span>Messages</span></Link>
+        <Link to="/explore" className="q-side-link" aria-label="Explore"><Search size={22} /><span>Explore</span></Link>
+        {isBrand
+          ? <Link to="/brand/campaigns" className="q-side-link q-side-extra" aria-label="My campaigns"><Megaphone size={22} /><span>My campaigns</span></Link>
+          : <Link to="/campaigns" className="q-side-link q-side-extra" aria-label="Campaigns"><Megaphone size={22} /><span>Campaigns</span></Link>}
+        {isBrand && <Link to="/marketplace" search={{ q: "" }} className="q-side-link q-side-extra" aria-label="Creators"><Users size={22} /><span>Creators</span></Link>}
+        <Link to="/ai-creators" className="q-side-link q-side-extra" aria-label="AI Creators"><Sparkles size={22} /><span>AI Creators</span></Link>
+        {isBrand && <Link to="/orders" className="q-side-link q-side-extra" aria-label="AI campaigns"><Bot size={22} /><span>AI campaigns</span></Link>}
         <Link to="/notifications" className="q-side-link q-side-extra" aria-label="Notifications"><Bell size={22} /><span>Notifications</span></Link>
+        <Link to="/messages" className="q-side-link" aria-label="Messages"><Mail size={22} /><span>Messages</span></Link>
+        <Link to="/collabs" className="q-side-link q-side-extra" aria-label="Collaborations"><Handshake size={22} /><span>Collaborations</span></Link>
         <Link to="/home" search={{ tab: "saved" }} className="q-side-link q-side-extra" aria-label="Bookmarks" activeOptions={{ includeSearch: true }}><Bookmark size={22} /><span>Bookmarks</span></Link>
-        <Link to={inbox} className="q-side-link q-side-extra" aria-label="My projects"><Inbox size={22} /><span>My projects</span></Link>
-        <Link to="/collabs" className="q-side-link q-side-extra" aria-label="Collaborate"><Users size={22} /><span>Collaborate</span></Link>
         {myHandle
           ? <Link to="/p/$handle" params={{ handle: myHandle }} className="q-side-link" aria-label="My profile"><User size={22} /><span>My profile</span></Link>
           : <Link to={user ? "/profile" : "/auth"} className="q-side-link" aria-label="My profile"><User size={22} /><span>My profile</span></Link>}

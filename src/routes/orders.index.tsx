@@ -1,3 +1,4 @@
+import { useRoleGate } from "@/lib/use-role-gate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { PublicNav } from "@/components/public-nav";
@@ -13,6 +14,7 @@ export const Route = createFileRoute("/orders/")({
 });
 
 function Orders() {
+  useRoleGate(["brand"]);
   const { user } = useAccount();
   const q = useQuery({
     queryKey: ["ai-orders", user?.id],

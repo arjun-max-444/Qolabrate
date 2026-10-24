@@ -18,6 +18,7 @@ import { Route as BrandRouteRouteImport } from './routes/brand/route'
 import { Route as BriefRouteImport } from './routes/brief'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CreatorRouteRouteImport } from './routes/creator/route'
+import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as ForBrandsRouteImport } from './routes/for-brands'
 import { Route as ForCreatorsRouteImport } from './routes/for-creators'
@@ -105,6 +106,11 @@ const ContactRoute = ContactRouteImport.update({
 const CreatorRouteRoute = CreatorRouteRouteImport.update({
   id: '/creator',
   path: '/creator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExploreRoute = ExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FeaturesRoute = FeaturesRouteImport.update({
@@ -335,6 +341,7 @@ export interface FileRoutesByFullPath {
   '/billing': typeof BillingRoute
   '/brief': typeof BriefRoute
   '/contact': typeof ContactRoute
+  '/explore': typeof ExploreRoute
   '/features': typeof FeaturesRoute
   '/for-brands': typeof ForBrandsRoute
   '/for-creators': typeof ForCreatorsRoute
@@ -389,6 +396,7 @@ export interface FileRoutesByTo {
   '/billing': typeof BillingRoute
   '/brief': typeof BriefRoute
   '/contact': typeof ContactRoute
+  '/explore': typeof ExploreRoute
   '/features': typeof FeaturesRoute
   '/for-brands': typeof ForBrandsRoute
   '/for-creators': typeof ForCreatorsRoute
@@ -444,6 +452,7 @@ export interface FileRoutesById {
   '/billing': typeof BillingRoute
   '/brief': typeof BriefRoute
   '/contact': typeof ContactRoute
+  '/explore': typeof ExploreRoute
   '/features': typeof FeaturesRoute
   '/for-brands': typeof ForBrandsRoute
   '/for-creators': typeof ForCreatorsRoute
@@ -500,6 +509,7 @@ export interface FileRouteTypes {
     | '/billing'
     | '/brief'
     | '/contact'
+    | '/explore'
     | '/features'
     | '/for-brands'
     | '/for-creators'
@@ -554,6 +564,7 @@ export interface FileRouteTypes {
     | '/billing'
     | '/brief'
     | '/contact'
+    | '/explore'
     | '/features'
     | '/for-brands'
     | '/for-creators'
@@ -608,6 +619,7 @@ export interface FileRouteTypes {
     | '/billing'
     | '/brief'
     | '/contact'
+    | '/explore'
     | '/features'
     | '/for-brands'
     | '/for-creators'
@@ -663,6 +675,7 @@ export interface RootRouteChildren {
   BillingRoute: typeof BillingRoute
   BriefRoute: typeof BriefRoute
   ContactRoute: typeof ContactRoute
+  ExploreRoute: typeof ExploreRoute
   FeaturesRoute: typeof FeaturesRoute
   ForBrandsRoute: typeof ForBrandsRoute
   ForCreatorsRoute: typeof ForCreatorsRoute
@@ -760,6 +773,13 @@ declare module '@tanstack/react-router' {
       path: '/creator'
       fullPath: '/creator'
       preLoaderRoute: typeof CreatorRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/features': {
@@ -1118,6 +1138,7 @@ const rootRouteChildren: RootRouteChildren = {
   BillingRoute: BillingRoute,
   BriefRoute: BriefRoute,
   ContactRoute: ContactRoute,
+  ExploreRoute: ExploreRoute,
   FeaturesRoute: FeaturesRoute,
   ForBrandsRoute: ForBrandsRoute,
   ForCreatorsRoute: ForCreatorsRoute,
