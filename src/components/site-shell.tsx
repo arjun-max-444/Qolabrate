@@ -140,8 +140,8 @@ export function SiteShell({ children }: { children: ReactNode }) {
         <nav className="member-nav" aria-label="Your account">
           <div className="container">
             {(role === "brand"
-              ? [["/brand/dashboard", "Dashboard"], ["/collabs", "Sent requests"], ["/brand/profile", "Brand profile"], ["/brand/campaigns", "Campaigns"], ["/brand/campaigns/new", "New campaign"], ["/brand/inbox", "Inbox"], ["/marketplace", "Find creators"]]
-              : [["/creator/dashboard", "Dashboard"], ["/collabs", "Collab invitations"], ["/profile", "My profile"], ["/creator/profile", "Edit details"], ["/creator/socials", "Social accounts"], ["/campaigns", "Campaigns"], ["/creator/inbox", "Inbox"]]
+              ? [["/home", "Feed"], ["/brand/dashboard", "Dashboard"], ["/collabs", "Sent requests"], ["/brand/profile", "Brand profile"], ["/brand/campaigns", "Campaigns"], ["/brand/campaigns/new", "New campaign"], ["/brand/inbox", "Inbox"], ["/marketplace", "Find creators"]]
+              : [["/home", "Feed"], ["/creator/dashboard", "Dashboard"], ["/collabs", "Collab invitations"], ["/profile", "My profile"], ["/creator/profile", "Edit details"], ["/creator/socials", "Social accounts"], ["/campaigns", "Campaigns"], ["/creator/inbox", "Inbox"]]
             ).map(([href, label]) => (
               <a key={href} href={href}>{label}</a>
             ))}
