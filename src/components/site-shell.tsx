@@ -15,7 +15,8 @@ const AccountContext = createContext<{
   profileComplete: boolean | null;
   saved: string[];
   toggle: (id: string) => Promise<void>;
-}>({ user: null, role: null, isAdmin: false, profileComplete: null, saved: [], toggle: async () => {} });
+  refresh: () => Promise<void>;
+}>({ user: null, role: null, isAdmin: false, profileComplete: null, saved: [], toggle: async () => {}, refresh: async () => {} });
 export const useAccount = () => useContext(AccountContext);
 export function AccountProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -23,6 +24,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   const [role, setRole] = useState<AppRole | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [profileComplete, setProfileComplete] = useState<boolean | null>(null);
+  const refreshRef = useRef<() => Promise<void>>(async () => {});
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
@@ -39,20 +41,9 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       setProfileComplete(null);
       return;
     }
-    const checkProfile = () =>
-      supabase.from("profiles").select("username,bio").eq("id", user.id).maybeSingle()
-        .then(({ data }) => setProfileComplete(!!data?.username && !!data.bio?.trim()));
-    void checkProfile();
+    const checkProfile = () => { void refreshRef.current(); };
+    void refreshRef.current();
     window.addEventListener("qolabrate:profile-saved", checkProfile);
-    supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", user.id)
-      .then(({ data }) => {
-        const r = pickRoles(data);
-        setRole(r.role);
-        setIsAdmin(r.isAdmin);
-      });
     supabase
       .from("shortlists")
       .select("creator_id")
@@ -60,6 +51,19 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       .then(({ data }) => setSaved(data?.map((x) => x.creator_id) ?? []));
     return () => window.removeEventListener("qolabrate:profile-saved", checkProfile);
   }, [user?.id]);
+  const refresh = async () => {
+    const id = user?.id;
+    if (!id) return;
+    const [p, r] = await Promise.all([
+      supabase.from("profiles").select("username,bio").eq("id", id).maybeSingle(),
+      supabase.from("user_roles").select("role").eq("user_id", id),
+    ]);
+    setProfileComplete(!!p.data?.username && !!p.data.bio?.trim());
+    const picked = pickRoles(r.data);
+    setRole(picked.role);
+    setIsAdmin(picked.isAdmin);
+  };
+  refreshRef.current = refresh;
   const toggle = async (id: string) => {
     if (!user) {
       toast("Sign in to save creators");
@@ -77,7 +81,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     toast.success(exists ? "Removed from shortlist" : "Creator saved");
   };
   return (
-    <AccountContext.Provider value={{ user, role, isAdmin, profileComplete, saved, toggle }}>
+    <AccountContext.Provider value={{ user, role, isAdmin, profileComplete, saved, toggle, refresh }}>
       {children}
       <Toaster position="bottom-right" />
     </AccountContext.Provider>
