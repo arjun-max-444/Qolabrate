@@ -231,7 +231,7 @@ function Feed() {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const err = postError(draft);
-    if (err) return toast.error(err);
+    if (err) { toast.error(err); return; }
     publish.mutate(draft.trim());
   };
 
