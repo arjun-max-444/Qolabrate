@@ -82,7 +82,7 @@ function Auth() {
         navigate({ href: next, replace: true });
         return;
       }
-      navigate({ href: r === "creator" || !r ? "/profile" : dashboardFor(r), replace: true });
+      navigate({ href: r === "admin" ? dashboardFor(r) : "/home", replace: true });
     })();
   }, [user, mode]);
   useEffect(() => {
@@ -158,12 +158,6 @@ function Auth() {
                   ? "Choose your password."
                   : "Your next project starts here."}
           </h1>
-          {mode === "signin" && (
-            <div className="tab-row mb-4" aria-label="Account type">
-              <Button type="button" variant={role === "creator" ? "default" : "outline"} aria-pressed={role === "creator"} onClick={() => { setRole("creator"); setError(""); }}>Creator</Button>
-              <Button type="button" variant={role === "brand" ? "default" : "outline"} aria-pressed={role === "brand"} onClick={() => { setRole("brand"); setError(""); }}>Brand / Agency</Button>
-            </div>
-          )}
           <p>
             {mode === "recover"
               ? "Verify your email to set a new password. Existing account imports are available after your data is supplied."

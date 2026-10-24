@@ -107,7 +107,7 @@ function EditProfile() {
     setBusy(false);
     if (error || err2) { toast.error(error?.message.includes("unique") ? "That username is taken" : "Could not save profile"); return; }
     toast.success(welcome ? "Your profile is ready" : "Profile saved");
-    navigate({ href: welcome && role === "brand" ? "/brand/dashboard" : "/profile" });
+    navigate({ href: welcome ? "/home" : "/profile" });
   }
 
   return (
