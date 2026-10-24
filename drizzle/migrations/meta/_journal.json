@@ -127,6 +127,13 @@
       "when": 1792841109333,
       "tag": "0017_feed_saves",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1792841441163,
+      "tag": "0018_creator_projects_and_subscriptions",
+      "breakpoints": true
     }
   ]
 }
