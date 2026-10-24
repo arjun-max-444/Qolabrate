@@ -7,7 +7,7 @@ import { useAccount } from "@/components/site-shell";
 import { supabase } from "@/integrations/supabase/client";
 import { pageHead } from "@/lib/seo";
 import { FEED_PAGE, FEED_TABS, POST_LIMIT, forYouScore, postError, type FeedTab } from "@/lib/feed";
-import { Avatar, FeedRail, FeedShell, POST_SELECT, PostList, PostSkeleton, useFeedMe, useSocial, type FeedPost } from "@/components/feed-kit";
+import { Avatar, FeedRail, FeedShell, POST_SELECT, PostList, PostSkeleton, focusComposer, useFeedMe, useSocial, type FeedPost } from "@/components/feed-kit";
 
 type HomeSearch = { tab?: FeedTab; post?: string; q?: string };
 
@@ -45,6 +45,7 @@ function Feed() {
   }, [photo]);
   const { signedIn, myId, myAvatar, meError } = useFeedMe();
   const social = useSocial(myId);
+  useEffect(() => { if (window.location.hash === "#composer") focusComposer(); }, []);
 
   const single = useQuery({
     queryKey: ["feed", "post", post],
@@ -147,7 +148,7 @@ function Feed() {
                   <button type="button" className="q-pill q-pill-light" style={{ position: "absolute", top: 8, right: 8, height: 30 }} onClick={() => setPhoto(null)}>Remove</button>
                 </div>
               )}
-              <textarea rows={2} maxLength={POST_LIMIT} aria-label="What's happening?" placeholder="What's happening? Use #tags for topics" value={draft} onChange={(e) => setDraft(e.target.value)} />
+              <textarea id="composer-input" rows={2} maxLength={POST_LIMIT} aria-label="What's happening?" placeholder="What's happening? Use #tags for topics" value={draft} onChange={(e) => setDraft(e.target.value)} />
               <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: ".8rem", marginTop: ".6rem" }}>
                 <label className="q-icon-btn" aria-label="Add photo" style={{ marginRight: "auto", cursor: "pointer" }}>
                   <ImagePlus size={18} />

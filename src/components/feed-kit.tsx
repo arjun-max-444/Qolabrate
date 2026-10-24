@@ -432,36 +432,51 @@ export function FeedRail({ myId, social }: { myId: string | undefined; social: S
   );
 }
 
-export function FeedShell({ children, rail }: { children: ReactNode; rail?: ReactNode }) {
-  const { user, role, isAdmin } = useAccount();
+export function focusComposer() {
+  let tries = 0;
+  const go = () => {
+    const el = document.getElementById("composer-input") as HTMLTextAreaElement | null;
+    if (el) { el.scrollIntoView({ block: "center", behavior: "smooth" }); el.focus(); return; }
+    if (++tries < 20) setTimeout(go, 100);
+  };
+  setTimeout(go, 0);
+}
+
+export function FeedShell({ children, rail, wide }: { children: ReactNode; rail?: ReactNode; wide?: boolean }) {
+  const { user, role, isAdmin, profileComplete } = useAccount();
   const { myHandle } = useFeedMe();
   const isBrand = role === "brand";
   const signedIn = !!user && !!role;
+  const showNav = signedIn && profileComplete !== false;
   return (
-    <div className="q-feed">
+    <div className={wide ? "q-feed q-feed-wide" : "q-feed"}>
       <aside className="q-side" aria-label="App navigation">
         <div className="q-side-brand">
           <Link to="/home" className="q-logo"><b>Qolabrate.</b></Link>
           {signedIn && <p className="q-account-type" aria-label="Account type">{isBrand ? "Brand / Agency" : role === "creator" ? "Creator" : "Admin"}{isAdmin && role !== "admin" ? " · Admin" : ""}</p>}
         </div>
+        {!showNav ? (
+          signedIn && <Link to="/profile/edit" search={{ welcome: true }} className="q-pill q-pill-dark" style={{ marginTop: "1rem" }}>Complete your profile</Link>
+        ) : (<>
         <Link to="/home" className="q-side-link" aria-label="Home" activeOptions={{ exact: true, includeSearch: false }}><HomeIcon size={22} /><span>Home</span></Link>
         <Link to="/explore" className="q-side-link" aria-label="Explore"><Search size={22} /><span>Explore</span></Link>
         {isBrand
-          ? <Link to="/brand/campaigns" className="q-side-link q-side-extra" aria-label="My campaigns"><Megaphone size={22} /><span>My campaigns</span></Link>
-          : <Link to="/campaigns" className="q-side-link q-side-extra" aria-label="Campaigns"><Megaphone size={22} /><span>Campaigns</span></Link>}
-        {isBrand && <Link to="/marketplace" search={{ q: "" }} className="q-side-link q-side-extra" aria-label="Creators"><Users size={22} /><span>Creators</span></Link>}
-        <Link to="/ai-creators" className="q-side-link q-side-extra" aria-label="AI Creators"><Sparkles size={22} /><span>AI Creators</span></Link>
-        {isBrand && <Link to="/orders" className="q-side-link q-side-extra" aria-label="AI campaigns"><Bot size={22} /><span>AI campaigns</span></Link>}
-        <Link to="/notifications" className="q-side-link q-side-extra" aria-label="Notifications"><Bell size={22} /><span>Notifications</span></Link>
+          ? <Link to="/brand/campaigns" className="q-side-link" aria-label="My campaigns"><Megaphone size={22} /><span>My campaigns</span></Link>
+          : <Link to="/campaigns" className="q-side-link" aria-label="Campaigns"><Megaphone size={22} /><span>Campaigns</span></Link>}
+        {isBrand && <Link to="/marketplace" search={{ q: "" }} className="q-side-link" aria-label="Creators"><Users size={22} /><span>Creators</span></Link>}
+        <Link to="/ai-creators" className="q-side-link" aria-label="AI Creators"><Sparkles size={22} /><span>AI Creators</span></Link>
+        {isBrand && <Link to="/orders" className="q-side-link" aria-label="AI campaigns"><Bot size={22} /><span>AI campaigns</span></Link>}
+        <Link to="/notifications" className="q-side-link" aria-label="Notifications"><Bell size={22} /><span>Notifications</span></Link>
         <Link to="/messages" className="q-side-link" aria-label="Messages"><Mail size={22} /><span>Messages</span></Link>
-        <Link to="/collabs" className="q-side-link q-side-extra" aria-label="Collaborations"><Handshake size={22} /><span>Collaborations</span></Link>
-        <Link to="/home" search={{ tab: "saved" }} className="q-side-link q-side-extra" aria-label="Shortlist" activeOptions={{ includeSearch: true }}><Bookmark size={22} /><span>Shortlist</span></Link>
+        <Link to="/collabs" className="q-side-link" aria-label="Collaborations"><Handshake size={22} /><span>Collaborations</span></Link>
+        <Link to="/home" search={{ tab: "saved" }} className="q-side-link" aria-label="Shortlist" activeOptions={{ includeSearch: true }}><Bookmark size={22} /><span>Shortlist</span></Link>
         {myHandle
           ? <Link to="/p/$handle" params={{ handle: myHandle }} className="q-side-link" aria-label="My profile"><User size={22} /><span>My profile</span></Link>
           : <Link to={user ? "/profile" : "/auth"} className="q-side-link" aria-label="My profile"><User size={22} /><span>My profile</span></Link>}
-        <Link to="/account" className="q-side-link q-side-extra" aria-label="Settings"><Settings size={22} /><span>Settings</span></Link>
-        {isAdmin && <Link to="/admin" className="q-side-link q-side-extra" aria-label="Admin"><ShieldCheck size={22} /><span>Admin</span></Link>}
-        {signedIn && <Link to="/home" hash="composer" className="q-pill q-pill-dark q-post-btn" aria-label="Create post"><PenSquare size={18} /><span>Post</span></Link>}
+        <Link to="/account" className="q-side-link" aria-label="Settings"><Settings size={22} /><span>Settings</span></Link>
+        {isAdmin && <Link to="/admin" className="q-side-link" aria-label="Admin"><ShieldCheck size={22} /><span>Admin</span></Link>}
+        <Link to="/home" hash="composer" className="q-pill q-pill-dark q-post-btn" aria-label="Create post" onClick={focusComposer}><PenSquare size={18} /><span>Post</span></Link>
+        </>)}
       </aside>
       <main className="q-center">{children}</main>
       {rail}

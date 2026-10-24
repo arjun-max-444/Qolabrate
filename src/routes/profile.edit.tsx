@@ -31,6 +31,7 @@ function EditProfile() {
   const navigate = useNavigate();
   const [f, setF] = useState({ full_name: "", username: "", bio: "", location: "", website: "", instagram: "", youtube: "", linkedin: "", skills: "", tools: "", rate: "", company: "", industry: "" });
   const [s, setS] = useState({ open: true, min: "0", limit: "3" });
+  const [feedAvatar, setFeedAvatar] = useState<string | null>(null);
   const [paths, setPaths] = useState<{ avatar: string | null; cover: string | null }>({ avatar: null, cover: null });
   const [coverUrl, setCoverUrl] = useState("");
   const [orig, setOrig] = useState("");
@@ -75,6 +76,11 @@ function EditProfile() {
     const { error } = await supabase.storage.from("avatars").upload(path, file);
     if (error) { toast.error("Upload failed"); return; }
     setPaths((p) => ({ ...p, [kind]: path }));
+    if (kind === "avatar") {
+      const fp = `${user.id}/avatar-${Date.now()}.${path.split(".").pop()}`;
+      const fu = await supabase.storage.from("feed-media").upload(fp, file, { contentType: file.type });
+      if (!fu.error) setFeedAvatar(fp);
+    }
     if (kind === "cover") mediaUrl(path).then(setCoverUrl);
     toast.success(`${kind === "avatar" ? "Photo" : "Cover"} uploaded — save to apply`);
   }
@@ -106,6 +112,11 @@ function EditProfile() {
     }
     setBusy(false);
     if (error || err2) { toast.error(error?.message.includes("unique") ? "That username is taken" : "Could not save profile"); return; }
+    if (feedAvatar) {
+      await supabase.rpc("ensure_feed_profile");
+      await supabase.rpc("set_feed_avatar", { _path: feedAvatar });
+    }
+    window.dispatchEvent(new Event("qolabrate:profile-saved"));
     toast.success(welcome ? "Your profile is ready" : "Profile saved");
     navigate({ href: welcome ? "/home" : "/profile" });
   }

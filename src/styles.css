@@ -1410,7 +1410,11 @@ body { font-family: "Montserrat", Arial, sans-serif; }
 .q-person { display: flex; align-items: center; gap: .9rem; padding: .8rem 1.25rem; border-bottom: 1px solid var(--border); }
 .q-person:hover { background: var(--surface); }
 @media (max-width: 1100px) { .q-feed { grid-template-columns: 88px minmax(0, 620px); } .q-rail { display: none; } .q-side-link span, .q-side .q-logo b, .q-post-btn span { display: none; } .q-post-btn { padding: 0; width: 46px; } }
-@media (max-width: 640px) { .q-feed { grid-template-columns: 1fr; } .q-side { position: fixed; top: auto; bottom: 0; left: 0; right: 0; height: auto; flex-direction: row; align-items: center; justify-content: space-around; padding: .4rem; background: var(--background); border-top: 1px solid var(--border); z-index: 20; overflow: visible; } .q-side .q-logo, .q-side-extra { display: none; } .q-post-btn { margin: 0; order: 2; width: 42px; height: 42px; } .q-center { padding-bottom: 70px; border: 0; } }
+@media (max-width: 640px) { .q-feed { grid-template-columns: 60px minmax(0, 1fr); } .q-side { padding: 1rem .4rem; align-items: center; } .q-side .q-side-brand { display: none; } .q-post-btn { width: 42px; height: 42px; } }
+.q-feed-wide { grid-template-columns: 250px minmax(0, 1100px); }
+@media (max-width: 1100px) { .q-feed-wide { grid-template-columns: 88px minmax(0, 1fr); } }
+@media (max-width: 640px) { .q-feed-wide { grid-template-columns: 60px minmax(0, 1fr); } }
+.q-feed-wide .q-center { padding: 0 1.5rem 3rem; }
 
 /* AI creator marketplace */
 .q-ai-note { display: inline-flex; gap: .4rem; align-items: center; font-size: 13px; color: var(--muted-foreground); background: var(--surface); border-radius: 999px; padding: .4rem .9rem; }

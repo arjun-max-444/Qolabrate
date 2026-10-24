@@ -12,15 +12,17 @@ const AccountContext = createContext<{
   user: User | null;
   role: AppRole | null;
   isAdmin: boolean;
+  profileComplete: boolean | null;
   saved: string[];
   toggle: (id: string) => Promise<void>;
-}>({ user: null, role: null, isAdmin: false, saved: [], toggle: async () => {} });
+}>({ user: null, role: null, isAdmin: false, profileComplete: null, saved: [], toggle: async () => {} });
 export const useAccount = () => useContext(AccountContext);
 export function AccountProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [saved, setSaved] = useState<string[]>([]);
   const [role, setRole] = useState<AppRole | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [profileComplete, setProfileComplete] = useState<boolean | null>(null);
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
@@ -34,8 +36,14 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       setSaved([]);
       setRole(null);
       setIsAdmin(false);
+      setProfileComplete(null);
       return;
     }
+    const checkProfile = () =>
+      supabase.from("profiles").select("username,bio").eq("id", user.id).maybeSingle()
+        .then(({ data }) => setProfileComplete(!!data?.username && !!data.bio?.trim()));
+    void checkProfile();
+    window.addEventListener("qolabrate:profile-saved", checkProfile);
     supabase
       .from("user_roles")
       .select("role")
@@ -50,6 +58,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       .select("creator_id")
       .eq("user_id", user.id)
       .then(({ data }) => setSaved(data?.map((x) => x.creator_id) ?? []));
+    return () => window.removeEventListener("qolabrate:profile-saved", checkProfile);
   }, [user?.id]);
   const toggle = async (id: string) => {
     if (!user) {
@@ -68,14 +77,14 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     toast.success(exists ? "Removed from shortlist" : "Creator saved");
   };
   return (
-    <AccountContext.Provider value={{ user, role, isAdmin, saved, toggle }}>
+    <AccountContext.Provider value={{ user, role, isAdmin, profileComplete, saved, toggle }}>
       {children}
       <Toaster position="bottom-right" />
     </AccountContext.Provider>
   );
 }
 export function SiteShell({ children }: { children: ReactNode }) {
-  const { user, role, isAdmin } = useAccount();
+  const { user, role, isAdmin, profileComplete } = useAccount();
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
   return (
@@ -142,7 +151,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
           )}
         </nav>
       </header>
-      {user && role && role !== "admin" && (
+      {user && role && role !== "admin" && profileComplete && (
         <nav className="member-nav" aria-label="Your account">
           <div className="container">
             {(role === "brand"
