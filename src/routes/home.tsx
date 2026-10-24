@@ -1,8 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ImagePlus } from "lucide-react";
 import { useAccount } from "@/components/site-shell";
 import { supabase } from "@/integrations/supabase/client";
 import { pageHead } from "@/lib/seo";
@@ -35,7 +35,15 @@ function Feed() {
   const navigate = useNavigate({ from: "/home" });
   const qc = useQueryClient();
   const [draft, setDraft] = useState("");
-  const { signedIn, myId, meError } = useFeedMe();
+  const [photo, setPhoto] = useState<File | null>(null);
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!photo) { setPhotoUrl(null); return; }
+    const u = URL.createObjectURL(photo);
+    setPhotoUrl(u);
+    return () => URL.revokeObjectURL(u);
+  }, [photo]);
+  const { signedIn, myId, myAvatar, meError } = useFeedMe();
   const social = useSocial(myId);
 
   const single = useQuery({

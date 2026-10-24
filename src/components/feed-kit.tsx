@@ -55,12 +55,12 @@ export function useFeedMe() {
     enabled: !!me.data,
     staleTime: Infinity,
     queryFn: async () => {
-      const { data, error } = await supabase.from("feed_profiles").select("handle").eq("id", me.data!).single();
+      const { data, error } = await supabase.from("feed_profiles").select("handle, avatar_path").eq("id", me.data!).single();
       if (error) throw error;
-      return data.handle;
+      return data;
     },
   });
-  return { signedIn, myId: me.data, myHandle: handle.data, meError: me.isError };
+  return { signedIn, myId: me.data, myHandle: handle.data?.handle, myAvatar: handle.data?.avatar_path ?? null, meError: me.isError };
 }
 
 type SetKey = "follows" | "likes" | "reposts" | "saves";
