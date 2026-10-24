@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Globe, MapPin, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { InviteButton } from "@/components/collab-invite";
+import { CreatorProjects } from "@/components/creator-projects";
 import { supabase } from "@/integrations/supabase/client";
 import { initials, mediaUrl, type PublicProfile } from "@/lib/collabs";
 
@@ -60,6 +61,7 @@ export function ProfileView({ p, isOwn }: { p: PublicProfile; isOwn: boolean }) 
           <div><h2 className="font-bold text-lg">About</h2><p className="mt-2 leading-7 whitespace-pre-line text-muted-foreground">{p.bio || "No bio yet."}</p></div>
           {p.skills.length > 0 && <div><h2 className="font-bold text-lg">{p.role === "brand" ? "Focus areas" : "Skills"}</h2><div className="tags mt-2">{p.skills.map((s) => <span className="tag" key={s}>{s}</span>)}</div></div>}
           {p.tools.length > 0 && <div><h2 className="font-bold text-lg">Tools</h2><div className="tags mt-2">{p.tools.map((s) => <span className="tag" key={s}>{s}</span>)}</div></div>}
+          {p.role === "creator" && <CreatorProjects userId={p.id} />}
           <div>
             <h2 className="font-bold text-lg">Reviews</h2>
             {reviews.length === 0 ? <p className="text-muted-foreground mt-2">No reviews yet.</p> : reviews.map((r, i) => (

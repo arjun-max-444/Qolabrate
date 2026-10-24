@@ -154,6 +154,7 @@ function EditProfile() {
             </div>
           </form>
         )}
+        {!loading && isCreator && user && <CreatorProjectsEditor userId={user.id} />}
       </main>
     </SiteShell>
   );

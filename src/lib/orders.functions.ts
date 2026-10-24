@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { aiCreators } from "@/lib/ai-creators";
+import { canPlaceOrder, monthStart, planById } from "@/lib/plans";
 import { allowedActions, priceBreakdown, validateBrief, REVISIONS_INCLUDED, type Delivery, type OrderAction, type OrderStatus } from "@/lib/orders";
 
 async function admin() {
@@ -28,6 +29,11 @@ export const createOrder = createServerFn({ method: "POST" })
     if (err) throw new Error(err);
     const price = priceBreakdown(pkg.price);
     const db = await admin();
+    const [{ data: sub }, { count }] = await Promise.all([
+      db.from("brand_subscriptions").select("plan").eq("user_id", context.userId).maybeSingle(),
+      db.from("ai_orders").select("id", { count: "exact", head: true }).eq("brand_id", context.userId).gte("created_at", monthStart()).neq("status", "cancelled"),
+    ]);
+    if (!canPlaceOrder(sub?.plan, count ?? 0)) throw new Error(`Your ${planById(sub?.plan).name} plan's monthly order limit is reached. Upgrade on the Plans page.`);
     const { data: row, error } = await db.from("ai_orders").insert({
       brand_id: context.userId, creator_id: c.id, package_name: pkg.name, package_price: price.packagePrice,
       fee: price.fee, total: price.total, brief: data.brief, revisions_allowed: REVISIONS_INCLUDED,

@@ -35,7 +35,10 @@ export function ProfileMenu({ userId, role, email }: { userId: string; role: App
         <a href="/profile/edit">Edit Profile</a>
         {role !== "admin" && <a href="/collabs" className="flex justify-between">{role === "brand" ? "Sent requests" : "Collab Invitations"}{pending > 0 && <span className="count-badge">{pending}</span>}</a>}
         {role !== "admin" && <a href={inbox}>Messages</a>}
+        <a href="/notifications">Notifications</a>
         {role === "brand" && <a href="/orders">AI creator orders</a>}
+        {role === "brand" && <a href="/billing">Plans and billing</a>}
+        {role === "admin" && <a href="/admin">Admin</a>}
         <a href="/account">Settings</a>
         <button type="button" className="text-left px-3 py-2 rounded hover:bg-muted" onClick={() => supabase.auth.signOut().then(() => (window.location.href = "/"))}>Sign out</button>
       </div>
