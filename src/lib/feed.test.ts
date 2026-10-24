@@ -29,3 +29,15 @@ describe("feed rules", () => {
     expect(list[1]!.last.body).toBe("yo");
   });
 });
+
+import { forYouScore } from "./feed";
+describe("For You ranking", () => {
+  const now = Date.parse("2026-01-10T00:00:00Z");
+  it("ranks the more-engaged post first when both are the same age", () => {
+    const at = "2026-01-09T22:00:00Z";
+    expect(forYouScore({ likes: 10, comments: 2, reposts: 1, created_at: at }, now)).toBeGreaterThan(forYouScore({ likes: 1, comments: 0, reposts: 0, created_at: at }, now));
+  });
+  it("lets a brand-new post beat a week-old post with a few likes", () => {
+    expect(forYouScore({ likes: 0, comments: 0, reposts: 0, created_at: "2026-01-09T23:50:00Z" }, now)).toBeGreaterThan(forYouScore({ likes: 3, comments: 0, reposts: 0, created_at: "2026-01-03T00:00:00Z" }, now));
+  });
+});
