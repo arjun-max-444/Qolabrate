@@ -26,6 +26,7 @@ import { Route as HomeRouteImport } from './routes/home'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as VerificationRouteImport } from './routes/verification'
 import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
@@ -48,6 +49,8 @@ import { Route as OrdersIdRouteImport } from './routes/orders.$id'
 import { Route as ProfileIndexRouteImport } from './routes/profile.index'
 import { Route as ProfileEditRouteImport } from './routes/profile.edit'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
+import { Route as AdminVerificationIndexRouteImport } from './routes/admin/verification.index'
+import { Route as AdminVerificationIdRouteImport } from './routes/admin/verification.$id'
 import { Route as ApiGstValidateFormatRouteImport } from './routes/api/gst/validate-format'
 import { Route as ApiGstVerificationStatusRouteImport } from './routes/api/gst/verification-status'
 import { Route as BrandCampaignsIndexRouteImport } from './routes/brand/campaigns.index'
@@ -141,6 +144,11 @@ const MessagesRoute = MessagesRouteImport.update({
 const NotificationsRoute = NotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerificationRoute = VerificationRouteImport.update({
+  id: '/verification',
+  path: '/verification',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WorkspaceRoute = WorkspaceRouteImport.update({
@@ -253,6 +261,16 @@ const UUsernameRoute = UUsernameRouteImport.update({
   path: '/u/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminVerificationIndexRoute = AdminVerificationIndexRouteImport.update({
+  id: '/admin/verification/',
+  path: '/admin/verification/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminVerificationIdRoute = AdminVerificationIdRouteImport.update({
+  id: '/admin/verification/$id',
+  path: '/admin/verification/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiGstValidateFormatRoute = ApiGstValidateFormatRouteImport.update({
   id: '/api/gst/validate-format',
   path: '/api/gst/validate-format',
@@ -319,6 +337,7 @@ export interface FileRoutesByFullPath {
   '/marketplace': typeof MarketplaceRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
+  '/verification': typeof VerificationRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
   '/ai-creators/$id': typeof AiCreatorsIdRoute
@@ -341,9 +360,11 @@ export interface FileRoutesByFullPath {
   '/collabs/': typeof CollabsIndexRoute
   '/orders/': typeof OrdersIndexRoute
   '/profile/': typeof ProfileIndexRoute
+  '/admin/verification/$id': typeof AdminVerificationIdRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
   '/brand/campaigns/new': typeof BrandCampaignsNewRoute
+  '/admin/verification/': typeof AdminVerificationIndexRoute
   '/brand/campaigns/': typeof BrandCampaignsIndexRoute
   '/brand/campaigns/$id/edit': typeof BrandCampaignsIdEditRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -369,6 +390,7 @@ export interface FileRoutesByTo {
   '/marketplace': typeof MarketplaceRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
+  '/verification': typeof VerificationRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
   '/ai-creators/$id': typeof AiCreatorsIdRoute
@@ -391,9 +413,11 @@ export interface FileRoutesByTo {
   '/collabs': typeof CollabsIndexRoute
   '/orders': typeof OrdersIndexRoute
   '/profile': typeof ProfileIndexRoute
+  '/admin/verification/$id': typeof AdminVerificationIdRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
   '/brand/campaigns/new': typeof BrandCampaignsNewRoute
+  '/admin/verification': typeof AdminVerificationIndexRoute
   '/brand/campaigns': typeof BrandCampaignsIndexRoute
   '/brand/campaigns/$id/edit': typeof BrandCampaignsIdEditRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -420,6 +444,7 @@ export interface FileRoutesById {
   '/marketplace': typeof MarketplaceRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
+  '/verification': typeof VerificationRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
   '/ai-creators/$id': typeof AiCreatorsIdRoute
@@ -442,9 +467,11 @@ export interface FileRoutesById {
   '/collabs/': typeof CollabsIndexRoute
   '/orders/': typeof OrdersIndexRoute
   '/profile/': typeof ProfileIndexRoute
+  '/admin/verification/$id': typeof AdminVerificationIdRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
   '/brand/campaigns/new': typeof BrandCampaignsNewRoute
+  '/admin/verification/': typeof AdminVerificationIndexRoute
   '/brand/campaigns/': typeof BrandCampaignsIndexRoute
   '/brand/campaigns/$id/edit': typeof BrandCampaignsIdEditRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -472,6 +499,7 @@ export interface FileRouteTypes {
     | '/marketplace'
     | '/messages'
     | '/notifications'
+    | '/verification'
     | '/workspace'
     | '/admin/login'
     | '/ai-creators/$id'
@@ -494,9 +522,11 @@ export interface FileRouteTypes {
     | '/collabs/'
     | '/orders/'
     | '/profile/'
+    | '/admin/verification/$id'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
     | '/brand/campaigns/new'
+    | '/admin/verification/'
     | '/brand/campaigns/'
     | '/brand/campaigns/$id/edit'
     | '/lovable/email/auth/preview'
@@ -522,6 +552,7 @@ export interface FileRouteTypes {
     | '/marketplace'
     | '/messages'
     | '/notifications'
+    | '/verification'
     | '/workspace'
     | '/admin/login'
     | '/ai-creators/$id'
@@ -544,9 +575,11 @@ export interface FileRouteTypes {
     | '/collabs'
     | '/orders'
     | '/profile'
+    | '/admin/verification/$id'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
     | '/brand/campaigns/new'
+    | '/admin/verification'
     | '/brand/campaigns'
     | '/brand/campaigns/$id/edit'
     | '/lovable/email/auth/preview'
@@ -572,6 +605,7 @@ export interface FileRouteTypes {
     | '/marketplace'
     | '/messages'
     | '/notifications'
+    | '/verification'
     | '/workspace'
     | '/admin/login'
     | '/ai-creators/$id'
@@ -594,9 +628,11 @@ export interface FileRouteTypes {
     | '/collabs/'
     | '/orders/'
     | '/profile/'
+    | '/admin/verification/$id'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
     | '/brand/campaigns/new'
+    | '/admin/verification/'
     | '/brand/campaigns/'
     | '/brand/campaigns/$id/edit'
     | '/lovable/email/auth/preview'
@@ -623,6 +659,7 @@ export interface RootRouteChildren {
   MarketplaceRoute: typeof MarketplaceRoute
   MessagesRoute: typeof MessagesRoute
   NotificationsRoute: typeof NotificationsRoute
+  VerificationRoute: typeof VerificationRoute
   WorkspaceRoute: typeof WorkspaceRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AiCreatorsIdRoute: typeof AiCreatorsIdRoute
@@ -638,8 +675,10 @@ export interface RootRouteChildren {
   CollabsIndexRoute: typeof CollabsIndexRoute
   OrdersIndexRoute: typeof OrdersIndexRoute
   ProfileIndexRoute: typeof ProfileIndexRoute
+  AdminVerificationIdRoute: typeof AdminVerificationIdRoute
   ApiGstValidateFormatRoute: typeof ApiGstValidateFormatRoute
   ApiGstVerificationStatusRoute: typeof ApiGstVerificationStatusRoute
+  AdminVerificationIndexRoute: typeof AdminVerificationIndexRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -764,6 +803,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/notifications'
       preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verification': {
+      id: '/verification'
+      path: '/verification'
+      fullPath: '/verification'
+      preLoaderRoute: typeof VerificationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/workspace': {
@@ -920,6 +966,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/verification/': {
+      id: '/admin/verification/'
+      path: '/admin/verification'
+      fullPath: '/admin/verification/'
+      preLoaderRoute: typeof AdminVerificationIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/verification/$id': {
+      id: '/admin/verification/$id'
+      path: '/admin/verification/$id'
+      fullPath: '/admin/verification/$id'
+      preLoaderRoute: typeof AdminVerificationIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/gst/validate-format': {
       id: '/api/gst/validate-format'
       path: '/api/gst/validate-format'
@@ -1046,6 +1106,7 @@ const rootRouteChildren: RootRouteChildren = {
   MarketplaceRoute: MarketplaceRoute,
   MessagesRoute: MessagesRoute,
   NotificationsRoute: NotificationsRoute,
+  VerificationRoute: VerificationRoute,
   WorkspaceRoute: WorkspaceRoute,
   AdminLoginRoute: AdminLoginRoute,
   AiCreatorsIdRoute: AiCreatorsIdRoute,
@@ -1061,8 +1122,10 @@ const rootRouteChildren: RootRouteChildren = {
   CollabsIndexRoute: CollabsIndexRoute,
   OrdersIndexRoute: OrdersIndexRoute,
   ProfileIndexRoute: ProfileIndexRoute,
+  AdminVerificationIdRoute: AdminVerificationIdRoute,
   ApiGstValidateFormatRoute: ApiGstValidateFormatRoute,
   ApiGstVerificationStatusRoute: ApiGstVerificationStatusRoute,
+  AdminVerificationIndexRoute: AdminVerificationIndexRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,

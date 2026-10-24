@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Globe, MapPin, Star } from "lucide-react";
+import { BadgeCheck, Globe, MapPin, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { InviteButton } from "@/components/collab-invite";
 import { CreatorProjects } from "@/components/creator-projects";
@@ -37,6 +37,11 @@ export function ProfileView({ p, isOwn }: { p: PublicProfile; isOwn: boolean }) 
   useEffect(() => {
     supabase.from("collab_reviews").select("rating,comment,created_at").eq("reviewee_id", p.id).order("created_at", { ascending: false }).limit(10).then(({ data }) => setReviews(data ?? []));
   }, [p.id]);
+  const [verified, setVerified] = useState(false);
+  useEffect(() => {
+    if (p.role !== "creator") return;
+    supabase.rpc("is_verified_creator", { _id: p.id }).then(({ data }) => setVerified(!!data));
+  }, [p.id, p.role]);
   const name = (p.role === "brand" ? p.company_name || p.full_name : p.full_name) || "Member";
   const links = Object.entries(p.social_links ?? {}).filter(([, v]) => typeof v === "string" && /^https?:\/\//.test(v));
   return (
@@ -45,7 +50,7 @@ export function ProfileView({ p, isOwn }: { p: PublicProfile; isOwn: boolean }) 
       <div className="profile-head">
         <Avatar path={p.avatar_path} name={name} size={96} />
         <div className="min-w-0 flex-1">
-          <h1 className="entry-title">{name}</h1>
+          <h1 className="entry-title">{name}{verified && <span className="status-tag ml-2 align-middle" title="Reviewed and approved by the Qolabrate team"><BadgeCheck size={14} className="inline mr-1" />Verified creator</span>}</h1>
           <p className="text-muted-foreground">@{p.username} · {p.role === "brand" ? (p.industry || "Brand") : "Creator"}
             {p.rating != null && <> · <Star size={13} className="inline text-primary" fill="currentColor" /> {p.rating} ({p.review_count})</>}
           </p>

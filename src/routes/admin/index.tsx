@@ -20,6 +20,7 @@ function Admin() {
     <SiteShell>
       <main className="container page-main">
         <h1>Admin</h1>
+        <p><Link to="/admin/verification" className="underline">Creator verification requests →</Link></p>
         {!user ? <p><Link to="/auth" search={{ mode: "signin" }} className="underline">Sign in</Link> with an admin account.</p>
           : q.isLoading ? <p>Loading…</p>
           : q.isError ? <p className="text-muted-foreground">This page is only for Qolabrate admins.</p>

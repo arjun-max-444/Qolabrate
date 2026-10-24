@@ -833,6 +833,41 @@ export type Database = {
           },
         ]
       }
+      creator_ai_reviews: {
+        Row: {
+          id: string
+          model_name: string
+          report: Json
+          request_id: string
+          review_version: number
+          reviewed_at: string
+        }
+        Insert: {
+          id?: string
+          model_name: string
+          report: Json
+          request_id: string
+          review_version?: number
+          reviewed_at?: string
+        }
+        Update: {
+          id?: string
+          model_name?: string
+          report?: Json
+          request_id?: string
+          review_version?: number
+          reviewed_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "creator_ai_reviews_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "creator_verification_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       creator_profiles: {
         Row: {
           ai_tools: Json
@@ -921,6 +956,47 @@ export type Database = {
           },
         ]
       }
+      creator_skills: {
+        Row: {
+          created_at: string
+          id: string
+          level: string
+          link: string
+          name: string
+          tools: string[]
+          user_id: string
+          years: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          level?: string
+          link?: string
+          name: string
+          tools?: string[]
+          user_id: string
+          years?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          level?: string
+          link?: string
+          name?: string
+          tools?: string[]
+          user_id?: string
+          years?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "creator_skills_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       creator_social_accounts: {
         Row: {
           avg_views: number | null
@@ -959,6 +1035,173 @@ export type Database = {
           {
             foreignKeyName: "creator_social_accounts_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      creator_verification_audit_logs: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          id: string
+          internal: boolean
+          new_status: string | null
+          previous_status: string | null
+          reason: string
+          request_id: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          internal?: boolean
+          new_status?: string | null
+          previous_status?: string | null
+          reason?: string
+          request_id: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          internal?: boolean
+          new_status?: string | null
+          previous_status?: string | null
+          reason?: string
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "creator_verification_audit_logs_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "creator_verification_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      creator_verification_evidence: {
+        Row: {
+          admin_note: string
+          created_at: string
+          creator_id: string
+          evidence_type: string
+          file_name: string
+          id: string
+          permission_to_share: boolean
+          related_project_id: string | null
+          related_skill: string
+          review_status: string
+          reviewed_at: string | null
+          storage_path: string | null
+          title: string
+          url: string
+        }
+        Insert: {
+          admin_note?: string
+          created_at?: string
+          creator_id: string
+          evidence_type: string
+          file_name?: string
+          id?: string
+          permission_to_share?: boolean
+          related_project_id?: string | null
+          related_skill?: string
+          review_status?: string
+          reviewed_at?: string | null
+          storage_path?: string | null
+          title: string
+          url?: string
+        }
+        Update: {
+          admin_note?: string
+          created_at?: string
+          creator_id?: string
+          evidence_type?: string
+          file_name?: string
+          id?: string
+          permission_to_share?: boolean
+          related_project_id?: string | null
+          related_skill?: string
+          review_status?: string
+          reviewed_at?: string | null
+          storage_path?: string | null
+          title?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "creator_verification_evidence_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "creator_verification_evidence_related_project_id_fkey"
+            columns: ["related_project_id"]
+            isOneToOne: false
+            referencedRelation: "creator_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      creator_verification_requests: {
+        Row: {
+          ai_review_status: string
+          created_at: string
+          creator_id: string
+          decision_reason: string
+          id: string
+          missing_items: string[]
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          submitted_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          ai_review_status?: string
+          created_at?: string
+          creator_id: string
+          decision_reason?: string
+          id?: string
+          missing_items?: string[]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ai_review_status?: string
+          created_at?: string
+          creator_id?: string
+          decision_reason?: string
+          id?: string
+          missing_items?: string[]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "creator_verification_requests_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "creator_verification_requests_reviewed_by_fkey"
+            columns: ["reviewed_by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -1708,6 +1951,7 @@ export type Database = {
       is_blocked: { Args: { _a: string; _b: string }; Returns: boolean }
       is_business_email: { Args: { _email: string }; Returns: boolean }
       is_collab_party: { Args: { _collab: string }; Returns: boolean }
+      is_verified_creator: { Args: { _id: string }; Returns: boolean }
       make_username: { Args: { _base: string; _id: string }; Returns: string }
       notify: {
         Args: { _body: string; _link: string; _title: string; _user: string }
@@ -1780,6 +2024,7 @@ export type Database = {
         Returns: string
       }
       username_available: { Args: { _username: string }; Returns: boolean }
+      verification_editable: { Args: { _uid: string }; Returns: boolean }
     }
     Enums: {
       app_role: "creator" | "brand" | "admin"
