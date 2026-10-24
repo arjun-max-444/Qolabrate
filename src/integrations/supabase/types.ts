@@ -1974,6 +1974,15 @@ export type Database = {
         Returns: string
       }
       collab_unlocked: { Args: { _collab: string }; Returns: boolean }
+      creator_track_record: {
+        Args: { _user: string }
+        Returns: {
+          completed: number
+          on_time: number
+          streak: number
+          success_rate: number
+        }[]
+      }
       deal_contacts: {
         Args: { _id: string; _kind: string }
         Returns: {
