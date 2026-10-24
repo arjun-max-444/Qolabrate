@@ -1,3 +1,4 @@
+import { useRoleGate } from "@/lib/use-role-gate";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -16,6 +17,7 @@ export const Route = createFileRoute("/orders/$id")({
 });
 
 function OrderPage() {
+  useRoleGate(["brand"]);
   const { id } = Route.useParams();
   const { user } = useAccount();
   const qc = useQueryClient();
