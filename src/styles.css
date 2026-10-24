@@ -1294,8 +1294,8 @@ body { font-family: "Montserrat", Arial, sans-serif; }
 .q-chev { width: 22px; height: 22px; border-radius: 50%; background: var(--primary-foreground); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; }
 .q-menu-btn { display: none; margin-left: auto; }
 .q-hero { position: relative; overflow: hidden; background: linear-gradient(180deg, var(--surface), var(--background)); }
-.q-hero::after { content: ""; position: absolute; left: -10%; right: -10%; bottom: -60px; height: 120px; border-radius: 50%; background: var(--background); }
-.q-hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1.1fr; align-items: center; gap: 2rem; padding: 3.5rem 0 5rem; }
+.q-hero::after { content: ""; pointer-events: none; position: absolute; left: -10%; right: -10%; bottom: -60px; height: 120px; border-radius: 50%; background: var(--background); }
+.q-hero-grid { position: relative; display: grid; grid-template-columns: 1fr 1.1fr; align-items: center; gap: 2rem; padding: 3.5rem 0 5rem; }
 .q-tag { letter-spacing: .3em; font-size: 13px; font-weight: 500; }
 .q-title { font-size: clamp(54px, 8vw, 104px); line-height: .95; font-weight: 800; letter-spacing: -0.03em; margin: 1rem 0 1.5rem; }
 .q-lede { font-size: 18px; line-height: 1.5; max-width: 420px; color: color-mix(in oklab, var(--foreground) 80%, var(--background)); }
@@ -1353,7 +1353,7 @@ body { font-family: "Montserrat", Arial, sans-serif; }
 .q-search { display: flex; align-items: center; gap: .5rem; background: var(--surface); border-radius: 999px; padding: .6rem 1rem; }
 .q-search input { border: 0; background: transparent; width: 100%; }
 .q-rail h2 { font-size: 19px; font-weight: 800; margin: 1.5rem 0 .75rem; }
-.q-trend { padding: .6rem 0; }
+.q-trend { display: block; padding: .6rem 0; }
 .q-trend small { color: var(--muted-foreground); font-size: 12px; }
 .q-trend b { display: block; font-size: 14px; }
 .q-follow { display: flex; align-items: center; gap: .75rem; padding: .6rem 0; }
