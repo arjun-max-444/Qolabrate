@@ -1369,6 +1369,7 @@ export type Database = {
           body: string
           created_at: string
           id: string
+          read_at: string | null
           recipient_id: string
           sender_id: string
         }
@@ -1376,6 +1377,7 @@ export type Database = {
           body: string
           created_at?: string
           id?: string
+          read_at?: string | null
           recipient_id: string
           sender_id: string
         }
@@ -1383,6 +1385,7 @@ export type Database = {
           body?: string
           created_at?: string
           id?: string
+          read_at?: string | null
           recipient_id?: string
           sender_id?: string
         }
@@ -1992,6 +1995,7 @@ export type Database = {
       is_collab_party: { Args: { _collab: string }; Returns: boolean }
       is_verified_creator: { Args: { _id: string }; Returns: boolean }
       make_username: { Args: { _base: string; _id: string }; Returns: string }
+      mark_messages_read: { Args: { _other: string }; Returns: undefined }
       notify: {
         Args: { _body: string; _link: string; _title: string; _user: string }
         Returns: undefined
