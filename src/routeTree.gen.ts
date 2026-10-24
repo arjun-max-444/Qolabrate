@@ -46,6 +46,7 @@ import { Route as CreatorSocialsRouteImport } from './routes/creator/socials'
 import { Route as CreatorsIdRouteImport } from './routes/creators/$id'
 import { Route as OrdersIndexRouteImport } from './routes/orders.index'
 import { Route as OrdersIdRouteImport } from './routes/orders.$id'
+import { Route as PHandleRouteImport } from './routes/p.$handle'
 import { Route as ProfileIndexRouteImport } from './routes/profile.index'
 import { Route as ProfileEditRouteImport } from './routes/profile.edit'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
@@ -246,6 +247,11 @@ const OrdersIdRoute = OrdersIdRouteImport.update({
   path: '/orders/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PHandleRoute = PHandleRouteImport.update({
+  id: '/p/$handle',
+  path: '/p/$handle',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileIndexRoute = ProfileIndexRouteImport.update({
   id: '/profile/',
   path: '/profile/',
@@ -352,6 +358,7 @@ export interface FileRoutesByFullPath {
   '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
   '/orders/$id': typeof OrdersIdRoute
+  '/p/$handle': typeof PHandleRoute
   '/profile/edit': typeof ProfileEditRoute
   '/u/$username': typeof UUsernameRoute
   '/admin/': typeof AdminIndexRoute
@@ -405,6 +412,7 @@ export interface FileRoutesByTo {
   '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
   '/orders/$id': typeof OrdersIdRoute
+  '/p/$handle': typeof PHandleRoute
   '/profile/edit': typeof ProfileEditRoute
   '/u/$username': typeof UUsernameRoute
   '/admin': typeof AdminIndexRoute
@@ -459,6 +467,7 @@ export interface FileRoutesById {
   '/creator/socials': typeof CreatorSocialsRoute
   '/creators/$id': typeof CreatorsIdRoute
   '/orders/$id': typeof OrdersIdRoute
+  '/p/$handle': typeof PHandleRoute
   '/profile/edit': typeof ProfileEditRoute
   '/u/$username': typeof UUsernameRoute
   '/admin/': typeof AdminIndexRoute
@@ -514,6 +523,7 @@ export interface FileRouteTypes {
     | '/creator/socials'
     | '/creators/$id'
     | '/orders/$id'
+    | '/p/$handle'
     | '/profile/edit'
     | '/u/$username'
     | '/admin/'
@@ -567,6 +577,7 @@ export interface FileRouteTypes {
     | '/creator/socials'
     | '/creators/$id'
     | '/orders/$id'
+    | '/p/$handle'
     | '/profile/edit'
     | '/u/$username'
     | '/admin'
@@ -620,6 +631,7 @@ export interface FileRouteTypes {
     | '/creator/socials'
     | '/creators/$id'
     | '/orders/$id'
+    | '/p/$handle'
     | '/profile/edit'
     | '/u/$username'
     | '/admin/'
@@ -667,6 +679,7 @@ export interface RootRouteChildren {
   CollabsIdRoute: typeof CollabsIdRoute
   CreatorsIdRoute: typeof CreatorsIdRoute
   OrdersIdRoute: typeof OrdersIdRoute
+  PHandleRoute: typeof PHandleRoute
   ProfileEditRoute: typeof ProfileEditRoute
   UUsernameRoute: typeof UUsernameRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -945,6 +958,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrdersIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/p/$handle': {
+      id: '/p/$handle'
+      path: '/p/$handle'
+      fullPath: '/p/$handle'
+      preLoaderRoute: typeof PHandleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile/': {
       id: '/profile/'
       path: '/profile'
@@ -1114,6 +1134,7 @@ const rootRouteChildren: RootRouteChildren = {
   CollabsIdRoute: CollabsIdRoute,
   CreatorsIdRoute: CreatorsIdRoute,
   OrdersIdRoute: OrdersIdRoute,
+  PHandleRoute: PHandleRoute,
   ProfileEditRoute: ProfileEditRoute,
   UUsernameRoute: UUsernameRoute,
   AdminIndexRoute: AdminIndexRoute,
