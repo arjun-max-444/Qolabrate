@@ -373,7 +373,7 @@ export function FeedRail({ myId, social }: { myId: string | undefined; social: S
     queryFn: async () => {
       const { data, error } = await supabase
         .from("feed_profiles")
-        .select("id, handle, display_name, kind")
+        .select("id, handle, display_name, kind, avatar_path")
         .eq("kind", role === "brand" ? "creator" : "brand")
         .neq("id", myId!)
         .order("created_at", { ascending: false })
@@ -420,7 +420,7 @@ export function FeedRail({ myId, social }: { myId: string | undefined; social: S
           <h2>{role === "brand" ? "Creators to follow" : "Brands to follow"}</h2>
           {whoToFollow.map((p) => (
             <div key={p.id} className="q-follow">
-              <Link to="/p/$handle" params={{ handle: p.handle }}><Avatar name={p.display_name} /></Link>
+              <Link to="/p/$handle" params={{ handle: p.handle }}><Avatar name={p.display_name} path={p.avatar_path} /></Link>
               <Link to="/p/$handle" params={{ handle: p.handle }} style={{ minWidth: 0 }}><b style={{ fontSize: 14 }}>{p.display_name}</b><br /><small className="q-muted">@{p.handle}</small></Link>
               <button className="q-pill q-pill-light" onClick={() => social.follow(p.id)}>Follow</button>
             </div>
