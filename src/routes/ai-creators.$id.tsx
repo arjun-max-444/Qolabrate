@@ -1,4 +1,8 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
+import { createOrder } from "@/lib/orders.functions";
+import { priceBreakdown, validateBrief } from "@/lib/orders";
 import { Sparkles, Check } from "lucide-react";
 import { PublicNav } from "@/components/public-nav";
 import { useAccount } from "@/components/site-shell";
@@ -26,7 +30,7 @@ function Profile() {
   const c = aiCreators.find((x) => x.id === id)!;
   const { user, role } = useAccount();
   const offerLink = user && role === "brand"
-    ? <Link to="/brand/campaigns/new" className="q-pill q-pill-dark">Create Collaboration Offer</Link>
+    ? <a href="#order" className="q-pill q-pill-dark">Create Collaboration Offer</a>
     : <Link to="/auth" search={{ mode: user ? "signin" : "signup", role: "brand" }} className="q-pill q-pill-dark">{user ? "Brand accounts only" : "Sign up as a brand to collaborate"}</Link>;
   return (
     <div className="q-home">
@@ -72,8 +76,44 @@ function Profile() {
             </div>
           ))}
         </div>
-        <div style={{ marginTop: "1.5rem" }}>{offerLink}</div>
+        {user && role === "brand" && c.available ? <OrderForm creatorId={c.id} packages={c.packages} /> : <div style={{ marginTop: "1.5rem" }}>{c.available ? offerLink : <p>{c.name} is fully booked right now.</p>}</div>}
       </main>
     </div>
+  );
+}
+
+function OrderForm({ creatorId, packages }: { creatorId: string; packages: { name: string; price: number }[] }) {
+  const navigate = useNavigate();
+  const [pkg, setPkg] = useState(packages[0].name);
+  const [brief, setBrief] = useState("");
+  const [busy, setBusy] = useState(false);
+  const price = priceBreakdown(packages.find((p) => p.name === pkg)!.price);
+  const err = validateBrief(brief);
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    if (err) return toast.error(err);
+    setBusy(true);
+    try {
+      const { id } = await createOrder({ data: { creatorId, packageName: pkg, brief } });
+      navigate({ to: "/orders/$id", params: { id } });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not create the order");
+      setBusy(false);
+    }
+  }
+  return (
+    <form id="order" onSubmit={submit} className="q-ai-pack" style={{ marginTop: "2rem", display: "grid", gap: ".75rem", maxWidth: 620 }}>
+      <h2 className="q-h2" style={{ margin: 0 }}>Create collaboration offer</h2>
+      <label>Package
+        <select value={pkg} onChange={(e) => setPkg(e.target.value)} style={{ display: "block", width: "100%", padding: ".6rem", border: "1px solid var(--border)", borderRadius: 10, marginTop: 4 }}>
+          {packages.map((p) => <option key={p.name} value={p.name}>{p.name} — {inr(p.price)}</option>)}
+        </select>
+      </label>
+      <label>Campaign brief
+        <textarea rows={4} maxLength={2000} value={brief} onChange={(e) => setBrief(e.target.value)} placeholder="Product, goal, key message, tone, anything to avoid" style={{ display: "block", width: "100%", padding: ".6rem", border: "1px solid var(--border)", borderRadius: 10, marginTop: 4 }} />
+      </label>
+      <p>Package {inr(price.packagePrice)} + 10% platform fee {inr(price.fee)} = <b>{inr(price.total)}</b> · 2 revisions included</p>
+      <button className="q-pill q-pill-dark" disabled={busy || !!err}>{busy ? "Sending…" : "Send offer"}</button>
+    </form>
   );
 }
