@@ -33,7 +33,7 @@ function Feed() {
   const posts = tab === "foryou" ? [...mine, ...samplePosts] : mine;
   const nav = [
     { to: "/home", icon: HomeIcon, label: "Home" },
-    { to: "/marketplace", icon: Search, label: "Explore" },
+    { to: "/ai-creators", icon: Search, label: "Explore" },
     { to: "/collabs", icon: Users, label: "Collaborate" },
     { to: inbox, icon: Mail, label: "Messages" },
     { to: "/account", icon: Bell, label: "Notifications" },
