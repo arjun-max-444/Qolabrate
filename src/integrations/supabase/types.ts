@@ -872,6 +872,140 @@ export type Database = {
         }
         Relationships: []
       }
+      feed_follows: {
+        Row: {
+          created_at: string
+          followee_id: string
+          follower_id: string
+        }
+        Insert: {
+          created_at?: string
+          followee_id: string
+          follower_id: string
+        }
+        Update: {
+          created_at?: string
+          followee_id?: string
+          follower_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_follows_followee_id_fkey"
+            columns: ["followee_id"]
+            isOneToOne: false
+            referencedRelation: "feed_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feed_follows_follower_id_fkey"
+            columns: ["follower_id"]
+            isOneToOne: false
+            referencedRelation: "feed_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_likes: {
+        Row: {
+          created_at: string
+          post_id: string
+          profile_id: string
+        }
+        Insert: {
+          created_at?: string
+          post_id: string
+          profile_id: string
+        }
+        Update: {
+          created_at?: string
+          post_id?: string
+          profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "feed_posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feed_likes_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "feed_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_posts: {
+        Row: {
+          author_id: string
+          body: string
+          created_at: string
+          id: string
+          image_key: string | null
+        }
+        Insert: {
+          author_id: string
+          body: string
+          created_at?: string
+          id?: string
+          image_key?: string | null
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          image_key?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_posts_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "feed_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_profiles: {
+        Row: {
+          bio: string
+          created_at: string
+          demo_no: number | null
+          display_name: string
+          handle: string
+          id: string
+          is_demo: boolean
+          kind: string
+          user_id: string | null
+        }
+        Insert: {
+          bio?: string
+          created_at?: string
+          demo_no?: number | null
+          display_name: string
+          handle: string
+          id?: string
+          is_demo?: boolean
+          kind: string
+          user_id?: string | null
+        }
+        Update: {
+          bio?: string
+          created_at?: string
+          demo_no?: number | null
+          display_name?: string
+          handle?: string
+          id?: string
+          is_demo?: boolean
+          kind?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       legacy_identities: {
         Row: {
           auth_user_id: string | null
@@ -1274,6 +1408,7 @@ export type Database = {
         Args: { _action: string; _id: string }
         Returns: undefined
       }
+      ensure_feed_profile: { Args: never; Returns: string }
       expire_collabs: { Args: never; Returns: undefined }
       has_role: {
         Args: {
