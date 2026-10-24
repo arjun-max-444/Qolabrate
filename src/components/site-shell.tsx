@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { Search, ArrowUpRight, ChevronDown } from "lucide-react";
 import { NotificationBell } from "@/components/notification-bell";
 import { dashboardFor, pickRoles, type AppRole } from "@/lib/roles";

@@ -116,7 +116,9 @@ function EditProfile() {
       await supabase.rpc("ensure_feed_profile");
       await supabase.rpc("set_feed_avatar", { _path: feedAvatar });
     }
-    window.dispatchEvent(new Event("qolabrate:profile-saved"));
+    await supabase.rpc("ensure_feed_profile");
+    await refresh();
+    await qc.invalidateQueries({ queryKey: ["feed"] });
     toast.success(welcome ? "Your profile is ready" : "Profile saved");
     navigate({ href: welcome ? "/home" : "/profile" });
   }
