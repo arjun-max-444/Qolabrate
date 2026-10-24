@@ -150,7 +150,7 @@ export function useMediaUrl(path: string | null | undefined) {
   }).data;
 }
 
-export function Avatar({ name, size = 42, path }: { name: string; size?: number; path?: string | null }) {
+export function Avatar({ name, size = 42, path }: { name: string; size?: number; path?: string | null | undefined }) {
   const url = useMediaUrl(path);
   if (url) return <img className="q-av" src={url} alt="" width={size} height={size} style={{ width: size, height: size, objectFit: "cover" }} />;
   return <div className="q-av" style={{ width: size, height: size, fontSize: size / 3 }} aria-hidden>{name.slice(0, 1).toUpperCase()}</div>;
