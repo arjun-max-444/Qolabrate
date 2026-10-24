@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { ArrowLeft, Mail } from "lucide-react";
 import { useAccount } from "@/components/site-shell";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,7 +14,7 @@ export const Route = createFileRoute("/p/$handle")({
   component: FeedProfile,
 });
 
-type Person = { id: string; user_id: string | null; handle: string; display_name: string; kind: string; bio: string | null; is_demo: boolean };
+type Person = { id: string; user_id: string | null; handle: string; display_name: string; kind: string; bio: string | null; is_demo: boolean; avatar_path?: string | null };
 type Tab = "posts" | "followers" | "following";
 
 async function count(table: "feed_follows" | "feed_posts", col: string, id: string) {
@@ -24,7 +25,7 @@ async function count(table: "feed_follows" | "feed_posts", col: string, id: stri
 
 function FeedProfile() {
   const { handle } = Route.useParams();
-  const { role } = useAccount();
+  const { role, user } = useAccount();
   const { signedIn, myId } = useFeedMe();
   const social = useSocial(myId);
   const [tab, setTab] = useState<Tab>("posts");
@@ -33,12 +34,27 @@ function FeedProfile() {
     queryKey: ["feed", "profile", handle],
     enabled: signedIn,
     queryFn: async () => {
-      const { data, error } = await supabase.from("feed_profiles").select("id, user_id, handle, display_name, kind, bio, is_demo").eq("handle", handle).maybeSingle();
+      const { data, error } = await supabase.from("feed_profiles").select("id, user_id, handle, display_name, kind, bio, is_demo, avatar_path").eq("handle", handle).maybeSingle();
       if (error) throw error;
       return data as Person | null;
     },
   });
   const p = person.data;
+  const qc = useQueryClient();
+  const [uploading, setUploading] = useState(false);
+  async function changePhoto(f: File) {
+    if (!user) return;
+    if (f.size > 5 * 1024 * 1024) { toast.error("Profile photos must be under 5 MB"); return; }
+    setUploading(true);
+    const ext = (f.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+    const path = `${user.id}/avatar-${Date.now()}.${ext}`;
+    const up = await supabase.storage.from("feed-media").upload(path, f, { contentType: f.type });
+    const rpc = up.error ? up : await supabase.rpc("set_feed_avatar", { _path: path });
+    setUploading(false);
+    if (rpc.error) { toast.error("Could not update your photo"); return; }
+    toast.success("Profile photo updated");
+    void qc.invalidateQueries({ queryKey: ["feed"] });
+  }
   const verified = useVerified([p?.kind === "creator" ? (p.user_id ?? null) : null]);
 
   const stats = useQuery({
@@ -105,10 +121,16 @@ function FeedProfile() {
         <>
           <section className="q-profile-head">
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem" }}>
-              <Avatar name={p.display_name} size={84} />
+              <Avatar name={p.display_name} size={84} path={p.avatar_path} />
               <div style={{ display: "flex", gap: ".5rem", flexWrap: "wrap", justifyContent: "flex-end" }}>
                 {mine ? (
-                  <Link to="/profile/edit" className="q-pill q-pill-light" style={{ height: 38 }}>Edit profile</Link>
+                  <>
+                    <label className="q-pill q-pill-light" style={{ height: 38, cursor: "pointer" }}>
+                      {uploading ? "Uploading…" : "Change photo"}
+                      <input type="file" accept="image/jpeg,image/png,image/webp" hidden disabled={uploading} onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) void changePhoto(f); }} />
+                    </label>
+                    <Link to="/profile/edit" className="q-pill q-pill-light" style={{ height: 38 }}>Edit profile</Link>
+                  </>
                 ) : (
                   <>
                     <Link to="/messages" search={{ to: p.id }} className="q-pill q-pill-light" style={{ height: 38, padding: "0 .9rem" }} aria-label={`Message ${p.display_name}`}><Mail size={16} /> Message</Link>

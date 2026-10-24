@@ -21,11 +21,12 @@ import product from "@/assets/feed-product.jpg";
 const images: Record<string, string> = { film, campaign, product };
 export const TRENDS = [["Technology", "AI Video"], ["Creative", "AI Animation"], ["Brands", "Campaign"], ["Creators", "Generative"], ["Business", "Collaboration"]] as const;
 
-export type FeedAuthor = { id: string; user_id: string | null; handle: string; display_name: string; kind: string; is_demo: boolean };
+export type FeedAuthor = { id: string; user_id: string | null; handle: string; display_name: string; kind: string; is_demo: boolean; avatar_path?: string | null };
 export type FeedPost = {
   id: string;
   body: string;
   image_key: string | null;
+  image_path?: string | null;
   created_at: string;
   author: FeedAuthor;
   feed_likes: { count: number }[];
@@ -33,7 +34,7 @@ export type FeedPost = {
   feed_reposts: { count: number }[];
 };
 export const POST_SELECT =
-  "id, body, image_key, created_at, author:feed_profiles!feed_posts_author_id_fkey!inner(id, user_id, handle, display_name, kind, is_demo), feed_likes(count), feed_comments(count), feed_reposts(count)";
+  "id, body, image_key, image_path, created_at, author:feed_profiles!feed_posts_author_id_fkey!inner(id, user_id, handle, display_name, kind, is_demo, avatar_path), feed_likes(count), feed_comments(count), feed_reposts(count)";
 
 /** The signed-in member's feed profile id (created on first use). */
 export function useFeedMe() {
@@ -54,12 +55,12 @@ export function useFeedMe() {
     enabled: !!me.data,
     staleTime: Infinity,
     queryFn: async () => {
-      const { data, error } = await supabase.from("feed_profiles").select("handle").eq("id", me.data!).single();
+      const { data, error } = await supabase.from("feed_profiles").select("handle, avatar_path").eq("id", me.data!).single();
       if (error) throw error;
-      return data.handle;
+      return data;
     },
   });
-  return { signedIn, myId: me.data, myHandle: handle.data, meError: me.isError };
+  return { signedIn, myId: me.data, myHandle: handle.data?.handle, myAvatar: handle.data?.avatar_path ?? null, meError: me.isError };
 }
 
 type SetKey = "follows" | "likes" | "reposts" | "saves";
@@ -135,8 +136,30 @@ export function useSocial(myId: string | undefined) {
 }
 export type Social = ReturnType<typeof useSocial>;
 
-export function Avatar({ name, size = 42 }: { name: string; size?: number }) {
+/** Short-lived link to a private feed photo; cached so each photo is fetched once per session. */
+export function useMediaUrl(path: string | null | undefined) {
+  return useQuery({
+    queryKey: ["feed-media", path],
+    enabled: !!path,
+    staleTime: 50 * 60 * 1000,
+    queryFn: async () => {
+      const { data, error } = await supabase.storage.from("feed-media").createSignedUrl(path!, 3600);
+      if (error) throw error;
+      return data.signedUrl;
+    },
+  }).data;
+}
+
+export function Avatar({ name, size = 42, path }: { name: string; size?: number; path?: string | null | undefined }) {
+  const url = useMediaUrl(path);
+  if (url) return <img className="q-av" src={url} alt="" width={size} height={size} style={{ width: size, height: size, objectFit: "cover" }} />;
   return <div className="q-av" style={{ width: size, height: size, fontSize: size / 3 }} aria-hidden>{name.slice(0, 1).toUpperCase()}</div>;
+}
+
+function PostPhoto({ path }: { path: string }) {
+  const url = useMediaUrl(path);
+  if (!url) return <Skeleton style={{ width: "100%", aspectRatio: "16 / 9", borderRadius: 14 }} />;
+  return <img src={url} alt="" loading="lazy" style={{ maxHeight: 520, objectFit: "cover" }} />;
 }
 
 /** Verified badge only for real creator accounts whose verification was approved. */
@@ -268,7 +291,7 @@ export function PostList({ posts, myId, social, openFirst = false }: { posts: Fe
         const saved = social.isSaved(p.id);
         return (
           <article key={p.id} className="q-post">
-            <Link to="/p/$handle" params={{ handle: p.author.handle }} aria-label={`${p.author.display_name}'s profile`}><Avatar name={p.author.display_name} /></Link>
+            <Link to="/p/$handle" params={{ handle: p.author.handle }} aria-label={`${p.author.display_name}'s profile`}><Avatar name={p.author.display_name} path={p.author.avatar_path} /></Link>
             <div style={{ minWidth: 0, flex: 1 }}>
               <div className="q-post-head">
                 <Link to="/p/$handle" params={{ handle: p.author.handle }} className="q-name"><b>{p.author.display_name}</b></Link>
@@ -304,7 +327,7 @@ export function PostList({ posts, myId, social, openFirst = false }: { posts: Fe
                 </span>
               </div>
               <Body text={p.body} />
-              {p.image_key && images[p.image_key] && <img src={images[p.image_key]} alt="" loading="lazy" width={1280} height={720} />}
+              {p.image_path ? <PostPhoto path={p.image_path} /> : p.image_key && images[p.image_key] && <img src={images[p.image_key]} alt="" loading="lazy" width={1280} height={720} style={{ maxHeight: 520, objectFit: "cover" }} />}
               <div className="q-post-actions">
                 <button aria-label="Comments" aria-expanded={openPost === p.id} onClick={() => setOpenPost(openPost === p.id ? null : p.id)}>
                   <MessageCircle size={16} />{p.feed_comments[0]?.count ?? 0}

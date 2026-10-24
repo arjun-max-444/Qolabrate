@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { SiteShell, useAccount } from "@/components/site-shell";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 import { pageHead } from "@/lib/seo";
 import { dashboardFor, fetchRole } from "@/lib/roles";
 import { isBusinessEmail } from "@/lib/business-email";
@@ -181,31 +180,6 @@ function Auth() {
               Signing up as a {role === "brand" ? "brand or agency" : "creator"} ·{" "}
               <button type="button" className="section-link" onClick={() => setRole(undefined)}>change</button>
             </p>
-          )}
-          {!["recover", "setup"].includes(mode) && role !== "brand" && (
-            <>
-              <Button
-                variant="outline"
-                className="full"
-                onClick={async () => {
-                  if (mode === "signup" && role) sessionStorage.setItem("qolabrate_signup_role", role);
-                  const result = await lovable.auth.signInWithOAuth("google", {
-                    redirect_uri: window.location.origin,
-                  });
-                  if (result.error) { setError(result.error.message); return; }
-                  if (result.redirected) return;
-                  const { role: signedInRole } = await fetchRole();
-                  if (signedInRole === "brand") {
-                    await supabase.auth.signOut();
-                    setRole("brand");
-                    setError("Brands and agencies must sign in with their official email and password.");
-                  }
-                }}
-              >
-                Continue with Google
-              </Button>
-              <div className="divider">or continue with email</div>
-            </>
           )}
           <form onSubmit={submit}>
             {mode === "signup" && (

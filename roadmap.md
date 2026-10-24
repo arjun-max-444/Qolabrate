@@ -10,6 +10,6 @@ Decisions (user, latest): keep human creators alongside AI personas; one account
 - [x] Creator verification: skills, evidence uploads, checklist, admin review with AI report, Verified badge.
 - [x] Social redesign stage 1: Latest tab, feed pages, post menu (copy link, report, delete), member profile pages with followers/following, follow notifications, mobile bottom bar.
 - [ ] Social redesign stage 2: messages page upgrade (unread counts, attachments, message requests, date separators).
-- [ ] Social redesign stage 3: Explore page (people search, filters), like/comment notifications, image/video posts.
+- [ ] Social redesign stage 3: Explore people search [done], like/comment notifications [done], photo posts + profile pictures [done], video posts [pending].
 - [ ] Email inbox from zip: overlaps with Messages — waiting on user whether a separate inbox is wanted.
 - [ ] Contact email: waiting on the real address (placeholder hello@qolabrate.chinmaipilot.in).

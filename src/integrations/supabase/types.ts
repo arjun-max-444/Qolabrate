@@ -1413,6 +1413,7 @@ export type Database = {
           created_at: string
           id: string
           image_key: string | null
+          image_path: string | null
         }
         Insert: {
           author_id: string
@@ -1420,6 +1421,7 @@ export type Database = {
           created_at?: string
           id?: string
           image_key?: string | null
+          image_path?: string | null
         }
         Update: {
           author_id?: string
@@ -1427,6 +1429,7 @@ export type Database = {
           created_at?: string
           id?: string
           image_key?: string | null
+          image_path?: string | null
         }
         Relationships: [
           {
@@ -1440,6 +1443,7 @@ export type Database = {
       }
       feed_profiles: {
         Row: {
+          avatar_path: string | null
           bio: string
           created_at: string
           demo_no: number | null
@@ -1451,6 +1455,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          avatar_path?: string | null
           bio?: string
           created_at?: string
           demo_no?: number | null
@@ -1462,6 +1467,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          avatar_path?: string | null
           bio?: string
           created_at?: string
           demo_no?: number | null
@@ -2066,6 +2072,7 @@ export type Database = {
         }
         Returns: string
       }
+      set_feed_avatar: { Args: { _path: string }; Returns: undefined }
       username_available: { Args: { _username: string }; Returns: boolean }
       verification_editable: { Args: { _uid: string }; Returns: boolean }
     }
