@@ -10,14 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BrandRouteRouteImport } from './routes/brand/route'
 import { Route as BriefRouteImport } from './routes/brief'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CreatorRouteRouteImport } from './routes/creator/route'
+import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as ForBrandsRouteImport } from './routes/for-brands'
 import { Route as ForCreatorsRouteImport } from './routes/for-creators'
 import { Route as HealthRouteImport } from './routes/health'
+import { Route as HomeRouteImport } from './routes/home'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
@@ -51,6 +55,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
   path: '/account',
@@ -71,9 +80,19 @@ const BriefRoute = BriefRouteImport.update({
   path: '/brief',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CreatorRouteRoute = CreatorRouteRouteImport.update({
   id: '/creator',
   path: '/creator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesRoute = FeaturesRouteImport.update({
+  id: '/features',
+  path: '/features',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForBrandsRoute = ForBrandsRouteImport.update({
@@ -89,6 +108,11 @@ const ForCreatorsRoute = ForCreatorsRouteImport.update({
 const HealthRoute = HealthRouteImport.update({
   id: '/health',
   path: '/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MarketplaceRoute = MarketplaceRouteImport.update({
@@ -233,12 +257,16 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/brand': typeof BrandRouteRouteWithChildren
   '/creator': typeof CreatorRouteRouteWithChildren
+  '/about': typeof AboutRoute
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/brief': typeof BriefRoute
+  '/contact': typeof ContactRoute
+  '/features': typeof FeaturesRoute
   '/for-brands': typeof ForBrandsRoute
   '/for-creators': typeof ForCreatorsRoute
   '/health': typeof HealthRoute
+  '/home': typeof HomeRoute
   '/marketplace': typeof MarketplaceRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
@@ -271,12 +299,16 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/brand': typeof BrandRouteRouteWithChildren
   '/creator': typeof CreatorRouteRouteWithChildren
+  '/about': typeof AboutRoute
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/brief': typeof BriefRoute
+  '/contact': typeof ContactRoute
+  '/features': typeof FeaturesRoute
   '/for-brands': typeof ForBrandsRoute
   '/for-creators': typeof ForCreatorsRoute
   '/health': typeof HealthRoute
+  '/home': typeof HomeRoute
   '/marketplace': typeof MarketplaceRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
@@ -310,12 +342,16 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/brand': typeof BrandRouteRouteWithChildren
   '/creator': typeof CreatorRouteRouteWithChildren
+  '/about': typeof AboutRoute
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/brief': typeof BriefRoute
+  '/contact': typeof ContactRoute
+  '/features': typeof FeaturesRoute
   '/for-brands': typeof ForBrandsRoute
   '/for-creators': typeof ForCreatorsRoute
   '/health': typeof HealthRoute
+  '/home': typeof HomeRoute
   '/marketplace': typeof MarketplaceRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
@@ -350,12 +386,16 @@ export interface FileRouteTypes {
     | '/'
     | '/brand'
     | '/creator'
+    | '/about'
     | '/account'
     | '/auth'
     | '/brief'
+    | '/contact'
+    | '/features'
     | '/for-brands'
     | '/for-creators'
     | '/health'
+    | '/home'
     | '/marketplace'
     | '/workspace'
     | '/admin/login'
@@ -388,12 +428,16 @@ export interface FileRouteTypes {
     | '/'
     | '/brand'
     | '/creator'
+    | '/about'
     | '/account'
     | '/auth'
     | '/brief'
+    | '/contact'
+    | '/features'
     | '/for-brands'
     | '/for-creators'
     | '/health'
+    | '/home'
     | '/marketplace'
     | '/workspace'
     | '/admin/login'
@@ -426,12 +470,16 @@ export interface FileRouteTypes {
     | '/'
     | '/brand'
     | '/creator'
+    | '/about'
     | '/account'
     | '/auth'
     | '/brief'
+    | '/contact'
+    | '/features'
     | '/for-brands'
     | '/for-creators'
     | '/health'
+    | '/home'
     | '/marketplace'
     | '/workspace'
     | '/admin/login'
@@ -465,12 +513,16 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BrandRouteRoute: typeof BrandRouteRouteWithChildren
   CreatorRouteRoute: typeof CreatorRouteRouteWithChildren
+  AboutRoute: typeof AboutRoute
   AccountRoute: typeof AccountRoute
   AuthRoute: typeof AuthRoute
   BriefRoute: typeof BriefRoute
+  ContactRoute: typeof ContactRoute
+  FeaturesRoute: typeof FeaturesRoute
   ForBrandsRoute: typeof ForBrandsRoute
   ForCreatorsRoute: typeof ForCreatorsRoute
   HealthRoute: typeof HealthRoute
+  HomeRoute: typeof HomeRoute
   MarketplaceRoute: typeof MarketplaceRoute
   WorkspaceRoute: typeof WorkspaceRoute
   AdminLoginRoute: typeof AdminLoginRoute
@@ -496,6 +548,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/account': {
@@ -526,11 +585,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BriefRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/creator': {
       id: '/creator'
       path: '/creator'
       fullPath: '/creator'
       preLoaderRoute: typeof CreatorRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features': {
+      id: '/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof FeaturesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/for-brands': {
@@ -552,6 +625,13 @@ declare module '@tanstack/react-router' {
       path: '/health'
       fullPath: '/health'
       preLoaderRoute: typeof HealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/marketplace': {
@@ -792,12 +872,16 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BrandRouteRoute: BrandRouteRouteWithChildren,
   CreatorRouteRoute: CreatorRouteRouteWithChildren,
+  AboutRoute: AboutRoute,
   AccountRoute: AccountRoute,
   AuthRoute: AuthRoute,
   BriefRoute: BriefRoute,
+  ContactRoute: ContactRoute,
+  FeaturesRoute: FeaturesRoute,
   ForBrandsRoute: ForBrandsRoute,
   ForCreatorsRoute: ForCreatorsRoute,
   HealthRoute: HealthRoute,
+  HomeRoute: HomeRoute,
   MarketplaceRoute: MarketplaceRoute,
   WorkspaceRoute: WorkspaceRoute,
   AdminLoginRoute: AdminLoginRoute,
