@@ -17,19 +17,31 @@ export function messageError(body: string): string | null {
   return null;
 }
 
-export type DirectMessage = { id: string; sender_id: string; recipient_id: string; body: string; created_at: string };
+export type DirectMessage = { id: string; sender_id: string; recipient_id: string; body: string; created_at: string; read_at?: string | null };
 
-/** Groups messages into one conversation per other person, newest conversation first. */
+/** Groups messages into one conversation per other person, newest conversation first, with unread counts. */
 export function conversations(messages: DirectMessage[], me: string) {
-  const map = new Map<string, DirectMessage>();
+  const map = new Map<string, { last: DirectMessage; unread: number }>();
   for (const m of messages) {
     const other = m.sender_id === me ? m.recipient_id : m.sender_id;
-    const prev = map.get(other);
-    if (!prev || prev.created_at < m.created_at) map.set(other, m);
+    const prev = map.get(other) ?? { last: m, unread: 0 };
+    if (prev.last.created_at < m.created_at) prev.last = m;
+    if (m.recipient_id === me && !m.read_at) prev.unread += 1;
+    map.set(other, prev);
   }
   return [...map.entries()]
-    .map(([other, last]) => ({ other, last }))
+    .map(([other, v]) => ({ other, ...v }))
     .sort((a, b) => (a.last.created_at < b.last.created_at ? 1 : -1));
+}
+
+/** Date separator label for a chat thread: Today, Yesterday, or a short date. */
+export function dayLabel(iso: string, now = new Date()): string {
+  const d = new Date(iso);
+  const start = (x: Date) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
+  const diff = Math.round((start(now) - start(d)) / 86400000);
+  if (diff === 0) return "Today";
+  if (diff === 1) return "Yesterday";
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", ...(d.getFullYear() !== now.getFullYear() ? { year: "numeric" } : {}) });
 }
 
 export function timeAgo(iso: string, now = Date.now()): string {
