@@ -1347,8 +1347,9 @@ body { font-family: "Montserrat", Arial, sans-serif; }
 .q-post p { font-size: 14px; line-height: 1.55; margin: .3rem 0 .6rem; }
 .q-post img { width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--border); }
 .q-post-actions { display: flex; justify-content: space-between; max-width: 420px; margin-top: .7rem; color: var(--muted-foreground); font-size: 13px; }
-.q-post-actions button { display: inline-flex; gap: .4rem; align-items: center; background: none; border: 0; color: inherit; }
-.q-post-actions button:hover, .q-post-actions button[aria-pressed="true"] { color: var(--foreground); }
+.q-post-actions button, .q-post-actions a { display: inline-flex; gap: .4rem; align-items: center; background: none; border: 0; color: inherit; }
+.q-post-actions button:hover, .q-post-actions a:hover, .q-post-actions button[aria-pressed="true"] { color: var(--foreground); }
+.q-post-actions button:disabled { opacity: .45; }
 .q-rail { padding: 1rem 1.5rem; }
 .q-search { display: flex; align-items: center; gap: .5rem; background: var(--surface); border-radius: 999px; padding: .6rem 1rem; }
 .q-search input { border: 0; background: transparent; width: 100%; }
