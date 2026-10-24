@@ -1,5 +1,6 @@
 # Qolabrate — platform rebuild (from uploaded docs, built one by one)
 Decisions (user, latest): keep human creators alongside AI personas; one account per email; start with social feed + 200 demo accounts.
+- [x] Top-right profile menu on app pages; dark buttons keep white text.
 - [x] Professional demo creator portraits and profile details; account type below sidebar wordmark.
 - [x] Light black-and-white redesign, new homepage, /home feed layout.
 - [x] AI Creator marketplace — 8 disclosed personas, search, filters, sort, profile pages.
