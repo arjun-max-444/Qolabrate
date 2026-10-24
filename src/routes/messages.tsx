@@ -42,7 +42,7 @@ function Messages() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("feed_messages")
-        .select("id, sender_id, recipient_id, body, created_at")
+        .select("id, sender_id, recipient_id, body, created_at, read_at")
         .or(`sender_id.eq.${myId},recipient_id.eq.${myId}`)
         .order("created_at", { ascending: true })
         .limit(500);
@@ -78,6 +78,12 @@ function Messages() {
 
   const thread = (msgs.data ?? []).filter((m) => to && (m.sender_id === to || m.recipient_id === to));
   useEffect(() => { endRef.current?.scrollIntoView({ block: "end" }); }, [thread.length, to]);
+  const unreadHere = thread.some((m) => m.recipient_id === myId && !m.read_at);
+  useEffect(() => {
+    if (!to || !myId || !unreadHere) return;
+    void supabase.rpc("mark_messages_read", { _other: to }).then(() => qc.invalidateQueries({ queryKey: ["dm", myId] }));
+  }, [to, myId, unreadHere, qc]);
+  const totalUnread = convos.reduce((n, c) => n + c.unread, 0);
 
   const send = useMutation({
     mutationFn: async (body: string) => {
@@ -106,6 +112,7 @@ function Messages() {
         <div style={{ padding: "1rem 1.2rem", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", gap: ".6rem" }}>
           <Link to="/home" aria-label="Back to feed"><ArrowLeft size={18} /></Link>
           <h1 style={{ fontSize: "1.2rem", fontWeight: 700 }}>Messages</h1>
+          {totalUnread > 0 && <span className="q-chip" aria-label={`${totalUnread} unread`}>{totalUnread} new</span>}
         </div>
         {msgs.isLoading && <p style={{ padding: "1.2rem", color: "var(--muted-foreground)" }}>Loading…</p>}
         {msgs.isSuccess && convos.length === 0 && (
