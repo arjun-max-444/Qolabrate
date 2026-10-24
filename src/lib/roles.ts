@@ -7,15 +7,19 @@ export type AppRole = "creator" | "brand" | "admin";
 export const dashboardFor = (role: AppRole | null) =>
   role === "brand" ? "/brand/dashboard" : role === "admin" ? "/admin/login" : "/creator/dashboard";
 
-export async function fetchRole(): Promise<{ userId: string | null; role: AppRole | null }> {
+/** A person has one account type (creator or brand); admin can be granted alongside it. */
+export function pickRoles(rows: { role: string }[] | null | undefined): { role: AppRole | null; isAdmin: boolean } {
+  const list = (rows ?? []).map((r) => r.role);
+  const isAdmin = list.includes("admin");
+  const account = list.find((r) => r === "creator" || r === "brand") as AppRole | undefined;
+  return { role: account ?? (isAdmin ? "admin" : null), isAdmin };
+}
+
+export async function fetchRole(): Promise<{ userId: string | null; role: AppRole | null; isAdmin: boolean }> {
   const { data } = await supabase.auth.getUser();
-  if (!data.user) return { userId: null, role: null };
-  const { data: row } = await supabase
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", data.user.id)
-    .maybeSingle();
-  return { userId: data.user.id, role: (row?.role as AppRole) ?? null };
+  if (!data.user) return { userId: null, role: null, isAdmin: false };
+  const { data: rows } = await supabase.from("user_roles").select("role").eq("user_id", data.user.id);
+  return { userId: data.user.id, ...pickRoles(rows) };
 }
 
 /** Client-only guard for role areas. */

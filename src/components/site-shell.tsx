@@ -2,7 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { Search, ArrowUpRight, ChevronDown } from "lucide-react";
 import { NotificationBell } from "@/components/notification-bell";
-import { dashboardFor, type AppRole } from "@/lib/roles";
+import { dashboardFor, pickRoles, type AppRole } from "@/lib/roles";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -11,14 +11,16 @@ import { ProfileMenu } from "@/components/profile-menu";
 const AccountContext = createContext<{
   user: User | null;
   role: AppRole | null;
+  isAdmin: boolean;
   saved: string[];
   toggle: (id: string) => Promise<void>;
-}>({ user: null, role: null, saved: [], toggle: async () => {} });
+}>({ user: null, role: null, isAdmin: false, saved: [], toggle: async () => {} });
 export const useAccount = () => useContext(AccountContext);
 export function AccountProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [saved, setSaved] = useState<string[]>([]);
   const [role, setRole] = useState<AppRole | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
@@ -31,14 +33,18 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     if (!user) {
       setSaved([]);
       setRole(null);
+      setIsAdmin(false);
       return;
     }
     supabase
       .from("user_roles")
       .select("role")
       .eq("user_id", user.id)
-      .maybeSingle()
-      .then(({ data }) => setRole((data?.role as AppRole) ?? null));
+      .then(({ data }) => {
+        const r = pickRoles(data);
+        setRole(r.role);
+        setIsAdmin(r.isAdmin);
+      });
     supabase
       .from("shortlists")
       .select("creator_id")
@@ -62,14 +68,14 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     toast.success(exists ? "Removed from shortlist" : "Creator saved");
   };
   return (
-    <AccountContext.Provider value={{ user, role, saved, toggle }}>
+    <AccountContext.Provider value={{ user, role, isAdmin, saved, toggle }}>
       {children}
       <Toaster position="bottom-right" />
     </AccountContext.Provider>
   );
 }
 export function SiteShell({ children }: { children: ReactNode }) {
-  const { user, role } = useAccount();
+  const { user, role, isAdmin } = useAccount();
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
   return (
@@ -120,7 +126,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
             <>
               {(!role || role === "admin") && <a href={dashboardFor(role)}>Dashboard</a>}
               <NotificationBell userId={user.id} />
-              <ProfileMenu userId={user.id} role={role} email={user.email ?? ""} />
+              <ProfileMenu userId={user.id} role={role} isAdmin={isAdmin} email={user.email ?? ""} />
             </>
           ) : (
             <>

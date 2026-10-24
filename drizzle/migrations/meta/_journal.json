@@ -169,6 +169,13 @@
       "when": 1792852230021,
       "tag": "0023_demo_replies_and_creator_streak",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1792852672340,
+      "tag": "0024_admin_role_alongside_account_type",
+      "breakpoints": true
     }
   ]
 }

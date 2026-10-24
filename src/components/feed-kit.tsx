@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
   Home as HomeIcon, Search, Bell, Mail, Users, Bookmark, User, PenSquare, MessageCircle, Repeat2, Heart, Share,
-  MoreHorizontal, BadgeCheck, Settings, Megaphone, Sparkles, Bot, Handshake,
+  MoreHorizontal, BadgeCheck, ShieldCheck, Settings, Megaphone, Sparkles, Bot, Handshake,
 } from "lucide-react";
 import { useAccount } from "@/components/site-shell";
 import { supabase } from "@/integrations/supabase/client";
@@ -432,7 +432,7 @@ export function FeedRail({ myId, social }: { myId: string | undefined; social: S
 }
 
 export function FeedShell({ children, rail }: { children: ReactNode; rail?: ReactNode }) {
-  const { user, role } = useAccount();
+  const { user, role, isAdmin } = useAccount();
   const { myHandle } = useFeedMe();
   const isBrand = role === "brand";
   const signedIn = !!user && !!role;
@@ -456,6 +456,7 @@ export function FeedShell({ children, rail }: { children: ReactNode; rail?: Reac
           ? <Link to="/p/$handle" params={{ handle: myHandle }} className="q-side-link" aria-label="My profile"><User size={22} /><span>My profile</span></Link>
           : <Link to={user ? "/profile" : "/auth"} className="q-side-link" aria-label="My profile"><User size={22} /><span>My profile</span></Link>}
         <Link to="/account" className="q-side-link q-side-extra" aria-label="Settings"><Settings size={22} /><span>Settings</span></Link>
+        {isAdmin && <Link to="/admin" className="q-side-link q-side-extra" aria-label="Admin"><ShieldCheck size={22} /><span>Admin</span></Link>}
         {signedIn && <Link to="/home" hash="composer" className="q-pill q-pill-dark q-post-btn" aria-label="Create post"><PenSquare size={18} /><span>Post</span></Link>}
       </aside>
       <main className="q-center">{children}</main>

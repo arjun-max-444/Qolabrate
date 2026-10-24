@@ -17,7 +17,7 @@ export function usePendingCollabs(userId: string | undefined, role: AppRole | nu
   return n;
 }
 
-export function ProfileMenu({ userId, role, email }: { userId: string; role: AppRole | null; email: string }) {
+export function ProfileMenu({ userId, role, isAdmin = false, email }: { userId: string; role: AppRole | null; isAdmin?: boolean; email: string }) {
   const [p, setP] = useState<{ full_name: string; avatar_path: string | null } | null>(null);
   const pending = usePendingCollabs(userId, role);
   useEffect(() => { supabase.from("profiles").select("full_name,avatar_path").eq("id", userId).maybeSingle().then(({ data }) => setP(data)); }, [userId]);
@@ -39,8 +39,8 @@ export function ProfileMenu({ userId, role, email }: { userId: string; role: App
         {role === "brand" && <a href="/orders">AI creator orders</a>}
         {role === "brand" && <a href="/billing">Plans and billing</a>}
         {role === "creator" && <a href="/verification">Get verified</a>}
-        {role === "admin" && <a href="/admin">Admin</a>}
-        {role === "admin" && <a href="/admin/verification">Verification requests</a>}
+        {(isAdmin || role === "admin") && <a href="/admin">Admin</a>}
+        {(isAdmin || role === "admin") && <a href="/admin/verification">Verification requests</a>}
         <a href="/account">Settings</a>
         <button type="button" className="text-left px-3 py-2 rounded hover:bg-muted" onClick={() => supabase.auth.signOut().then(() => (window.location.href = "/"))}>Sign out</button>
       </div>

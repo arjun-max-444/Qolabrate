@@ -10,7 +10,7 @@ export const sendWelcomeEmail = createServerFn({ method: "POST" })
     const { supabase, userId, claims } = context;
     const email = (claims as { email?: string }).email;
     if (!email) return { sent: false };
-    const { data: r } = await supabase.from("user_roles").select("role").eq("user_id", userId).maybeSingle();
+    const { data: r } = await supabase.from("user_roles").select("role").eq("user_id", userId).in("role", ["creator", "brand"]).maybeSingle();
     const { data: p } = await supabase.from("profiles").select("full_name").eq("id", userId).maybeSingle();
     const role = r?.role ?? "creator";
     const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");

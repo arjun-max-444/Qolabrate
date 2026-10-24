@@ -7,6 +7,7 @@ import { pageHead } from "@/lib/seo";
 import { dashboardFor, fetchRole } from "@/lib/roles";
 import { isBusinessEmail } from "@/lib/business-email";
 import { sendWelcomeEmail } from "@/lib/emails.functions";
+import { lovable } from "@/integrations/lovable/index";
 export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>): { mode: string; role?: "creator" | "brand" | undefined } => ({
     mode: typeof s["mode"] === "string" ? s["mode"] : "signin",
@@ -133,6 +134,14 @@ function Auth() {
     setError(err ?? "");
     setBusy(false);
   }
+  // Google is for creators only: brands must use their official company email and password.
+  async function google() {
+    setError("");
+    setNotice("");
+    if (mode === "signup") sessionStorage.setItem("qolabrate_signup_role", "creator");
+    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/auth?mode=continue" });
+    if (result.error) setError(result.error instanceof Error ? result.error.message : "Google sign-in failed. Please try again.");
+  }
   if ((checking || user) && mode !== "setup" && !error)
     return (
       <SiteShell>
@@ -176,10 +185,35 @@ function Auth() {
           ) : (
           <>
           {mode === "signup" && role && (
+            <div className="role-switch" role="radiogroup" aria-label="Account type">
+              {(["creator", "brand"] as const).map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  role="radio"
+                  aria-checked={role === r}
+                  className={role === r ? "role-switch-opt active" : "role-switch-opt"}
+                  onClick={() => { setRole(r); setError(""); }}
+                >
+                  {r === "creator" ? "Creator" : "Brand / Agency"}
+                </button>
+              ))}
+            </div>
+          )}
+          {mode === "signup" && role && (
             <p className="notice">
-              Signing up as a {role === "brand" ? "brand or agency" : "creator"} ·{" "}
-              <button type="button" className="section-link" onClick={() => setRole(undefined)}>change</button>
+              You're creating a <b>{role === "brand" ? "Brand / Agency" : "Creator"}</b> account. This can't be changed later.
             </p>
+          )}
+          {(mode === "signin" || (mode === "signup" && role === "creator")) && (
+            <>
+              <Button type="button" variant="outline" className="full" onClick={google}>
+                Continue with Google
+              </Button>
+              <p className="q-muted text-sm mt-2">
+                {mode === "signin" ? "Google sign-in is for creators. Brands sign in with their company email below." : "Or sign up with email:"}
+              </p>
+            </>
           )}
           <form onSubmit={submit}>
             {mode === "signup" && (
