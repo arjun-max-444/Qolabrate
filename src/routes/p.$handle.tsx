@@ -87,8 +87,8 @@ function FeedProfile() {
       const { data, error } = await supabase
         .from("feed_follows")
         .select(followers
-          ? "who:feed_profiles!feed_follows_follower_id_fkey!inner(id, handle, display_name, kind, is_demo)"
-          : "who:feed_profiles!feed_follows_followee_id_fkey!inner(id, handle, display_name, kind, is_demo)")
+          ? "who:feed_profiles!feed_follows_follower_id_fkey!inner(id, handle, display_name, kind, is_demo, avatar_path)"
+          : "who:feed_profiles!feed_follows_followee_id_fkey!inner(id, handle, display_name, kind, is_demo, avatar_path)")
         .eq(followers ? "followee_id" : "follower_id", p!.id)
         .order("created_at", { ascending: false })
         .limit(100);
@@ -184,7 +184,7 @@ function FeedProfile() {
               {people.data?.length === 0 && <p className="q-empty">{tab === "followers" ? "No followers yet." : "Not following anyone yet."}</p>}
               {people.data?.map((u) => (
                 <div key={u.id} className="q-person">
-                  <Link to="/p/$handle" params={{ handle: u.handle }}><Avatar name={u.display_name} /></Link>
+                  <Link to="/p/$handle" params={{ handle: u.handle }}><Avatar name={u.display_name} path={u.avatar_path} /></Link>
                   <Link to="/p/$handle" params={{ handle: u.handle }} style={{ flex: 1, minWidth: 0 }}>
                     <b style={{ fontSize: 15 }}>{u.display_name}</b><br />
                     <small className="q-muted">@{u.handle} · {u.kind === "brand" ? "Brand" : "Creator"}{u.is_demo ? " · Demo" : ""}</small>
