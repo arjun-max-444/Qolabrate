@@ -21,12 +21,12 @@ export const Route = createFileRoute("/home")({
   component: Feed,
 });
 
-const TAB_LABEL: Record<FeedTab, string> = { foryou: "For You", following: "Following", latest: "Latest", saved: "Saved" };
+const TAB_LABEL: Record<FeedTab, string> = { foryou: "For You", following: "Following", latest: "Latest", saved: "Shortlist" };
 const EMPTY: Record<FeedTab, string> = {
   foryou: "No posts found.",
   latest: "No posts found.",
   following: "Nothing here yet — follow creators and brands to fill this tab.",
-  saved: "No saved posts yet — tap the bookmark on any post to save it.",
+  saved: "Your shortlist is empty — tap the bookmark on any post to add it.",
 };
 
 function Feed() {

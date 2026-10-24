@@ -130,7 +130,7 @@ export function useSocial(myId: string | undefined) {
     repost: (id: string) => repostT.mutate({ id, on: (reposts.data ?? []).includes(id) }),
     save: (id: string) => {
       const on = saved.includes(id);
-      saveT.mutate({ id, on }, { onSuccess: () => toast(on ? "Removed from saved" : "Saved") });
+      saveT.mutate({ id, on }, { onSuccess: () => toast(on ? "Removed from shortlist" : "Added to shortlist") });
     },
   };
 }
@@ -419,7 +419,7 @@ export function FeedShell({ children, rail }: { children: ReactNode; rail?: Reac
         <Link to="/notifications" className="q-side-link q-side-extra" aria-label="Notifications"><Bell size={22} /><span>Notifications</span></Link>
         <Link to="/messages" className="q-side-link" aria-label="Messages"><Mail size={22} /><span>Messages</span></Link>
         <Link to="/collabs" className="q-side-link q-side-extra" aria-label="Collaborations"><Handshake size={22} /><span>Collaborations</span></Link>
-        <Link to="/home" search={{ tab: "saved" }} className="q-side-link q-side-extra" aria-label="Bookmarks" activeOptions={{ includeSearch: true }}><Bookmark size={22} /><span>Bookmarks</span></Link>
+        <Link to="/home" search={{ tab: "saved" }} className="q-side-link q-side-extra" aria-label="Shortlist" activeOptions={{ includeSearch: true }}><Bookmark size={22} /><span>Shortlist</span></Link>
         {myHandle
           ? <Link to="/p/$handle" params={{ handle: myHandle }} className="q-side-link" aria-label="My profile"><User size={22} /><span>My profile</span></Link>
           : <Link to={user ? "/profile" : "/auth"} className="q-side-link" aria-label="My profile"><User size={22} /><span>My profile</span></Link>}
