@@ -13,7 +13,7 @@ import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/profile/edit")({
   ssr: false,
-  validateSearch: (s: Record<string, unknown>): { welcome?: boolean } => ({ welcome: s["welcome"] === true || s["welcome"] === "true" ? true : undefined }),
+  validateSearch: (s: Record<string, unknown>): { welcome?: boolean | undefined } => ({ welcome: s["welcome"] === true || s["welcome"] === "true" ? true : undefined }),
   beforeLoad: async () => {
     const { userId } = await fetchRole();
     if (!userId) { sessionStorage.setItem("qolabrate_next", "/profile/edit"); throw redirect({ to: "/auth", search: { mode: "signin" } }); }
