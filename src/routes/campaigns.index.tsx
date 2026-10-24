@@ -8,6 +8,8 @@ import type { Tables } from "@/integrations/supabase/types";
 import { categories } from "@/lib/marketplace-data";
 import { money } from "@/lib/social";
 import { pageHead } from "@/lib/seo";
+import { FeedShell } from "@/components/feed-kit";
+import { demoCampaigns } from "@/lib/demo-campaigns";
 
 export const Route = createFileRoute("/campaigns/")({
   head: () => pageHead("Open campaigns", "Browse open brand campaigns for Instagram and YouTube creators."),
@@ -16,7 +18,7 @@ export const Route = createFileRoute("/campaigns/")({
 
 function CampaignsPage() {
   useRoleGate(["creator"]);
-  const { user } = useAccount();
+  const { user, role } = useAccount();
   const [rows, setRows] = useState<Tables<"campaigns">[] | null>(null);
   const [cat, setCat] = useState("");
   const [platform, setPlatform] = useState("");
@@ -29,9 +31,11 @@ function CampaignsPage() {
     [rows, cat, platform, minBudget],
   );
   const visible = user ? shown : shown.slice(0, 3);
+  const demos = demoCampaigns.filter((c) => (!cat || c.category === cat) && (!platform || c.platforms.includes(platform)) && (!minBudget || c.budget_max >= Number(minBudget)));
+  const Shell = user && role ? ({ children }: { children: React.ReactNode }) => <FeedShell wide>{children}</FeedShell> : SiteShell;
   return (
-    <SiteShell>
-      <main className="container section">
+    <Shell>
+      <main className={user && role ? "section" : "container section"}>
         <h1 className="entry-title">Open campaigns</h1>
         <p className="entry-lead">Brands looking for creators right now.</p>
         <div className="filters">
@@ -50,6 +54,23 @@ function CampaignsPage() {
             ))}
           </div>
         )}
+        {user && demos.length > 0 && (
+          <>
+            <h2 className="entry-title mt-8" style={{ fontSize: 22 }}>More campaigns</h2>
+            <p className="entry-lead">Sample briefs to show what brands post here.</p>
+            <div className="entry-grid">
+              {demos.map((c) => (
+                <div key={c.id} className="entry-card">
+                  <strong>{c.title}</strong>
+                  <span>{c.brand} · <em>Sample</em></span>
+                  <span>{c.category} · {c.platforms.join(", ")}</span>
+                  <span>{money(c.budget_min, "INR")}–{money(c.budget_max, "INR")} · by {c.deadline}</span>
+                  <span className="text-muted-foreground">{c.description}</span>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
         {!user && shown.length > 0 && (
           <div className="entry-card mt-6">
             <strong>See all {shown.length} campaigns and apply</strong>
@@ -57,6 +78,6 @@ function CampaignsPage() {
           </div>
         )}
       </main>
-    </SiteShell>
+    </Shell>
   );
 }

@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Search, Sparkles } from "lucide-react";
 import { PublicNav } from "@/components/public-nav";
 import { pageHead } from "@/lib/seo";
+import { FeedShell } from "@/components/feed-kit";
+import { useAccount } from "@/components/site-shell";
 import { AI_CATEGORIES, AI_FORMATS, aiCreators, compact, defaultFilters, filterAiCreators, inr, startingPrice, type AiFilters } from "@/lib/ai-creators";
 
 export const Route = createFileRoute("/ai-creators/")({
@@ -14,13 +16,24 @@ function AiCreatorsPage() {
   const [f, setF] = useState<AiFilters>(defaultFilters);
   const set = (p: Partial<AiFilters>) => setF({ ...f, ...p });
   const list = filterAiCreators(aiCreators, f);
-  return (
-    <div className="q-home">
-      <PublicNav />
-      <main className="q-wrap" style={{ padding: "2rem 0 4rem" }}>
+  const { user, role } = useAccount();
+  const inApp = !!user && !!role;
+  const available = aiCreators.filter((c) => c.available).length;
+  const body = (
+      <main className={inApp ? "" : "q-wrap"} style={{ padding: "2rem 0 4rem" }}>
         <p className="q-tag">AI CREATOR MARKETPLACE</p>
         <h1 style={{ fontSize: 44, fontWeight: 800, margin: ".5rem 0" }}>Find your AI creator.</h1>
         <p className="q-ai-note"><Sparkles size={14} /> Every creator here is a virtual persona run by Qolabrate. Audience numbers are platform estimates, not real social stats.</p>
+        <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", margin: "1rem 0" }}>
+          {[[String(aiCreators.length), "AI creators"], [String(available), "available now"], [String(AI_CATEGORIES.length), "niches"], [inr(Math.min(...aiCreators.map(startingPrice))), "starting price"]].map(([n, l]) => (
+            <div key={l} className="entry-card" style={{ minWidth: 140, padding: ".8rem 1rem" }}><strong style={{ fontSize: 22 }}>{n}</strong><span className="text-muted-foreground">{l}</span></div>
+          ))}
+        </div>
+        <div className="q-ai-tags" style={{ marginBottom: ".5rem" }}>
+          {["", ...AI_CATEGORIES].map((c) => (
+            <button key={c || "all"} type="button" onClick={() => set({ category: c })} style={{ fontWeight: f.category === c ? 800 : 500, textDecoration: f.category === c ? "underline" : "none" }}>{c || "All"}</button>
+          ))}
+        </div>
 
         <div className="q-filters">
           <label className="q-search" style={{ flex: 2 }}><Search size={16} /><input aria-label="Search AI creators" placeholder="Search by name, niche or keyword" value={f.q} onChange={(e) => set({ q: e.target.value })} /></label>
@@ -59,6 +72,6 @@ function AiCreatorsPage() {
           ))}
         </div>
       </main>
-    </div>
   );
+  return inApp ? <FeedShell wide>{body}</FeedShell> : <div className="q-home"><PublicNav />{body}</div>;
 }
