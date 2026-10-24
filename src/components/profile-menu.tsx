@@ -33,6 +33,10 @@ export function ProfileMenu({ userId, role, isAdmin = false, email }: { userId: 
         <span className="px-3 py-2 text-sm text-muted-foreground truncate">{name}</span>
         <a href="/profile">My Profile</a>
         <a href="/profile/edit">Edit Profile</a>
+        <a href="/home">Feed</a>
+        {role === "brand" && <a href="/brand/campaigns">My campaigns</a>}
+        {role === "creator" && <a href="/campaigns">Campaigns</a>}
+        <a href="/home?tab=saved">Shortlist</a>
         {role !== "admin" && <a href="/collabs" className="flex justify-between">{role === "brand" ? "Sent requests" : "Collab Invitations"}{pending > 0 && <span className="count-badge">{pending}</span>}</a>}
         {role !== "admin" && <a href={inbox}>Messages</a>}
         <a href="/notifications">Notifications</a>
