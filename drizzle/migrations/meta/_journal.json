@@ -183,6 +183,13 @@
       "when": 1792853732855,
       "tag": "0025_brand_oauth_google_microsoft",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1792855364427,
+      "tag": "0026_creator_google_signup",
+      "breakpoints": true
     }
   ]
 }

@@ -18,3 +18,4 @@
 - AI creator orders are created and advanced only through server functions in src/lib/orders.functions.ts (prices looked up server-side, brand role checked); ai_orders has owner read RLS and no client write grants, so brands can't set their own price or status.
 - Creator verification status changes only through server functions in src/lib/verification.functions.ts (requests, AI reports and audit logs have no client write grants); eligibility rules live in src/lib/verification.ts so reviewers, not the AI or the creator, control the Verified badge.
 - Feed UI (sidebar, rail, post list, optimistic social toggles) lives in src/components/feed-kit.tsx and is shared by /home and /p/$handle, so feed and profile pages behave identically.
+- Resolve OAuth signup intent in a browser-safe helper while enforcing provider eligibility and permanent account types in choose_signup_role; this keeps redirects testable without trusting client role hints for access.
