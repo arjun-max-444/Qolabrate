@@ -1418,3 +1418,8 @@ body { font-family: "Montserrat", Arial, sans-serif; }
   .q-dm-hide-sm { display: none !important; }
   .q-dm-back { display: inline-flex; }
 }
+
+/* Gentle fade-in for onboarding and auth hand-offs */
+@keyframes q-fade-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.fade-in { animation: q-fade-in 0.45s ease-out both; }
+@media (prefers-reduced-motion: reduce) { .fade-in { animation: none; } }

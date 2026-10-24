@@ -22,16 +22,33 @@ export const Route = createFileRoute("/auth")({
 });
 function Auth() {
   const { mode: initial, role: initialRole } = Route.useSearch();
-  const [mode, setMode] = useState(initial);
-  const [role, setRole] = useState<"creator" | "brand" | undefined>(initialRole ?? (initial === "signin" ? "creator" : undefined));
+  const [mode, setMode] = useState(initial === "continue" ? "signin" : initial);
+  const [role, setRole] = useState<"creator" | "brand" | undefined>(initialRole ?? (initial === "signin" || initial === "continue" ? "creator" : undefined));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
+  // While a saved session or an email-verification link is being restored, show a loading
+  // screen instead of the sign-in form so returning users are never asked for creator/brand again.
+  const [checking, setChecking] = useState(true);
   const { user } = useAccount();
   const navigate = useNavigate();
+  useEffect(() => {
+    const fromLink = initial === "continue" || /[?&#](code|access_token|token_hash)=/.test(window.location.href);
+    let done = false;
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session || !fromLink) { done = true; if (!data.session) setChecking(false); }
+    });
+    const t = setTimeout(() => {
+      if (!done) {
+        setChecking(false);
+        setNotice("Your email is verified. Sign in to finish setting up your profile.");
+      }
+    }, fromLink ? 6000 : 0);
+    return () => clearTimeout(t);
+  }, []);
   useEffect(() => {
     if (!user || mode === "setup") return;
     (async () => {
@@ -39,6 +56,7 @@ function Auth() {
       if (existingRole === "brand" && (user.app_metadata.provider !== "email" || !isBusinessEmail(user.email ?? ""))) {
         await supabase.auth.signOut();
         setRole("brand");
+        setChecking(false);
         setError("Brands and agencies require an official business email and password. Personal-email accounts can't access the brand area.");
         return;
       }
@@ -46,13 +64,23 @@ function Auth() {
       if (pending === "creator" || pending === "brand") {
         sessionStorage.removeItem("qolabrate_signup_role");
         const { error } = await supabase.rpc("choose_signup_role", { _role: pending });
-        if (error) { setError(error.message); return; }
+        if (error) { setChecking(false); setError(error.message); return; }
       }
       const { role: r } = await fetchRole();
       sendWelcomeEmail().catch(() => {});
       const next = sessionStorage.getItem("qolabrate_next");
       sessionStorage.removeItem("qolabrate_next");
-      navigate({ href: next && next.startsWith("/") && !next.startsWith("//") ? next : r === "creator" || !r ? "/profile" : dashboardFor(r), replace: true });
+      if (next && next.startsWith("/") && !next.startsWith("//") && next !== "/profile/edit") {
+        navigate({ href: next, replace: true });
+        return;
+      }
+      // New accounts finish their profile first; complete profiles go straight to their own area.
+      const { data: p } = await supabase.from("profiles").select("username,bio").eq("id", user.id).maybeSingle();
+      if (!p?.username || !p.bio?.trim()) {
+        navigate({ to: "/profile/edit", search: { welcome: true }, replace: true });
+        return;
+      }
+      navigate({ href: r === "creator" || !r ? "/profile" : dashboardFor(r), replace: true });
     })();
   }, [user, mode]);
   useEffect(() => {
@@ -77,7 +105,7 @@ function Auth() {
         password,
         options: {
           data: { full_name: name, signup_role: role ?? "creator" },
-          emailRedirectTo: window.location.origin + "/auth?mode=signin",
+          emailRedirectTo: window.location.origin + "/auth?mode=continue",
         },
       });
       err = error?.message;
@@ -96,7 +124,7 @@ function Auth() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       err = error?.message;
       if (error && /confirm/i.test(error.message)) {
-        await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: window.location.origin + "/auth?mode=signin" } });
+        await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: window.location.origin + "/auth?mode=continue" } });
         err = "Your email isn't verified yet. We've sent a new verification link — check your inbox (and spam/quarantine folder), click it, and you'll go straight to your profile.";
       }
 
@@ -104,12 +132,12 @@ function Auth() {
     setError(err ?? "");
     setBusy(false);
   }
-  if (user && mode !== "setup" && !error)
+  if ((checking || user) && mode !== "setup" && !error)
     return (
       <SiteShell>
         <main className="container">
-          <section className="auth-wrap" role="status">
-            <h1>Opening your dashboard…</h1>
+          <section className="auth-wrap fade-in" role="status">
+            <h1>{user ? "Opening your profile…" : "Just a moment…"}</h1>
             <div className="skeleton-block" style={{ height: 120 }} />
           </section>
         </main>
