@@ -23,6 +23,7 @@ import { Route as ForCreatorsRouteImport } from './routes/for-creators'
 import { Route as HealthRouteImport } from './routes/health'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AiCreatorsIndexRouteImport } from './routes/ai-creators.index'
@@ -120,6 +121,11 @@ const HomeRoute = HomeRouteImport.update({
 const MarketplaceRoute = MarketplaceRouteImport.update({
   id: '/marketplace',
   path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MessagesRoute = MessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WorkspaceRoute = WorkspaceRouteImport.update({
@@ -280,6 +286,7 @@ export interface FileRoutesByFullPath {
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/marketplace': typeof MarketplaceRoute
+  '/messages': typeof MessagesRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
   '/ai-creators/$id': typeof AiCreatorsIdRoute
@@ -324,6 +331,7 @@ export interface FileRoutesByTo {
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/marketplace': typeof MarketplaceRoute
+  '/messages': typeof MessagesRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
   '/ai-creators/$id': typeof AiCreatorsIdRoute
@@ -369,6 +377,7 @@ export interface FileRoutesById {
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/marketplace': typeof MarketplaceRoute
+  '/messages': typeof MessagesRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
   '/ai-creators/$id': typeof AiCreatorsIdRoute
@@ -415,6 +424,7 @@ export interface FileRouteTypes {
     | '/health'
     | '/home'
     | '/marketplace'
+    | '/messages'
     | '/workspace'
     | '/admin/login'
     | '/ai-creators/$id'
@@ -459,6 +469,7 @@ export interface FileRouteTypes {
     | '/health'
     | '/home'
     | '/marketplace'
+    | '/messages'
     | '/workspace'
     | '/admin/login'
     | '/ai-creators/$id'
@@ -503,6 +514,7 @@ export interface FileRouteTypes {
     | '/health'
     | '/home'
     | '/marketplace'
+    | '/messages'
     | '/workspace'
     | '/admin/login'
     | '/ai-creators/$id'
@@ -548,6 +560,7 @@ export interface RootRouteChildren {
   HealthRoute: typeof HealthRoute
   HomeRoute: typeof HomeRoute
   MarketplaceRoute: typeof MarketplaceRoute
+  MessagesRoute: typeof MessagesRoute
   WorkspaceRoute: typeof WorkspaceRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AiCreatorsIdRoute: typeof AiCreatorsIdRoute
@@ -665,6 +678,13 @@ declare module '@tanstack/react-router' {
       path: '/marketplace'
       fullPath: '/marketplace'
       preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/messages': {
+      id: '/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof MessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/workspace': {
@@ -923,6 +943,7 @@ const rootRouteChildren: RootRouteChildren = {
   HealthRoute: HealthRoute,
   HomeRoute: HomeRoute,
   MarketplaceRoute: MarketplaceRoute,
+  MessagesRoute: MessagesRoute,
   WorkspaceRoute: WorkspaceRoute,
   AdminLoginRoute: AdminLoginRoute,
   AiCreatorsIdRoute: AiCreatorsIdRoute,
