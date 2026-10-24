@@ -14,3 +14,4 @@
 - Use semantic global CSS tokens and shared Button controls for the marketplace redesign so presentation stays consistent.
 - Initialize matching directory rows in the account lifecycle and rank all candidates, including low-overlap discovery suggestions, so new accounts never depend on a second onboarding save.
 - Enforce brand business-email and email-provider requirements in account lifecycle functions as well as the sign-in UI, so hidden controls cannot bypass account creation rules.
+- Social feed identities live in feed_profiles (demo rows have no login; members get one via ensure_feed_profile), so demo accounts never need real auth users.
