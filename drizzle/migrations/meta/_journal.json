@@ -155,6 +155,13 @@
       "when": 1792848573709,
       "tag": "0021_feed_messages_read_receipts",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1792851800140,
+      "tag": "0022_feed_photos_and_avatars",
+      "breakpoints": true
     }
   ]
 }
