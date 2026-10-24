@@ -676,6 +676,27 @@ select {
   margin: 18px 0;
   line-height: 1.7;
 }
+.role-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  margin: 18px 0 0;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--secondary);
+}
+.role-switch-opt {
+  padding: 10px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  transition: background 0.15s, color 0.15s;
+}
+.role-switch-opt.active {
+  background: var(--foreground);
+  color: var(--background);
+}
 .workspace-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
