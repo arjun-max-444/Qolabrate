@@ -88,7 +88,7 @@ function Comments({ postId, myId }: { postId: string; myId: string }) {
 function Feed() {
   const { user, role } = useAccount();
   const qc = useQueryClient();
-  const [tab, setTab] = useState<"foryou" | "following">("foryou");
+  const [tab, setTab] = useState<"foryou" | "following" | "saved">("foryou");
   const [draft, setDraft] = useState("");
   const [search, setSearch] = useState("");
   const [term, setTerm] = useState("");
@@ -140,9 +140,20 @@ function Feed() {
   });
   const reposted = reposts.data ?? new Set<string>();
 
+  const saves = useQuery({
+    queryKey: ["feed", "saves", myId],
+    enabled: !!myId,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("feed_saves").select("post_id").eq("profile_id", myId!);
+      if (error) throw error;
+      return new Set(data.map((r) => r.post_id));
+    },
+  });
+  const saved = saves.data ?? new Set<string>();
+
   const posts = useQuery({
-    queryKey: ["feed", "posts", tab, term, tab === "following" ? following.join(",") : "", myId],
-    enabled: signedIn && (tab === "foryou" || follows.isSuccess),
+    queryKey: ["feed", "posts", tab, term, tab === "following" ? following.join(",") : tab === "saved" ? [...saved].join(",") : "", myId],
+    enabled: signedIn && (tab === "foryou" || (tab === "following" && follows.isSuccess) || (tab === "saved" && saves.isSuccess)),
     queryFn: async () => {
       let q = supabase
         .from("feed_posts")
@@ -150,6 +161,7 @@ function Feed() {
         .order("created_at", { ascending: false })
         .limit(50);
       if (tab === "following") q = q.in("author_id", [...following, myId!]);
+      if (tab === "saved") q = q.in("id", saved.size ? [...saved] : ["00000000-0000-0000-0000-000000000000"]);
       if (term) q = q.ilike("body", `%${term.replace(/[%_]/g, "")}%`);
       const { data, error } = await q;
       if (error) throw error;
@@ -193,6 +205,18 @@ function Feed() {
     },
     onSuccess: refresh,
     onError: () => toast.error("Could not update repost"),
+  });
+
+  const toggleSave = useMutation({
+    mutationFn: async (postId: string) => {
+      const { error } = saved.has(postId)
+        ? await supabase.from("feed_saves").delete().eq("post_id", postId).eq("profile_id", myId!)
+        : await supabase.from("feed_saves").insert({ post_id: postId, profile_id: myId! });
+      if (error) throw error;
+      return !saved.has(postId);
+    },
+    onSuccess: (now) => { refresh(); toast(now ? "Saved" : "Removed from saved"); },
+    onError: () => toast.error("Could not update saved posts"),
   });
 
   const toggleLike = useMutation({
@@ -249,6 +273,7 @@ function Feed() {
         <div className="q-tabs" role="tablist">
           <button role="tab" aria-selected={tab === "foryou"} onClick={() => setTab("foryou")}>For You</button>
           <button role="tab" aria-selected={tab === "following"} onClick={() => setTab("following")}>Following</button>
+          <button role="tab" aria-selected={tab === "saved"} onClick={() => setTab("saved")}>Saved</button>
         </div>
 
         {!signedIn ? (
@@ -272,7 +297,7 @@ function Feed() {
             {me.isError && <p style={{ padding: "1.5rem", color: "var(--destructive)" }}>We couldn't set up your feed profile. Please refresh.</p>}
             {term && <p style={{ padding: ".8rem 1.2rem", fontSize: 14 }}>Results for “{term}” · <button onClick={() => { setTerm(""); setSearch(""); }} style={{ textDecoration: "underline" }}>Clear</button></p>}
             {posts.isLoading && <p style={{ padding: "2rem", color: "var(--muted-foreground)" }}>Loading posts…</p>}
-            {posts.data?.length === 0 && <p style={{ padding: "2rem", color: "var(--muted-foreground)" }}>{tab === "following" ? "Nothing here yet — follow creators and brands to fill this tab." : "No posts found."}</p>}
+            {posts.data?.length === 0 && <p style={{ padding: "2rem", color: "var(--muted-foreground)" }}>{tab === "following" ? "Nothing here yet — follow creators and brands to fill this tab." : tab === "saved" ? "No saved posts yet — tap the bookmark on any post to save it." : "No posts found."}</p>}
             {posts.data?.map((p) => {
               const isLiked = liked.has(p.id);
               const mine = p.author.id === myId;
@@ -302,6 +327,9 @@ function Feed() {
                         <Heart size={16} fill={isLiked ? "currentColor" : "none"} />{p.feed_likes[0]?.count ?? 0}
                       </button>
                       {!mine && <Link to="/messages" search={{ to: p.author.id }} aria-label={`Message ${p.author.display_name}`}><Mail size={16} /></Link>}
+                      <button aria-label={saved.has(p.id) ? "Remove from saved" : "Save post"} aria-pressed={saved.has(p.id)} onClick={() => toggleSave.mutate(p.id)}>
+                        <Bookmark size={16} fill={saved.has(p.id) ? "currentColor" : "none"} />
+                      </button>
                       <button aria-label="Share" onClick={() => { void navigator.clipboard?.writeText(p.body); toast("Post text copied"); }}><Share size={16} /></button>
                     </div>
                     {openPost === p.id && myId && <Comments postId={p.id} myId={myId} />}
