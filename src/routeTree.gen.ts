@@ -25,6 +25,8 @@ import { Route as HomeRouteImport } from './routes/home'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as AiCreatorsIndexRouteImport } from './routes/ai-creators.index'
+import { Route as AiCreatorsIdRouteImport } from './routes/ai-creators.$id'
 import { Route as BrandDashboardRouteImport } from './routes/brand/dashboard'
 import { Route as BrandInboxRouteImport } from './routes/brand/inbox'
 import { Route as BrandProfileRouteImport } from './routes/brand/profile'
@@ -128,6 +130,16 @@ const WorkspaceRoute = WorkspaceRouteImport.update({
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin/login',
   path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiCreatorsIndexRoute = AiCreatorsIndexRouteImport.update({
+  id: '/ai-creators/',
+  path: '/ai-creators/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiCreatorsIdRoute = AiCreatorsIdRouteImport.update({
+  id: '/ai-creators/$id',
+  path: '/ai-creators/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BrandDashboardRoute = BrandDashboardRouteImport.update({
@@ -270,6 +282,7 @@ export interface FileRoutesByFullPath {
   '/marketplace': typeof MarketplaceRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
+  '/ai-creators/$id': typeof AiCreatorsIdRoute
   '/brand/dashboard': typeof BrandDashboardRoute
   '/brand/inbox': typeof BrandInboxRoute
   '/brand/profile': typeof BrandProfileRoute
@@ -282,6 +295,7 @@ export interface FileRoutesByFullPath {
   '/creators/$id': typeof CreatorsIdRoute
   '/profile/edit': typeof ProfileEditRoute
   '/u/$username': typeof UUsernameRoute
+  '/ai-creators/': typeof AiCreatorsIndexRoute
   '/campaigns/': typeof CampaignsIndexRoute
   '/collabs/': typeof CollabsIndexRoute
   '/profile/': typeof ProfileIndexRoute
@@ -312,6 +326,7 @@ export interface FileRoutesByTo {
   '/marketplace': typeof MarketplaceRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
+  '/ai-creators/$id': typeof AiCreatorsIdRoute
   '/brand/dashboard': typeof BrandDashboardRoute
   '/brand/inbox': typeof BrandInboxRoute
   '/brand/profile': typeof BrandProfileRoute
@@ -324,6 +339,7 @@ export interface FileRoutesByTo {
   '/creators/$id': typeof CreatorsIdRoute
   '/profile/edit': typeof ProfileEditRoute
   '/u/$username': typeof UUsernameRoute
+  '/ai-creators': typeof AiCreatorsIndexRoute
   '/campaigns': typeof CampaignsIndexRoute
   '/collabs': typeof CollabsIndexRoute
   '/profile': typeof ProfileIndexRoute
@@ -355,6 +371,7 @@ export interface FileRoutesById {
   '/marketplace': typeof MarketplaceRoute
   '/workspace': typeof WorkspaceRoute
   '/admin/login': typeof AdminLoginRoute
+  '/ai-creators/$id': typeof AiCreatorsIdRoute
   '/brand/dashboard': typeof BrandDashboardRoute
   '/brand/inbox': typeof BrandInboxRoute
   '/brand/profile': typeof BrandProfileRoute
@@ -367,6 +384,7 @@ export interface FileRoutesById {
   '/creators/$id': typeof CreatorsIdRoute
   '/profile/edit': typeof ProfileEditRoute
   '/u/$username': typeof UUsernameRoute
+  '/ai-creators/': typeof AiCreatorsIndexRoute
   '/campaigns/': typeof CampaignsIndexRoute
   '/collabs/': typeof CollabsIndexRoute
   '/profile/': typeof ProfileIndexRoute
@@ -399,6 +417,7 @@ export interface FileRouteTypes {
     | '/marketplace'
     | '/workspace'
     | '/admin/login'
+    | '/ai-creators/$id'
     | '/brand/dashboard'
     | '/brand/inbox'
     | '/brand/profile'
@@ -411,6 +430,7 @@ export interface FileRouteTypes {
     | '/creators/$id'
     | '/profile/edit'
     | '/u/$username'
+    | '/ai-creators/'
     | '/campaigns/'
     | '/collabs/'
     | '/profile/'
@@ -441,6 +461,7 @@ export interface FileRouteTypes {
     | '/marketplace'
     | '/workspace'
     | '/admin/login'
+    | '/ai-creators/$id'
     | '/brand/dashboard'
     | '/brand/inbox'
     | '/brand/profile'
@@ -453,6 +474,7 @@ export interface FileRouteTypes {
     | '/creators/$id'
     | '/profile/edit'
     | '/u/$username'
+    | '/ai-creators'
     | '/campaigns'
     | '/collabs'
     | '/profile'
@@ -483,6 +505,7 @@ export interface FileRouteTypes {
     | '/marketplace'
     | '/workspace'
     | '/admin/login'
+    | '/ai-creators/$id'
     | '/brand/dashboard'
     | '/brand/inbox'
     | '/brand/profile'
@@ -495,6 +518,7 @@ export interface FileRouteTypes {
     | '/creators/$id'
     | '/profile/edit'
     | '/u/$username'
+    | '/ai-creators/'
     | '/campaigns/'
     | '/collabs/'
     | '/profile/'
@@ -526,11 +550,13 @@ export interface RootRouteChildren {
   MarketplaceRoute: typeof MarketplaceRoute
   WorkspaceRoute: typeof WorkspaceRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AiCreatorsIdRoute: typeof AiCreatorsIdRoute
   CampaignsIdRoute: typeof CampaignsIdRoute
   CollabsIdRoute: typeof CollabsIdRoute
   CreatorsIdRoute: typeof CreatorsIdRoute
   ProfileEditRoute: typeof ProfileEditRoute
   UUsernameRoute: typeof UUsernameRoute
+  AiCreatorsIndexRoute: typeof AiCreatorsIndexRoute
   CampaignsIndexRoute: typeof CampaignsIndexRoute
   CollabsIndexRoute: typeof CollabsIndexRoute
   ProfileIndexRoute: typeof ProfileIndexRoute
@@ -653,6 +679,20 @@ declare module '@tanstack/react-router' {
       path: '/admin/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-creators/': {
+      id: '/ai-creators/'
+      path: '/ai-creators'
+      fullPath: '/ai-creators/'
+      preLoaderRoute: typeof AiCreatorsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-creators/$id': {
+      id: '/ai-creators/$id'
+      path: '/ai-creators/$id'
+      fullPath: '/ai-creators/$id'
+      preLoaderRoute: typeof AiCreatorsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/brand/dashboard': {
@@ -885,11 +925,13 @@ const rootRouteChildren: RootRouteChildren = {
   MarketplaceRoute: MarketplaceRoute,
   WorkspaceRoute: WorkspaceRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AiCreatorsIdRoute: AiCreatorsIdRoute,
   CampaignsIdRoute: CampaignsIdRoute,
   CollabsIdRoute: CollabsIdRoute,
   CreatorsIdRoute: CreatorsIdRoute,
   ProfileEditRoute: ProfileEditRoute,
   UUsernameRoute: UUsernameRoute,
+  AiCreatorsIndexRoute: AiCreatorsIndexRoute,
   CampaignsIndexRoute: CampaignsIndexRoute,
   CollabsIndexRoute: CollabsIndexRoute,
   ProfileIndexRoute: ProfileIndexRoute,
