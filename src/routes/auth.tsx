@@ -63,15 +63,15 @@ function Auth() {
         return;
       }
       // Google and Microsoft sign-in are brand-only, so a new social account becomes a brand.
-      const social = user.app_metadata.provider !== "email";
-      const pending = sessionStorage.getItem("qolabrate_signup_role") ?? (social && !existingRole ? "brand" : null);
+      const isSocial = user.app_metadata.provider !== "email";
+      const pending = sessionStorage.getItem("qolabrate_signup_role") ?? (isSocial && !existingRole ? "brand" : null);
       if (pending === "creator" || pending === "brand") {
         sessionStorage.removeItem("qolabrate_signup_role");
         const { error } = await supabase.rpc("choose_signup_role", { _role: pending });
         if (error) {
-          if (social) await supabase.auth.signOut();
+          if (isSocial) await supabase.auth.signOut();
           setChecking(false);
-          setError(social ? "Google and Microsoft sign-in is for brands with an official company email (not Gmail, Outlook etc.). Creators: sign up with email and password." : error.message);
+          setError(isSocial ? "Google and Microsoft sign-in is for brands with an official company email (not Gmail, Outlook etc.). Creators: sign up with email and password." : error.message);
           return;
         }
       }
