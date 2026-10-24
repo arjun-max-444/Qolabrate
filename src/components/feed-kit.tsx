@@ -7,6 +7,7 @@ import {
   MoreHorizontal, BadgeCheck, ShieldCheck, Settings, Megaphone, Sparkles, Bot, Handshake,
 } from "lucide-react";
 import { useAccount } from "@/components/site-shell";
+import { ProfileMenu } from "@/components/profile-menu";
 import { supabase } from "@/integrations/supabase/client";
 import { POST_LIMIT, REPORT_REASONS, postError, timeAgo } from "@/lib/feed";
 import { professionalPortrait } from "@/lib/professional-creators";
@@ -449,7 +450,8 @@ export function FeedShell({ children, rail, wide }: { children: ReactNode; rail?
   const signedIn = !!user && !!role;
   const showNav = signedIn && profileComplete !== false;
   return (
-    <div className={wide ? "q-feed q-feed-wide" : "q-feed"}>
+    <div className={`q-feed${wide ? " q-feed-wide" : ""}${signedIn ? " q-feed-signed" : ""}`}>
+      {signedIn && user && <div className="q-topbar"><ProfileMenu userId={user.id} role={role} isAdmin={isAdmin} email={user.email ?? ""} /></div>}
       <aside className="q-side" aria-label="App navigation">
         <div className="q-side-brand">
           <Link to="/home" className="q-logo"><b>Qolabrate.</b></Link>
