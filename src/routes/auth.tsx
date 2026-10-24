@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { SiteShell, useAccount } from "@/components/site-shell";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 import { pageHead } from "@/lib/seo";
 import { dashboardFor, fetchRole } from "@/lib/roles";
 import { isBusinessEmail } from "@/lib/business-email";
