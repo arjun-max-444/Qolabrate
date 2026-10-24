@@ -73,16 +73,23 @@ function Feed() {
 
   const publish = useMutation({
     mutationFn: async (body: string) => {
-      const { error } = await supabase.from("feed_posts").insert({ author_id: myId!, body });
+      let image_path: string | null = null;
+      if (photo && user) {
+        const ext = (photo.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+        image_path = `${user.id}/posts/${crypto.randomUUID()}.${ext}`;
+        const up = await supabase.storage.from("feed-media").upload(image_path, photo, { contentType: photo.type });
+        if (up.error) throw up.error;
+      }
+      const { error } = await supabase.from("feed_posts").insert({ author_id: myId!, body, image_path });
       if (error) throw error;
     },
-    onSuccess: () => { setDraft(""); void qc.invalidateQueries({ queryKey: ["feed"] }); toast.success("Posted"); },
+    onSuccess: () => { setDraft(""); setPhoto(null); void qc.invalidateQueries({ queryKey: ["feed"] }); toast.success("Posted"); },
     onError: () => toast.error("Could not publish your post"),
   });
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    const err = postError(draft);
+    const err = photo && !draft.trim() ? null : postError(draft);
     if (err) { toast.error(err); return; }
     publish.mutate(draft.trim());
   };
@@ -115,10 +122,25 @@ function Feed() {
       ) : (
         <>
           <form id="composer" className="q-composer" onSubmit={submit}>
-            <Avatar name={user?.email ?? "Q"} />
+            <Avatar name={user?.email ?? "Q"} path={myAvatar} />
             <div style={{ flex: 1 }}>
+              {photoUrl && (
+                <div style={{ position: "relative", margin: ".4rem 0" }}>
+                  <img src={photoUrl} alt="Selected photo" style={{ width: "100%", maxHeight: 320, objectFit: "cover", borderRadius: 14 }} />
+                  <button type="button" className="q-pill q-pill-light" style={{ position: "absolute", top: 8, right: 8, height: 30 }} onClick={() => setPhoto(null)}>Remove</button>
+                </div>
+              )}
               <textarea rows={2} maxLength={POST_LIMIT} aria-label="What's happening?" placeholder="What's happening? Use #tags for topics" value={draft} onChange={(e) => setDraft(e.target.value)} />
               <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: ".8rem", marginTop: ".6rem" }}>
+                <label className="q-icon-btn" aria-label="Add photo" style={{ marginRight: "auto", cursor: "pointer" }}>
+                  <ImagePlus size={18} />
+                  <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" hidden onChange={(e) => {
+                    const f = e.target.files?.[0] ?? null;
+                    e.target.value = "";
+                    if (f && f.size > 10 * 1024 * 1024) { toast.error("Photos must be under 10 MB"); return; }
+                    setPhoto(f);
+                  }} />
+                </label>
                 <small className="q-muted">{draft.length}/{POST_LIMIT}</small>
                 <button type="submit" disabled={!myId || publish.isPending} className="q-pill q-pill-dark" style={{ height: 38 }}>Post</button>
               </div>
