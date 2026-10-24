@@ -13,6 +13,7 @@ import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/profile/edit")({
   ssr: false,
+  validateSearch: (s: Record<string, unknown>): { welcome?: boolean } => ({ welcome: s["welcome"] === true || s["welcome"] === "true" ? true : undefined }),
   beforeLoad: async () => {
     const { userId } = await fetchRole();
     if (!userId) { sessionStorage.setItem("qolabrate_next", "/profile/edit"); throw redirect({ to: "/auth", search: { mode: "signin" } }); }
@@ -26,6 +27,7 @@ const url = (s: string) => !s || /^https:\/\/[^\s]+\.[^\s]+$/i.test(s);
 
 function EditProfile() {
   const { user, role } = useAccount();
+  const { welcome } = Route.useSearch();
   const navigate = useNavigate();
   const [f, setF] = useState({ full_name: "", username: "", bio: "", location: "", website: "", instagram: "", youtube: "", linkedin: "", skills: "", tools: "", rate: "", company: "", industry: "" });
   const [s, setS] = useState({ open: true, min: "0", limit: "3" });
@@ -104,16 +106,17 @@ function EditProfile() {
     }
     setBusy(false);
     if (error || err2) { toast.error(error?.message.includes("unique") ? "That username is taken" : "Could not save profile"); return; }
-    toast.success("Profile saved");
-    navigate({ to: "/profile" });
+    toast.success(welcome ? "Your profile is ready" : "Profile saved");
+    navigate({ href: welcome && role === "brand" ? "/brand/dashboard" : "/profile" });
   }
 
   return (
     <SiteShell>
-      <main className="container section max-w-3xl">
-        <h1 className="entry-title">Edit profile</h1>
+      <main className="container section max-w-3xl fade-in">
+        <h1 className="entry-title">{welcome ? "Complete your profile" : "Edit profile"}</h1>
+        {welcome && <p className="text-muted-foreground mt-2">Welcome to Qolabrate! Add a username and a short {role === "brand" ? "description of your company" : "bio"} so {role === "brand" ? "creators" : "brands"} can find you. You can change everything later.</p>}
         {loading ? <div className="grid gap-3 mt-6"><span className="skeleton-line" /><span className="skeleton-line" /></div> : (
-          <form onSubmit={save} className="grid gap-4 mt-6">
+          <form onSubmit={save} className="grid gap-4 mt-6 fade-in">
             <div className="profile-cover profile-cover-sm" style={coverUrl ? { backgroundImage: `url(${coverUrl})` } : undefined}>
               <label className="cover-upload">Change cover<input type="file" accept="image/*" className="sr-only" onChange={(e) => e.target.files?.[0] && upload("cover", e.target.files[0])} /></label>
             </div>
@@ -130,7 +133,7 @@ function EditProfile() {
               <label className="form-field">Company name<input className="field" maxLength={140} value={f.company} onChange={set("company")} /></label>
               <label className="form-field">Industry<input className="field" maxLength={80} value={f.industry} onChange={set("industry")} /></label>
             </>}
-            <label className="form-field">{role === "brand" ? "About the company" : "Bio"}<textarea className="field" rows={4} maxLength={2000} value={f.bio} onChange={set("bio")} /></label>
+            <label className="form-field">{role === "brand" ? "About the company" : "Bio"}<textarea className="field" rows={4} required={welcome} maxLength={2000} value={f.bio} onChange={set("bio")} /></label>
             <label className="form-field">Location<input className="field" maxLength={120} value={f.location} onChange={set("location")} /></label>
             <label className="form-field">{role === "brand" ? "Focus areas" : "Skills"} (comma separated)<input className="field" value={f.skills} onChange={set("skills")} /></label>
             {isCreator && <label className="form-field">Tools (comma separated)<input className="field" value={f.tools} onChange={set("tools")} placeholder="Runway, Midjourney, Blender" /></label>}
@@ -150,8 +153,8 @@ function EditProfile() {
               </fieldset>
             )}
             <div className="flex gap-2">
-              <Button type="submit" disabled={busy || taken}>{busy ? "Saving…" : "Save"}</Button>
-              <Button asChild variant="outline"><Link to="/profile">Cancel</Link></Button>
+              <Button type="submit" disabled={busy || taken}>{busy ? "Saving…" : welcome ? "Finish setup" : "Save"}</Button>
+              {!welcome && <Button asChild variant="outline"><Link to="/profile">Cancel</Link></Button>}
             </div>
           </form>
         )}
