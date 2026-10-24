@@ -46,17 +46,45 @@ Brand brief: ${order.brief}
 ${order.revision_note ? `The brand asked for this revision: ${order.revision_note}` : ""}
 Write ${count} distinct social media captions in your voice, 8 relevant hashtags${wantsScript ? ", and one short-form vertical video script (hook, 3 beats, call to action)" : ""}.
 Reply with JSON only: {"captions": string[], "hashtags": string[], "script": string | null}`;
-  const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+  const res = await fetch("https://ai.gateway.lovable.dev/v1/responses", {
     method: "POST",
-    headers: { Authorization: `Bearer ${process.env["LOVABLE_API_KEY"]}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ model: "google/gemini-2.5-flash", messages: [{ role: "user", content: prompt }], response_format: { type: "json_object" } }),
+    headers: { "Lovable-API-Key": String(process.env["LOVABLE_API_KEY"]), "X-Lovable-AIG-SDK": "fetch", "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "openai/gpt-6-astra",
+      input: [{ role: "user", content: prompt }],
+      stream: true,
+      store: false,
+      reasoning: { effort: "low" },
+      text: { format: { type: "json_schema", name: "delivery", strict: true, schema: {
+        type: "object", additionalProperties: false, required: ["captions", "hashtags", "script"],
+        properties: { captions: { type: "array", items: { type: "string" } }, hashtags: { type: "array", items: { type: "string" } }, script: { type: ["string", "null"] } },
+      } } },
+    }),
   });
   if (res.status === 429) throw new Error("Too many requests right now — try again in a minute.");
   if (res.status === 402) throw new Error("AI credits have run out for this workspace.");
-  if (!res.ok) { console.error("AI gateway", res.status, await res.text()); throw new Error("Content generation failed. Try again."); }
-  const json = await res.json();
-  const raw = String(json.choices?.[0]?.message?.content ?? "{}").replace(/^```(json)?|```$/g, "").trim();
-  const out = JSON.parse(raw);
+  if (!res.ok || !res.body) { console.error("AI gateway", res.status, await res.text()); throw new Error("Content generation failed. Try again."); }
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let buf = "", text = "";
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    const lines = buf.split("\n");
+    buf = lines.pop() ?? "";
+    for (const line of lines) {
+      if (!line.startsWith("data:")) continue;
+      const payload = line.slice(5).trim();
+      if (!payload || payload === "[DONE]") continue;
+      try {
+        const ev = JSON.parse(payload);
+        if (ev.type === "response.output_text.delta") text += ev.delta ?? "";
+        if (ev.type === "response.failed" || ev.type === "error") throw new Error("Content generation failed. Try again.");
+      } catch (e) { if (e instanceof Error && e.message.startsWith("Content")) throw e; }
+    }
+  }
+  const out = JSON.parse(text || "{}");
   return {
     captions: (out.captions ?? []).map(String).slice(0, count),
     hashtags: (out.hashtags ?? []).map((h: string) => String(h).replace(/^#?/, "#")).slice(0, 12),
