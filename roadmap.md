@@ -6,5 +6,6 @@ Decisions (user, latest): keep human creators alongside AI personas; one account
 - [x] Feed comments, reposts and direct messages (/messages, realtime).
 - [x] AI creator orders (from uploaded zip): offer → test payment → AI-written delivery → revisions (2) → approve → review.
 - [x] Saved posts (bookmark button + Saved tab on the feed).
-- [ ] Other zip features not yet ported (admin pages, notifications page, email inbox, subscriptions).
+- [x] Admin overview page, notifications page, brand plans (test payment, monthly order limits), creator previous projects.
+- [ ] Email inbox from zip: overlaps with Messages — waiting on user whether a separate inbox is wanted.
 - [ ] Contact email: waiting on the real address (placeholder hello@qolabrate.chinmaipilot.in).
