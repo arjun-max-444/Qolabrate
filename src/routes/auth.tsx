@@ -124,7 +124,7 @@ function Auth() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       err = error?.message;
       if (error && /confirm/i.test(error.message)) {
-        await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: window.location.origin + "/auth?mode=signin" } });
+        await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: window.location.origin + "/auth?mode=continue" } });
         err = "Your email isn't verified yet. We've sent a new verification link — check your inbox (and spam/quarantine folder), click it, and you'll go straight to your profile.";
       }
 
@@ -132,12 +132,12 @@ function Auth() {
     setError(err ?? "");
     setBusy(false);
   }
-  if (user && mode !== "setup" && !error)
+  if ((checking || user) && mode !== "setup" && !error)
     return (
       <SiteShell>
         <main className="container">
-          <section className="auth-wrap" role="status">
-            <h1>Opening your dashboard…</h1>
+          <section className="auth-wrap fade-in" role="status">
+            <h1>{user ? "Opening your profile…" : "Just a moment…"}</h1>
             <div className="skeleton-block" style={{ height: 120 }} />
           </section>
         </main>
