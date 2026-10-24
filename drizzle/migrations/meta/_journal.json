@@ -148,6 +148,13 @@
       "when": 1792843110896,
       "tag": "0020_feed_reports_and_follow_notifications",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1792848573709,
+      "tag": "0021_feed_messages_read_receipts",
+      "breakpoints": true
     }
   ]
 }
