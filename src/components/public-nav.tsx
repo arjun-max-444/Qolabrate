@@ -14,6 +14,7 @@ export function PublicNav() {
         <div className="q-links">
           <Link to="/" activeOptions={{ exact: true }}>Home</Link>
           <Link to="/about">About</Link>
+          <Link to="/ai-creators">AI Creators</Link>
           <Link to="/features">Features</Link>
           <Link to="/for-brands">Brand</Link>
           <Link to="/contact">Contact</Link>
