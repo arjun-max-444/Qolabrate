@@ -38,7 +38,9 @@ export function ProfileMenu({ userId, role, email }: { userId: string; role: App
         <a href="/notifications">Notifications</a>
         {role === "brand" && <a href="/orders">AI creator orders</a>}
         {role === "brand" && <a href="/billing">Plans and billing</a>}
+        {role === "creator" && <a href="/verification">Get verified</a>}
         {role === "admin" && <a href="/admin">Admin</a>}
+        {role === "admin" && <a href="/admin/verification">Verification requests</a>}
         <a href="/account">Settings</a>
         <button type="button" className="text-left px-3 py-2 rounded hover:bg-muted" onClick={() => supabase.auth.signOut().then(() => (window.location.href = "/"))}>Sign out</button>
       </div>
