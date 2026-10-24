@@ -77,7 +77,7 @@ function Feed() {
     queryFn: async () => {
       let q = supabase
         .from("feed_posts")
-        .select("id, body, image_key, created_at, author:feed_profiles!inner(id, handle, display_name, kind, is_demo), feed_likes(count)")
+        .select("id, body, image_key, created_at, author:feed_profiles!feed_posts_author_id_fkey!inner(id, handle, display_name, kind, is_demo), feed_likes(count)")
         .order("created_at", { ascending: false })
         .limit(50);
       if (tab === "following") q = q.in("author_id", [...following, myId!]);
