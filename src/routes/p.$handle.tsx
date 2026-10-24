@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { ArrowLeft, Mail } from "lucide-react";
+import { ArrowLeft, Flame, Mail } from "lucide-react";
 import { useAccount } from "@/components/site-shell";
 import { supabase } from "@/integrations/supabase/client";
 import { pageHead } from "@/lib/seo";
@@ -153,7 +153,8 @@ function FeedProfile() {
               <button onClick={() => setTab("followers")}><b>{stats.data?.followers ?? "–"}</b> Followers</button>
               <button onClick={() => setTab("posts")}><b>{stats.data?.posts ?? "–"}</b> Posts</button>
             </div>
-            {p.is_demo && !mine && <p className="q-muted" style={{ fontSize: 13, marginTop: ".6rem" }}>Demo accounts can be followed but don't reply to messages.</p>}
+            {p.kind === "creator" && p.user_id && <CreatorRecord userId={p.user_id} />}
+            {p.is_demo && !mine && <p className="q-muted" style={{ fontSize: 13, marginTop: ".6rem" }}>Demo account — messages get an automatic demo reply.</p>}
             {role === "brand" && p.kind === "creator" && !p.is_demo && (
               <Link to="/marketplace" search={{ q: p.display_name }} className="q-link-btn" style={{ display: "inline-block", marginTop: ".6rem" }}>Find this creator in the marketplace to request a collaboration</Link>
             )}
@@ -200,5 +201,53 @@ function FeedProfile() {
         </>
       )}
     </FeedShell>
+  );
+}
+
+/** Creator-only track record (streak of on-time completions, success rate) plus previous works. */
+function CreatorRecord({ userId }: { userId: string }) {
+  const rec = useQuery({
+    queryKey: ["feed", "track-record", userId],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("creator_track_record", { _user: userId });
+      if (error) throw error;
+      return data?.[0] ?? null;
+    },
+  });
+  const works = useQuery({
+    queryKey: ["feed", "works", userId],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("creator_projects").select("id, title, client, year, link, description").eq("user_id", userId).order("year", { ascending: false }).limit(6);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+  const r = rec.data;
+  return (
+    <div style={{ marginTop: "1rem", display: "grid", gap: ".8rem" }}>
+      {r && (
+        <div style={{ display: "flex", gap: ".6rem", flexWrap: "wrap" }} aria-label="Track record">
+          <span className="q-pill q-pill-light" style={{ height: 34 }} title="On-time projects in a row">
+            <Flame size={16} style={{ color: "var(--primary)" }} /> {r.streak} streak
+          </span>
+          <span className="q-pill q-pill-light" style={{ height: 34 }} title="Projects delivered on time">{r.completed ? `${r.success_rate}% on time` : "No completed projects yet"}</span>
+          <span className="q-pill q-pill-light" style={{ height: 34 }}>{r.completed} completed</span>
+        </div>
+      )}
+      {(works.data?.length ?? 0) > 0 && (
+        <div>
+          <b style={{ fontSize: 15 }}>Previous works</b>
+          <ul style={{ marginTop: ".4rem", display: "grid", gap: ".5rem" }}>
+            {works.data!.map((w) => (
+              <li key={w.id} style={{ border: "1px solid var(--border)", borderRadius: 12, padding: ".6rem .8rem" }}>
+                <b style={{ fontSize: 14 }}>{w.link ? <a href={w.link} target="_blank" rel="noreferrer" className="q-link-btn">{w.title}</a> : w.title}</b>
+                <small className="q-muted"> · {[w.client, w.year].filter(Boolean).join(" · ")}</small>
+                {w.description && <p className="q-muted" style={{ fontSize: 13, marginTop: 2 }}>{w.description}</p>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
   );
 }

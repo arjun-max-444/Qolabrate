@@ -17,6 +17,16 @@ import { Skeleton } from "@/components/ui/skeleton";
 import film from "@/assets/feed-film.jpg";
 import campaign from "@/assets/feed-campaign.jpg";
 import product from "@/assets/feed-product.jpg";
+import aiAria from "@/assets/ai-aria.jpg";
+import aiDev from "@/assets/ai-dev.jpg";
+import aiKai from "@/assets/ai-kai.jpg";
+import aiLuna from "@/assets/ai-luna.jpg";
+import aiMaya from "@/assets/ai-maya.jpg";
+import aiNora from "@/assets/ai-nora.jpg";
+import aiRex from "@/assets/ai-rex.jpg";
+import aiZoya from "@/assets/ai-zoya.jpg";
+
+const demoFaces: Record<string, string> = { "ai-aria": aiAria, "ai-dev": aiDev, "ai-kai": aiKai, "ai-luna": aiLuna, "ai-maya": aiMaya, "ai-nora": aiNora, "ai-rex": aiRex, "ai-zoya": aiZoya };
 
 const images: Record<string, string> = { film, campaign, product };
 export const TRENDS = [["Technology", "AI Video"], ["Creative", "AI Animation"], ["Brands", "Campaign"], ["Creators", "Generative"], ["Business", "Collaboration"]] as const;
@@ -140,7 +150,7 @@ export type Social = ReturnType<typeof useSocial>;
 export function useMediaUrl(path: string | null | undefined) {
   return useQuery({
     queryKey: ["feed-media", path],
-    enabled: !!path,
+    enabled: !!path && !path.startsWith("asset:"),
     staleTime: 50 * 60 * 1000,
     queryFn: async () => {
       const { data, error } = await supabase.storage.from("feed-media").createSignedUrl(path!, 3600);
@@ -151,7 +161,8 @@ export function useMediaUrl(path: string | null | undefined) {
 }
 
 export function Avatar({ name, size = 42, path }: { name: string; size?: number; path?: string | null | undefined }) {
-  const url = useMediaUrl(path);
+  const remote = useMediaUrl(path);
+  const url = path?.startsWith("asset:") ? demoFaces[path.slice(6)] : remote;
   if (url) return <img className="q-av" src={url} alt="" width={size} height={size} style={{ width: size, height: size, objectFit: "cover" }} />;
   return <div className="q-av" style={{ width: size, height: size, fontSize: size / 3 }} aria-hidden>{name.slice(0, 1).toUpperCase()}</div>;
 }
@@ -339,7 +350,7 @@ export function PostList({ posts, myId, social, openFirst = false }: { posts: Fe
                   <Heart size={16} fill={liked ? "currentColor" : "none"} />{p.feed_likes[0]?.count ?? 0}
                 </button>
                 {!mine && <Link to="/messages" search={{ to: p.author.id }} aria-label={`Message ${p.author.display_name}`}><Mail size={16} /></Link>}
-                <button aria-label={saved ? "Remove from saved" : "Save post"} aria-pressed={saved} onClick={() => social.save(p.id)}>
+                <button aria-label={saved ? "Remove from shortlist" : "Add to shortlist"} aria-pressed={saved} onClick={() => social.save(p.id)}>
                   <Bookmark size={16} fill={saved ? "currentColor" : "none"} />
                 </button>
                 <button aria-label="Copy link to post" onClick={() => copyLink(p.id)}><Share size={16} /></button>
@@ -371,12 +382,33 @@ export function FeedRail({ myId, social }: { myId: string | undefined; social: S
       return data;
     },
   });
+  const campaigns = useQuery({
+    queryKey: ["feed", "trending-campaigns"],
+    staleTime: 5 * 60 * 1000,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("campaigns").select("id, title, category").eq("status", "open").order("created_at", { ascending: false }).limit(3);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
   const whoToFollow = (suggestions.data ?? []).filter((p) => !social.following.includes(p.id)).slice(0, 4);
   return (
     <aside className="q-rail" aria-label="Trends and suggestions">
       <form className="q-search" role="search" onSubmit={(e) => { e.preventDefault(); const q = search.trim(); if (q) window.location.assign(`/home?q=${encodeURIComponent(q)}`); }}>
         <Search size={16} /><input aria-label="Search posts" placeholder="Search posts…" value={search} onChange={(e) => setSearch(e.target.value)} />
       </form>
+      {(campaigns.data?.length ?? 0) > 0 && (
+        <>
+          <h2>Trending campaigns</h2>
+          {campaigns.data!.map((c) => role === "creator" ? (
+            <Link key={c.id} to="/campaigns/$id" params={{ id: c.id }} className="q-trend" style={{ display: "block" }}>
+              <small>{c.category} · Campaign</small><b>{c.title}</b>
+            </Link>
+          ) : (
+            <div key={c.id} className="q-trend"><small>{c.category} · Campaign</small><b>{c.title}</b></div>
+          ))}
+        </>
+      )}
       <h2>What's happening</h2>
       {TRENDS.map(([cat, tag]) => (
         <Link key={tag} to="/home" search={{ q: tag }} className="q-trend" style={{ display: "block" }}>
