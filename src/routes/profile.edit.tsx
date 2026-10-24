@@ -1,6 +1,7 @@
 import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 import { CreatorProjectsEditor } from "@/components/creator-projects";
 import { SiteShell, useAccount } from "@/components/site-shell";
 import { Button } from "@/components/ui/button";
@@ -26,7 +27,8 @@ const tags = (s: string) => s.split(",").map((x) => x.trim()).filter(Boolean).sl
 const url = (s: string) => !s || /^https:\/\/[^\s]+\.[^\s]+$/i.test(s);
 
 function EditProfile() {
-  const { user, role } = useAccount();
+  const { user, role, refresh } = useAccount();
+  const qc = useQueryClient();
   const { welcome } = Route.useSearch();
   const navigate = useNavigate();
   const [f, setF] = useState({ full_name: "", username: "", bio: "", location: "", website: "", instagram: "", youtube: "", linkedin: "", skills: "", tools: "", rate: "", company: "", industry: "" });
@@ -116,7 +118,9 @@ function EditProfile() {
       await supabase.rpc("ensure_feed_profile");
       await supabase.rpc("set_feed_avatar", { _path: feedAvatar });
     }
-    window.dispatchEvent(new Event("qolabrate:profile-saved"));
+    await supabase.rpc("ensure_feed_profile");
+    await refresh();
+    await qc.invalidateQueries({ queryKey: ["feed"] });
     toast.success(welcome ? "Your profile is ready" : "Profile saved");
     navigate({ href: welcome ? "/home" : "/profile" });
   }
