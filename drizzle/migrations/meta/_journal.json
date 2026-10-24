@@ -176,6 +176,13 @@
       "when": 1792852672340,
       "tag": "0024_admin_role_alongside_account_type",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1792853732855,
+      "tag": "0025_brand_oauth_google_microsoft",
+      "breakpoints": true
     }
   ]
 }

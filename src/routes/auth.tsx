@@ -55,18 +55,25 @@ function Auth() {
     if (!user || mode === "setup") return;
     (async () => {
       const { role: existingRole } = await fetchRole();
-      if (existingRole === "brand" && (user.app_metadata.provider !== "email" || !isBusinessEmail(user.email ?? ""))) {
+      if (existingRole === "brand" && !isBusinessEmail(user.email ?? "")) {
         await supabase.auth.signOut();
         setRole("brand");
         setChecking(false);
-        setError("Brands and agencies require an official business email and password. Personal-email accounts can't access the brand area.");
+        setError("Brands and agencies require an official business email. Personal-email accounts can't access the brand area.");
         return;
       }
-      const pending = sessionStorage.getItem("qolabrate_signup_role");
+      // Google and Microsoft sign-in are brand-only, so a new social account becomes a brand.
+      const isSocial = user.app_metadata.provider !== "email";
+      const pending = sessionStorage.getItem("qolabrate_signup_role") ?? (isSocial && !existingRole ? "brand" : null);
       if (pending === "creator" || pending === "brand") {
         sessionStorage.removeItem("qolabrate_signup_role");
         const { error } = await supabase.rpc("choose_signup_role", { _role: pending });
-        if (error) { setChecking(false); setError(error.message); return; }
+        if (error) {
+          if (isSocial) await supabase.auth.signOut();
+          setChecking(false);
+          setError(isSocial ? "Google and Microsoft sign-in is for brands with an official company email (not Gmail, Outlook etc.). Creators: sign up with email and password." : error.message);
+          return;
+        }
       }
       const { role: r } = await fetchRole();
       if (user.email) localStorage.setItem("qolabrate_last_email", user.email);
@@ -138,13 +145,13 @@ function Auth() {
     setError(err ?? "");
     setBusy(false);
   }
-  // Google is for creators only: brands must use their official company email and password.
-  async function google() {
+  // Google and Microsoft are for brands only, and still need an official company email.
+  async function social(provider: "google" | "microsoft") {
     setError("");
     setNotice("");
-    if (mode === "signup") sessionStorage.setItem("qolabrate_signup_role", "creator");
-    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/auth?mode=continue" });
-    if (result.error) setError(result.error instanceof Error ? result.error.message : "Google sign-in failed. Please try again.");
+    sessionStorage.setItem("qolabrate_signup_role", "brand");
+    const result = await lovable.auth.signInWithOAuth(provider, { redirect_uri: window.location.origin + "/auth?mode=continue" });
+    if (result.error) setError(result.error instanceof Error ? result.error.message : "Sign-in failed. Please try again.");
   }
   if ((checking || user) && mode !== "setup" && !error)
     return (
@@ -209,13 +216,19 @@ function Auth() {
               You're creating a <b>{role === "brand" ? "Brand / Agency" : "Creator"}</b> account. This can't be changed later.
             </p>
           )}
-          {(mode === "signin" || (mode === "signup" && role === "creator")) && (
+          {(mode === "signin" || (mode === "signup" && role === "brand")) && (
             <>
-              <Button type="button" variant="outline" className="full" onClick={google}>
-                Continue with Google
-              </Button>
+              {mode === "signin" && <p className="q-muted text-sm mt-4">Brands and agencies:</p>}
+              <div className="grid gap-2 mt-2">
+                <Button type="button" variant="outline" className="full" onClick={() => social("google")}>
+                  Continue with Google
+                </Button>
+                <Button type="button" variant="outline" className="full" onClick={() => social("microsoft")}>
+                  Continue with Microsoft
+                </Button>
+              </div>
               <p className="q-muted text-sm mt-2">
-                {mode === "signin" ? "Google sign-in is for creators. Brands sign in with their company email below." : "Or sign up with email:"}
+                Use your company Google Workspace or Microsoft work account.{mode === "signin" ? " Creators sign in with email below." : " Or sign up with email:"}
               </p>
             </>
           )}

@@ -29,7 +29,7 @@ export async function requireRole(role: "creator" | "brand") {
   if (current !== role) throw redirect({ href: dashboardFor(current) });
   if (role === "brand") {
     const { data } = await supabase.auth.getUser();
-    if (data.user?.app_metadata.provider !== "email" || !isBusinessEmail(data.user?.email ?? "")) {
+    if (!isBusinessEmail(data.user?.email ?? "")) {
       await supabase.auth.signOut();
       throw redirect({ to: "/auth", search: { mode: "signin", role: "brand" } });
     }
