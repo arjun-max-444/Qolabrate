@@ -61,6 +61,8 @@ function Feed() {
   const posts = useInfiniteQuery({
     queryKey: ["feed", "posts", tab, q ?? "", scope, myId],
     enabled: signedIn && !post && !!myId && ready,
+    refetchInterval: 30_000,
+    refetchOnWindowFocus: true,
     initialPageParam: 0,
     getNextPageParam: (last: FeedPost[], all) => (last.length === FEED_PAGE ? all.length : undefined),
     queryFn: async ({ pageParam }) => {
@@ -74,7 +76,14 @@ function Feed() {
       const page = data as unknown as FeedPost[];
       if (tab !== "foryou") return page;
       const score = (p: FeedPost) => forYouScore({ likes: p.feed_likes[0]?.count ?? 0, comments: p.feed_comments[0]?.count ?? 0, reposts: p.feed_reposts[0]?.count ?? 0, created_at: p.created_at });
-      return [...page].sort((a, b) => score(b) - score(a));
+      // New posts (last 24h) always lead For You, newest first, photo posts ahead; older ones by score.
+      const fresh = (p: FeedPost) => Date.now() - new Date(p.created_at).getTime() < 86_400_000;
+      return [...page].sort((a, b) => {
+        const fa = fresh(a), fb = fresh(b);
+        if (fa !== fb) return fa ? -1 : 1;
+        if (fa) return (b.image_path ? 1 : 0) - (a.image_path ? 1 : 0) || b.created_at.localeCompare(a.created_at);
+        return score(b) - score(a);
+      });
     },
   });
   const list = posts.data?.pages.flat() ?? [];
