@@ -68,16 +68,18 @@ function Auth() {
       }
       const { role: r } = await fetchRole();
       sendWelcomeEmail().catch(() => {});
+      // New accounts finish their profile first, even when a "next" destination is stored;
+      // complete profiles continue to their stored destination or their own area.
+      const { data: p } = await supabase.from("profiles").select("username,bio").eq("id", user.id).maybeSingle();
+      if (!p?.username || !p.bio?.trim()) {
+        sessionStorage.removeItem("qolabrate_next");
+        navigate({ to: "/profile/edit", search: { welcome: true }, replace: true });
+        return;
+      }
       const next = sessionStorage.getItem("qolabrate_next");
       sessionStorage.removeItem("qolabrate_next");
       if (next && next.startsWith("/") && !next.startsWith("//") && next !== "/profile/edit") {
         navigate({ href: next, replace: true });
-        return;
-      }
-      // New accounts finish their profile first; complete profiles go straight to their own area.
-      const { data: p } = await supabase.from("profiles").select("username,bio").eq("id", user.id).maybeSingle();
-      if (!p?.username || !p.bio?.trim()) {
-        navigate({ to: "/profile/edit", search: { welcome: true }, replace: true });
         return;
       }
       navigate({ href: r === "creator" || !r ? "/profile" : dashboardFor(r), replace: true });
