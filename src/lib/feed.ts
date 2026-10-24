@@ -39,3 +39,15 @@ export function timeAgo(iso: string, now = Date.now()): string {
   if (s < 86400) return `${Math.floor(s / 3600)}h`;
   return `${Math.floor(s / 86400)}d`;
 }
+
+export type FeedTab = "foryou" | "following" | "latest" | "saved";
+export const FEED_TABS: FeedTab[] = ["foryou", "following", "latest", "saved"];
+export const FEED_PAGE = 20;
+
+/** "For You" score: engagement (comments ×2, reposts ×3) decayed by age in hours, so fresh posts still surface. */
+export function forYouScore(p: { likes: number; comments: number; reposts: number; created_at: string }, now = Date.now()): number {
+  const hours = Math.max(0, (now - new Date(p.created_at).getTime()) / 3_600_000);
+  return (1 + p.likes + 2 * p.comments + 3 * p.reposts) / Math.pow(hours + 2, 1.2);
+}
+
+export const REPORT_REASONS = ["Spam", "Harassment or hate", "Misleading or scam", "Inappropriate content"] as const;
