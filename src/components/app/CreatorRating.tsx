@@ -46,7 +46,7 @@ export function CreatorRating({ creatorId }: { creatorId: string }) {
   return (
     <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 rounded-2xl border px-4 py-3 text-sm">
       <span className="flex items-center gap-1.5" title="Brand ratings of 4 stars or more in a row">
-        <Flame className="h-5 w-5 text-accent" />
+        <Flame className="h-5 w-5 fill-foreground" />
         <b>{summary?.streak ?? 0}</b><span className="text-muted-foreground">streak</span>
       </span>
       <span className="flex items-center gap-1.5">
