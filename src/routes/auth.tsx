@@ -97,7 +97,8 @@ function Auth() {
         return;
       }
       navigate({ href: r === "admin" ? "/admin" : "/home", replace: true });
-    })().catch(() => {
+    })().catch((e) => {
+      console.error("Opening account failed", e);
       setChecking(false);
       setError("We couldn't open your account just now. Please try again in a moment.");
     });
