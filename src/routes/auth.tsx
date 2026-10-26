@@ -94,7 +94,10 @@ function Auth() {
         return;
       }
       navigate({ href: r === "admin" ? dashboardFor(r) : "/home", replace: true });
-    })();
+    })().catch(() => {
+      setChecking(false);
+      setError("We couldn't open your account just now. Please try again in a moment.");
+    });
   }, [user, mode]);
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event) => {
