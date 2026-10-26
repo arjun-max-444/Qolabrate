@@ -478,9 +478,9 @@ function DemoContent({ isAdmin }: { isAdmin: boolean }) {
   const { data, isLoading } = useQuery({
     queryKey: ["admin-demo-counts"],
     queryFn: async () => {
-      const count = async (table: "posts" | "campaigns" | "profiles") =>
+      const count = async (table: "posts" | "v2_campaigns" | "v2_profiles") =>
         (await supabase.from(table).select("id", { count: "exact", head: true }).eq("is_demo", true)).count ?? 0;
-      const [posts, campaigns, profiles] = await Promise.all([count("posts"), count("campaigns"), count("profiles")]);
+      const [posts, campaigns, profiles] = await Promise.all([count("posts"), count("v2_campaigns"), count("v2_profiles")]);
       return { posts, campaigns, profiles };
     },
   });
