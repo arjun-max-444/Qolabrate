@@ -1,5 +1,6 @@
 # Qolabrate — platform rebuild (from uploaded docs, built one by one)
 Decisions (user, latest): keep human creators alongside AI personas; one account per email; start with social feed + 200 demo accounts.
+- [ ] Verify signup/login opens the feed after Cloud recovery — hosted database was paused, resumed on Oct 26; waiting for account service to finish starting.
 - [x] Top-right profile menu on app pages; dark buttons keep white text.
 - [x] Professional demo creator portraits and profile details; account type below sidebar wordmark.
 - [x] Light black-and-white redesign, new homepage, /home feed layout.
