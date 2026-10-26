@@ -58,6 +58,47 @@ export type Database = {
           },
         ]
       }
+      admin_audit_log: {
+        Row: {
+          action: string
+          admin_id: string | null
+          created_at: string
+          details: Json
+          id: string
+          reason: string | null
+          target_id: string | null
+          target_type: string
+        }
+        Insert: {
+          action: string
+          admin_id?: string | null
+          created_at?: string
+          details?: Json
+          id?: string
+          reason?: string | null
+          target_id?: string | null
+          target_type: string
+        }
+        Update: {
+          action?: string
+          admin_id?: string | null
+          created_at?: string
+          details?: Json
+          id?: string
+          reason?: string | null
+          target_id?: string | null
+          target_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_audit_log_admin_id_fkey"
+            columns: ["admin_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       admin_audit_logs: {
         Row: {
           action: string
@@ -2924,6 +2965,7 @@ export type Database = {
           id: string
           is_demo: boolean
           location: string | null
+          moderation_note: string | null
           project_type: string
           published_at: string | null
           remote: boolean
@@ -2952,6 +2994,7 @@ export type Database = {
           id?: string
           is_demo?: boolean
           location?: string | null
+          moderation_note?: string | null
           project_type?: string
           published_at?: string | null
           remote?: boolean
@@ -2980,6 +3023,7 @@ export type Database = {
           id?: string
           is_demo?: boolean
           location?: string | null
+          moderation_note?: string | null
           project_type?: string
           published_at?: string | null
           remote?: boolean
@@ -3158,6 +3202,8 @@ export type Database = {
           posts_count: number
           show_email: boolean
           social_links: Json
+          suspended_at: string | null
+          suspension_reason: string | null
           updated_at: string
           username: string | null
           verified: boolean
@@ -3184,6 +3230,8 @@ export type Database = {
           posts_count?: number
           show_email?: boolean
           social_links?: Json
+          suspended_at?: string | null
+          suspension_reason?: string | null
           updated_at?: string
           username?: string | null
           verified?: boolean
@@ -3210,6 +3258,8 @@ export type Database = {
           posts_count?: number
           show_email?: boolean
           social_links?: Json
+          suspended_at?: string | null
+          suspension_reason?: string | null
           updated_at?: string
           username?: string | null
           verified?: boolean
@@ -3276,21 +3326,30 @@ export type Database = {
       verification_requests: {
         Row: {
           created_at: string
+          kind: string
           note: string
+          reason: string | null
+          resubmissions: number
           reviewed_at: string | null
           status: string
           user_id: string
         }
         Insert: {
           created_at?: string
+          kind?: string
           note?: string
+          reason?: string | null
+          resubmissions?: number
           reviewed_at?: string | null
           status?: string
           user_id: string
         }
         Update: {
           created_at?: string
+          kind?: string
           note?: string
+          reason?: string | null
+          resubmissions?: number
           reviewed_at?: string | null
           status?: string
           user_id?: string
@@ -3310,8 +3369,31 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_moderate_campaign: {
+        Args: { _campaign: string; _reason: string; _status: string }
+        Returns: undefined
+      }
+      admin_platform_stats: { Args: never; Returns: Json }
+      admin_review_verification: {
+        Args: { _approve: boolean; _reason?: string; _user: string }
+        Returns: undefined
+      }
+      admin_set_suspended: {
+        Args: { _reason?: string; _suspend: boolean; _user: string }
+        Returns: undefined
+      }
       admin_set_verified: {
         Args: { _user: string; _verified: boolean }
+        Returns: undefined
+      }
+      audit: {
+        Args: {
+          _action: string
+          _details?: Json
+          _reason: string
+          _target: string
+          _type: string
+        }
         Returns: undefined
       }
       brand_badges: {
@@ -3392,6 +3474,7 @@ export type Database = {
         Returns: boolean
       }
       is_staff: { Args: { _uid: string }; Returns: boolean }
+      is_suspended: { Args: { _uid: string }; Returns: boolean }
       is_verified: { Args: { _uid: string }; Returns: boolean }
       is_verified_creator: { Args: { _id: string }; Returns: boolean }
       log_collab: {
@@ -3575,6 +3658,7 @@ export type Database = {
         Returns: undefined
       }
       verification_editable: { Args: { _uid: string }; Returns: boolean }
+      verification_missing: { Args: { _uid: string }; Returns: string[] }
     }
     Enums: {
       account_type: "creator" | "brand"

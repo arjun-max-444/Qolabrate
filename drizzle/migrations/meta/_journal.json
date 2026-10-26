@@ -239,6 +239,13 @@
       "when": 1793026741401,
       "tag": "0033_v2_0007_0008_demo_seed_polish",
       "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1793026810817,
+      "tag": "0034_v2_0009_admin_moderation_suspension_audit",
+      "breakpoints": true
     }
   ]
 }
