@@ -10,62 +10,61 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AboutRouteImport } from './routes/about'
-import { Route as AccountRouteImport } from './routes/account'
 import { Route as AuthRouteImport } from './routes/auth'
-import { Route as BillingRouteImport } from './routes/billing'
-import { Route as BrandRouteRouteImport } from './routes/brand/route'
-import { Route as BriefRouteImport } from './routes/brief'
+import { Route as BrandRouteImport } from './routes/brand'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CreatorRouteRouteImport } from './routes/creator/route'
-import { Route as ExploreRouteImport } from './routes/explore'
+import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as FeaturesRouteImport } from './routes/features'
-import { Route as ForBrandsRouteImport } from './routes/for-brands'
-import { Route as ForCreatorsRouteImport } from './routes/for-creators'
-import { Route as HealthRouteImport } from './routes/health'
-import { Route as HomeRouteImport } from './routes/home'
-import { Route as MarketplaceRouteImport } from './routes/marketplace'
-import { Route as MessagesRouteImport } from './routes/messages'
-import { Route as NotificationsRouteImport } from './routes/notifications'
-import { Route as VerificationRouteImport } from './routes/verification'
-import { Route as WorkspaceRouteImport } from './routes/workspace'
-import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as AdminLoginRouteImport } from './routes/admin/login'
-import { Route as AiCreatorsIndexRouteImport } from './routes/ai-creators.index'
-import { Route as AiCreatorsIdRouteImport } from './routes/ai-creators.$id'
-import { Route as BrandDashboardRouteImport } from './routes/brand/dashboard'
-import { Route as BrandInboxRouteImport } from './routes/brand/inbox'
-import { Route as BrandProfileRouteImport } from './routes/brand/profile'
-import { Route as CampaignsIndexRouteImport } from './routes/campaigns.index'
-import { Route as CampaignsIdRouteImport } from './routes/campaigns.$id'
-import { Route as CollabsIndexRouteImport } from './routes/collabs.index'
-import { Route as CollabsIdRouteImport } from './routes/collabs.$id'
-import { Route as CreatorDashboardRouteImport } from './routes/creator/dashboard'
-import { Route as CreatorInboxRouteImport } from './routes/creator/inbox'
-import { Route as CreatorProfileRouteImport } from './routes/creator/profile'
-import { Route as CreatorSocialsRouteImport } from './routes/creator/socials'
-import { Route as CreatorsIdRouteImport } from './routes/creators/$id'
-import { Route as OrdersIndexRouteImport } from './routes/orders.index'
-import { Route as OrdersIdRouteImport } from './routes/orders.$id'
-import { Route as PHandleRouteImport } from './routes/p.$handle'
-import { Route as ProfileIndexRouteImport } from './routes/profile.index'
-import { Route as ProfileEditRouteImport } from './routes/profile.edit'
-import { Route as UUsernameRouteImport } from './routes/u.$username'
-import { Route as AdminVerificationIndexRouteImport } from './routes/admin/verification.index'
-import { Route as AdminVerificationIdRouteImport } from './routes/admin/verification.$id'
+import { Route as JoinRouteImport } from './routes/join'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SigninRouteImport } from './routes/signin'
+import { Route as AuthenticatedShellRouteImport } from './routes/_authenticated/_shell'
+import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
+import { Route as AuthenticatedShellAdminRouteImport } from './routes/_authenticated/_shell/admin'
+import { Route as AuthenticatedShellBillingRouteImport } from './routes/_authenticated/_shell/billing'
+import { Route as AuthenticatedShellBookmarksRouteImport } from './routes/_authenticated/_shell/bookmarks'
+import { Route as AuthenticatedShellCreatorsRouteImport } from './routes/_authenticated/_shell/creators'
+import { Route as AuthenticatedShellEmailRouteImport } from './routes/_authenticated/_shell/email'
+import { Route as AuthenticatedShellExploreRouteImport } from './routes/_authenticated/_shell/explore'
+import { Route as AuthenticatedShellHomeRouteImport } from './routes/_authenticated/_shell/home'
+import { Route as AuthenticatedShellMessagesRouteImport } from './routes/_authenticated/_shell/messages'
+import { Route as AuthenticatedShellNotificationsRouteImport } from './routes/_authenticated/_shell/notifications'
+import { Route as AuthenticatedShellSettingsRouteImport } from './routes/_authenticated/_shell/settings'
+import { Route as AuthenticatedShellShortlistsRouteImport } from './routes/_authenticated/_shell/shortlists'
 import { Route as ApiGstValidateFormatRouteImport } from './routes/api/gst/validate-format'
 import { Route as ApiGstVerificationStatusRouteImport } from './routes/api/gst/verification-status'
-import { Route as BrandCampaignsIndexRouteImport } from './routes/brand/campaigns.index'
-import { Route as BrandCampaignsNewRouteImport } from './routes/brand/campaigns.new'
-import { Route as BrandCampaignsIdIndexRouteImport } from './routes/brand/campaigns.$id.index'
-import { Route as BrandCampaignsIdEditRouteImport } from './routes/brand/campaigns.$id.edit'
+import { Route as ApiOrdersGenerateRouteImport } from './routes/api/orders.generate'
+import { Route as ApiOrdersVideoRouteImport } from './routes/api/orders.video'
+import { Route as AuthenticatedShellAiCreatorsIndexRouteImport } from './routes/_authenticated/_shell/ai-creators.index'
+import { Route as AuthenticatedShellAiCreatorsSlugRouteImport } from './routes/_authenticated/_shell/ai-creators.$slug'
+import { Route as AuthenticatedShellCampaignsIndexRouteImport } from './routes/_authenticated/_shell/campaigns.index'
+import { Route as AuthenticatedShellCampaignsIdRouteImport } from './routes/_authenticated/_shell/campaigns.$id'
+import { Route as AuthenticatedShellCampaignsNewRouteImport } from './routes/_authenticated/_shell/campaigns.new'
+import { Route as AuthenticatedShellCollaborateIndexRouteImport } from './routes/_authenticated/_shell/collaborate.index'
+import { Route as AuthenticatedShellCollaborateNewRouteImport } from './routes/_authenticated/_shell/collaborate.new'
+import { Route as AuthenticatedShellMessagesIndexRouteImport } from './routes/_authenticated/_shell/messages.index'
+import { Route as AuthenticatedShellMessagesIdRouteImport } from './routes/_authenticated/_shell/messages.$id'
+import { Route as AuthenticatedShellOrdersIndexRouteImport } from './routes/_authenticated/_shell/orders.index'
+import { Route as AuthenticatedShellOrdersIdRouteImport } from './routes/_authenticated/_shell/orders.$id'
+import { Route as AuthenticatedShellPostIdRouteImport } from './routes/_authenticated/_shell/post.$id'
+import { Route as AuthenticatedShellUUsernameRouteImport } from './routes/_authenticated/_shell/u.$username'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
+import { Route as AuthenticatedShellCampaignsEditIdRouteImport } from './routes/_authenticated/_shell/campaigns.edit.$id'
+import { Route as AuthenticatedShellCollaborateCIdRouteImport } from './routes/_authenticated/_shell/collaborate.c.$id'
+import { Route as AuthenticatedShellCollaborateEditIdRouteImport } from './routes/_authenticated/_shell/collaborate.edit.$id'
+import { Route as AuthenticatedShellCollaborateWIdRouteImport } from './routes/_authenticated/_shell/collaborate.w.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -73,29 +72,14 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AccountRoute = AccountRouteImport.update({
-  id: '/account',
-  path: '/account',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BillingRoute = BillingRouteImport.update({
-  id: '/billing',
-  path: '/billing',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BrandRouteRoute = BrandRouteRouteImport.update({
+const BrandRoute = BrandRouteImport.update({
   id: '/brand',
   path: '/brand',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BriefRoute = BriefRouteImport.update({
-  id: '/brief',
-  path: '/brief',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -103,14 +87,9 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CreatorRouteRoute = CreatorRouteRouteImport.update({
-  id: '/creator',
-  path: '/creator',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ExploreRoute = ExploreRouteImport.update({
-  id: '/explore',
-  path: '/explore',
+const DiscoverRoute = DiscoverRouteImport.update({
+  id: '/discover',
+  path: '/discover',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FeaturesRoute = FeaturesRouteImport.update({
@@ -118,171 +97,93 @@ const FeaturesRoute = FeaturesRouteImport.update({
   path: '/features',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ForBrandsRoute = ForBrandsRouteImport.update({
-  id: '/for-brands',
-  path: '/for-brands',
+const JoinRoute = JoinRouteImport.update({
+  id: '/join',
+  path: '/join',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ForCreatorsRoute = ForCreatorsRouteImport.update({
-  id: '/for-creators',
-  path: '/for-creators',
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HealthRoute = HealthRouteImport.update({
-  id: '/health',
-  path: '/health',
+const SigninRoute = SigninRouteImport.update({
+  id: '/signin',
+  path: '/signin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HomeRoute = HomeRouteImport.update({
+const AuthenticatedShellRoute = AuthenticatedShellRouteImport.update({
+  id: '/_shell',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedShellAdminRoute = AuthenticatedShellAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedShellRoute,
+} as any)
+const AuthenticatedShellBillingRoute =
+  AuthenticatedShellBillingRouteImport.update({
+    id: '/billing',
+    path: '/billing',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellBookmarksRoute =
+  AuthenticatedShellBookmarksRouteImport.update({
+    id: '/bookmarks',
+    path: '/bookmarks',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellCreatorsRoute =
+  AuthenticatedShellCreatorsRouteImport.update({
+    id: '/creators',
+    path: '/creators',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellEmailRoute = AuthenticatedShellEmailRouteImport.update({
+  id: '/email',
+  path: '/email',
+  getParentRoute: () => AuthenticatedShellRoute,
+} as any)
+const AuthenticatedShellExploreRoute =
+  AuthenticatedShellExploreRouteImport.update({
+    id: '/explore',
+    path: '/explore',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellHomeRoute = AuthenticatedShellHomeRouteImport.update({
   id: '/home',
   path: '/home',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedShellRoute,
 } as any)
-const MarketplaceRoute = MarketplaceRouteImport.update({
-  id: '/marketplace',
-  path: '/marketplace',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MessagesRoute = MessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NotificationsRoute = NotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VerificationRoute = VerificationRouteImport.update({
-  id: '/verification',
-  path: '/verification',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const WorkspaceRoute = WorkspaceRouteImport.update({
-  id: '/workspace',
-  path: '/workspace',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/admin/',
-  path: '/admin/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminLoginRoute = AdminLoginRouteImport.update({
-  id: '/admin/login',
-  path: '/admin/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AiCreatorsIndexRoute = AiCreatorsIndexRouteImport.update({
-  id: '/ai-creators/',
-  path: '/ai-creators/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AiCreatorsIdRoute = AiCreatorsIdRouteImport.update({
-  id: '/ai-creators/$id',
-  path: '/ai-creators/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BrandDashboardRoute = BrandDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => BrandRouteRoute,
-} as any)
-const BrandInboxRoute = BrandInboxRouteImport.update({
-  id: '/inbox',
-  path: '/inbox',
-  getParentRoute: () => BrandRouteRoute,
-} as any)
-const BrandProfileRoute = BrandProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => BrandRouteRoute,
-} as any)
-const CampaignsIndexRoute = CampaignsIndexRouteImport.update({
-  id: '/campaigns/',
-  path: '/campaigns/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CampaignsIdRoute = CampaignsIdRouteImport.update({
-  id: '/campaigns/$id',
-  path: '/campaigns/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CollabsIndexRoute = CollabsIndexRouteImport.update({
-  id: '/collabs/',
-  path: '/collabs/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CollabsIdRoute = CollabsIdRouteImport.update({
-  id: '/collabs/$id',
-  path: '/collabs/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CreatorDashboardRoute = CreatorDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => CreatorRouteRoute,
-} as any)
-const CreatorInboxRoute = CreatorInboxRouteImport.update({
-  id: '/inbox',
-  path: '/inbox',
-  getParentRoute: () => CreatorRouteRoute,
-} as any)
-const CreatorProfileRoute = CreatorProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => CreatorRouteRoute,
-} as any)
-const CreatorSocialsRoute = CreatorSocialsRouteImport.update({
-  id: '/socials',
-  path: '/socials',
-  getParentRoute: () => CreatorRouteRoute,
-} as any)
-const CreatorsIdRoute = CreatorsIdRouteImport.update({
-  id: '/creators/$id',
-  path: '/creators/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OrdersIndexRoute = OrdersIndexRouteImport.update({
-  id: '/orders/',
-  path: '/orders/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OrdersIdRoute = OrdersIdRouteImport.update({
-  id: '/orders/$id',
-  path: '/orders/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PHandleRoute = PHandleRouteImport.update({
-  id: '/p/$handle',
-  path: '/p/$handle',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfileIndexRoute = ProfileIndexRouteImport.update({
-  id: '/profile/',
-  path: '/profile/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfileEditRoute = ProfileEditRouteImport.update({
-  id: '/profile/edit',
-  path: '/profile/edit',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const UUsernameRoute = UUsernameRouteImport.update({
-  id: '/u/$username',
-  path: '/u/$username',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminVerificationIndexRoute = AdminVerificationIndexRouteImport.update({
-  id: '/admin/verification/',
-  path: '/admin/verification/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminVerificationIdRoute = AdminVerificationIdRouteImport.update({
-  id: '/admin/verification/$id',
-  path: '/admin/verification/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedShellMessagesRoute =
+  AuthenticatedShellMessagesRouteImport.update({
+    id: '/messages',
+    path: '/messages',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellNotificationsRoute =
+  AuthenticatedShellNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellSettingsRoute =
+  AuthenticatedShellSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellShortlistsRoute =
+  AuthenticatedShellShortlistsRouteImport.update({
+    id: '/shortlists',
+    path: '/shortlists',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
 const ApiGstValidateFormatRoute = ApiGstValidateFormatRouteImport.update({
   id: '/api/gst/validate-format',
   path: '/api/gst/validate-format',
@@ -294,26 +195,94 @@ const ApiGstVerificationStatusRoute =
     path: '/api/gst/verification-status',
     getParentRoute: () => rootRouteImport,
   } as any)
-const BrandCampaignsIndexRoute = BrandCampaignsIndexRouteImport.update({
-  id: '/campaigns/',
-  path: '/campaigns/',
-  getParentRoute: () => BrandRouteRoute,
+const ApiOrdersGenerateRoute = ApiOrdersGenerateRouteImport.update({
+  id: '/api/orders/generate',
+  path: '/api/orders/generate',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const BrandCampaignsNewRoute = BrandCampaignsNewRouteImport.update({
-  id: '/campaigns/new',
-  path: '/campaigns/new',
-  getParentRoute: () => BrandRouteRoute,
+const ApiOrdersVideoRoute = ApiOrdersVideoRouteImport.update({
+  id: '/api/orders/video',
+  path: '/api/orders/video',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const BrandCampaignsIdIndexRoute = BrandCampaignsIdIndexRouteImport.update({
-  id: '/campaigns/$id/',
-  path: '/campaigns/$id/',
-  getParentRoute: () => BrandRouteRoute,
-} as any)
-const BrandCampaignsIdEditRoute = BrandCampaignsIdEditRouteImport.update({
-  id: '/campaigns/$id/edit',
-  path: '/campaigns/$id/edit',
-  getParentRoute: () => BrandRouteRoute,
-} as any)
+const AuthenticatedShellAiCreatorsIndexRoute =
+  AuthenticatedShellAiCreatorsIndexRouteImport.update({
+    id: '/ai-creators/',
+    path: '/ai-creators/',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellAiCreatorsSlugRoute =
+  AuthenticatedShellAiCreatorsSlugRouteImport.update({
+    id: '/ai-creators/$slug',
+    path: '/ai-creators/$slug',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellCampaignsIndexRoute =
+  AuthenticatedShellCampaignsIndexRouteImport.update({
+    id: '/campaigns/',
+    path: '/campaigns/',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellCampaignsIdRoute =
+  AuthenticatedShellCampaignsIdRouteImport.update({
+    id: '/campaigns/$id',
+    path: '/campaigns/$id',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellCampaignsNewRoute =
+  AuthenticatedShellCampaignsNewRouteImport.update({
+    id: '/campaigns/new',
+    path: '/campaigns/new',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellCollaborateIndexRoute =
+  AuthenticatedShellCollaborateIndexRouteImport.update({
+    id: '/collaborate/',
+    path: '/collaborate/',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellCollaborateNewRoute =
+  AuthenticatedShellCollaborateNewRouteImport.update({
+    id: '/collaborate/new',
+    path: '/collaborate/new',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellMessagesIndexRoute =
+  AuthenticatedShellMessagesIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedShellMessagesRoute,
+  } as any)
+const AuthenticatedShellMessagesIdRoute =
+  AuthenticatedShellMessagesIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedShellMessagesRoute,
+  } as any)
+const AuthenticatedShellOrdersIndexRoute =
+  AuthenticatedShellOrdersIndexRouteImport.update({
+    id: '/orders/',
+    path: '/orders/',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellOrdersIdRoute =
+  AuthenticatedShellOrdersIdRouteImport.update({
+    id: '/orders/$id',
+    path: '/orders/$id',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellPostIdRoute =
+  AuthenticatedShellPostIdRouteImport.update({
+    id: '/post/$id',
+    path: '/post/$id',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellUUsernameRoute =
+  AuthenticatedShellUUsernameRouteImport.update({
+    id: '/u/$username',
+    path: '/u/$username',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
 const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   id: '/lovable/email/auth/preview',
   path: '/lovable/email/auth/preview',
@@ -330,381 +299,341 @@ const LovableEmailTransactionalPreviewRoute =
     path: '/lovable/email/transactional/preview',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedShellCampaignsEditIdRoute =
+  AuthenticatedShellCampaignsEditIdRouteImport.update({
+    id: '/campaigns/edit/$id',
+    path: '/campaigns/edit/$id',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellCollaborateCIdRoute =
+  AuthenticatedShellCollaborateCIdRouteImport.update({
+    id: '/collaborate/c/$id',
+    path: '/collaborate/c/$id',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellCollaborateEditIdRoute =
+  AuthenticatedShellCollaborateEditIdRouteImport.update({
+    id: '/collaborate/edit/$id',
+    path: '/collaborate/edit/$id',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
+const AuthenticatedShellCollaborateWIdRoute =
+  AuthenticatedShellCollaborateWIdRouteImport.update({
+    id: '/collaborate/w/$id',
+    path: '/collaborate/w/$id',
+    getParentRoute: () => AuthenticatedShellRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/brand': typeof BrandRouteRouteWithChildren
-  '/creator': typeof CreatorRouteRouteWithChildren
   '/about': typeof AboutRoute
-  '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
-  '/billing': typeof BillingRoute
-  '/brief': typeof BriefRoute
+  '/brand': typeof BrandRoute
   '/contact': typeof ContactRoute
-  '/explore': typeof ExploreRoute
+  '/discover': typeof DiscoverRoute
   '/features': typeof FeaturesRoute
-  '/for-brands': typeof ForBrandsRoute
-  '/for-creators': typeof ForCreatorsRoute
-  '/health': typeof HealthRoute
-  '/home': typeof HomeRoute
-  '/marketplace': typeof MarketplaceRoute
-  '/messages': typeof MessagesRoute
-  '/notifications': typeof NotificationsRoute
-  '/verification': typeof VerificationRoute
-  '/workspace': typeof WorkspaceRoute
-  '/admin/login': typeof AdminLoginRoute
-  '/ai-creators/$id': typeof AiCreatorsIdRoute
-  '/brand/dashboard': typeof BrandDashboardRoute
-  '/brand/inbox': typeof BrandInboxRoute
-  '/brand/profile': typeof BrandProfileRoute
-  '/campaigns/$id': typeof CampaignsIdRoute
-  '/collabs/$id': typeof CollabsIdRoute
-  '/creator/dashboard': typeof CreatorDashboardRoute
-  '/creator/inbox': typeof CreatorInboxRoute
-  '/creator/profile': typeof CreatorProfileRoute
-  '/creator/socials': typeof CreatorSocialsRoute
-  '/creators/$id': typeof CreatorsIdRoute
-  '/orders/$id': typeof OrdersIdRoute
-  '/p/$handle': typeof PHandleRoute
-  '/profile/edit': typeof ProfileEditRoute
-  '/u/$username': typeof UUsernameRoute
-  '/admin/': typeof AdminIndexRoute
-  '/ai-creators/': typeof AiCreatorsIndexRoute
-  '/campaigns/': typeof CampaignsIndexRoute
-  '/collabs/': typeof CollabsIndexRoute
-  '/orders/': typeof OrdersIndexRoute
-  '/profile/': typeof ProfileIndexRoute
-  '/admin/verification/$id': typeof AdminVerificationIdRoute
+  '/join': typeof JoinRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/signin': typeof SigninRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/admin': typeof AuthenticatedShellAdminRoute
+  '/billing': typeof AuthenticatedShellBillingRoute
+  '/bookmarks': typeof AuthenticatedShellBookmarksRoute
+  '/creators': typeof AuthenticatedShellCreatorsRoute
+  '/email': typeof AuthenticatedShellEmailRoute
+  '/explore': typeof AuthenticatedShellExploreRoute
+  '/home': typeof AuthenticatedShellHomeRoute
+  '/messages': typeof AuthenticatedShellMessagesRouteWithChildren
+  '/notifications': typeof AuthenticatedShellNotificationsRoute
+  '/settings': typeof AuthenticatedShellSettingsRoute
+  '/shortlists': typeof AuthenticatedShellShortlistsRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
-  '/brand/campaigns/new': typeof BrandCampaignsNewRoute
-  '/admin/verification/': typeof AdminVerificationIndexRoute
-  '/brand/campaigns/': typeof BrandCampaignsIndexRoute
-  '/brand/campaigns/$id/edit': typeof BrandCampaignsIdEditRoute
+  '/api/orders/generate': typeof ApiOrdersGenerateRoute
+  '/api/orders/video': typeof ApiOrdersVideoRoute
+  '/ai-creators/$slug': typeof AuthenticatedShellAiCreatorsSlugRoute
+  '/campaigns/$id': typeof AuthenticatedShellCampaignsIdRoute
+  '/campaigns/new': typeof AuthenticatedShellCampaignsNewRoute
+  '/collaborate/new': typeof AuthenticatedShellCollaborateNewRoute
+  '/messages/$id': typeof AuthenticatedShellMessagesIdRoute
+  '/orders/$id': typeof AuthenticatedShellOrdersIdRoute
+  '/post/$id': typeof AuthenticatedShellPostIdRoute
+  '/u/$username': typeof AuthenticatedShellUUsernameRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
-  '/brand/campaigns/$id/': typeof BrandCampaignsIdIndexRoute
+  '/ai-creators/': typeof AuthenticatedShellAiCreatorsIndexRoute
+  '/campaigns/': typeof AuthenticatedShellCampaignsIndexRoute
+  '/collaborate/': typeof AuthenticatedShellCollaborateIndexRoute
+  '/messages/': typeof AuthenticatedShellMessagesIndexRoute
+  '/orders/': typeof AuthenticatedShellOrdersIndexRoute
+  '/campaigns/edit/$id': typeof AuthenticatedShellCampaignsEditIdRoute
+  '/collaborate/c/$id': typeof AuthenticatedShellCollaborateCIdRoute
+  '/collaborate/edit/$id': typeof AuthenticatedShellCollaborateEditIdRoute
+  '/collaborate/w/$id': typeof AuthenticatedShellCollaborateWIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/brand': typeof BrandRouteRouteWithChildren
-  '/creator': typeof CreatorRouteRouteWithChildren
   '/about': typeof AboutRoute
-  '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
-  '/billing': typeof BillingRoute
-  '/brief': typeof BriefRoute
+  '/brand': typeof BrandRoute
   '/contact': typeof ContactRoute
-  '/explore': typeof ExploreRoute
+  '/discover': typeof DiscoverRoute
   '/features': typeof FeaturesRoute
-  '/for-brands': typeof ForBrandsRoute
-  '/for-creators': typeof ForCreatorsRoute
-  '/health': typeof HealthRoute
-  '/home': typeof HomeRoute
-  '/marketplace': typeof MarketplaceRoute
-  '/messages': typeof MessagesRoute
-  '/notifications': typeof NotificationsRoute
-  '/verification': typeof VerificationRoute
-  '/workspace': typeof WorkspaceRoute
-  '/admin/login': typeof AdminLoginRoute
-  '/ai-creators/$id': typeof AiCreatorsIdRoute
-  '/brand/dashboard': typeof BrandDashboardRoute
-  '/brand/inbox': typeof BrandInboxRoute
-  '/brand/profile': typeof BrandProfileRoute
-  '/campaigns/$id': typeof CampaignsIdRoute
-  '/collabs/$id': typeof CollabsIdRoute
-  '/creator/dashboard': typeof CreatorDashboardRoute
-  '/creator/inbox': typeof CreatorInboxRoute
-  '/creator/profile': typeof CreatorProfileRoute
-  '/creator/socials': typeof CreatorSocialsRoute
-  '/creators/$id': typeof CreatorsIdRoute
-  '/orders/$id': typeof OrdersIdRoute
-  '/p/$handle': typeof PHandleRoute
-  '/profile/edit': typeof ProfileEditRoute
-  '/u/$username': typeof UUsernameRoute
-  '/admin': typeof AdminIndexRoute
-  '/ai-creators': typeof AiCreatorsIndexRoute
-  '/campaigns': typeof CampaignsIndexRoute
-  '/collabs': typeof CollabsIndexRoute
-  '/orders': typeof OrdersIndexRoute
-  '/profile': typeof ProfileIndexRoute
-  '/admin/verification/$id': typeof AdminVerificationIdRoute
+  '/join': typeof JoinRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/signin': typeof SigninRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/admin': typeof AuthenticatedShellAdminRoute
+  '/billing': typeof AuthenticatedShellBillingRoute
+  '/bookmarks': typeof AuthenticatedShellBookmarksRoute
+  '/creators': typeof AuthenticatedShellCreatorsRoute
+  '/email': typeof AuthenticatedShellEmailRoute
+  '/explore': typeof AuthenticatedShellExploreRoute
+  '/home': typeof AuthenticatedShellHomeRoute
+  '/notifications': typeof AuthenticatedShellNotificationsRoute
+  '/settings': typeof AuthenticatedShellSettingsRoute
+  '/shortlists': typeof AuthenticatedShellShortlistsRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
-  '/brand/campaigns/new': typeof BrandCampaignsNewRoute
-  '/admin/verification': typeof AdminVerificationIndexRoute
-  '/brand/campaigns': typeof BrandCampaignsIndexRoute
-  '/brand/campaigns/$id/edit': typeof BrandCampaignsIdEditRoute
+  '/api/orders/generate': typeof ApiOrdersGenerateRoute
+  '/api/orders/video': typeof ApiOrdersVideoRoute
+  '/ai-creators/$slug': typeof AuthenticatedShellAiCreatorsSlugRoute
+  '/campaigns/$id': typeof AuthenticatedShellCampaignsIdRoute
+  '/campaigns/new': typeof AuthenticatedShellCampaignsNewRoute
+  '/collaborate/new': typeof AuthenticatedShellCollaborateNewRoute
+  '/messages/$id': typeof AuthenticatedShellMessagesIdRoute
+  '/orders/$id': typeof AuthenticatedShellOrdersIdRoute
+  '/post/$id': typeof AuthenticatedShellPostIdRoute
+  '/u/$username': typeof AuthenticatedShellUUsernameRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
-  '/brand/campaigns/$id': typeof BrandCampaignsIdIndexRoute
+  '/ai-creators': typeof AuthenticatedShellAiCreatorsIndexRoute
+  '/campaigns': typeof AuthenticatedShellCampaignsIndexRoute
+  '/collaborate': typeof AuthenticatedShellCollaborateIndexRoute
+  '/messages': typeof AuthenticatedShellMessagesIndexRoute
+  '/orders': typeof AuthenticatedShellOrdersIndexRoute
+  '/campaigns/edit/$id': typeof AuthenticatedShellCampaignsEditIdRoute
+  '/collaborate/c/$id': typeof AuthenticatedShellCollaborateCIdRoute
+  '/collaborate/edit/$id': typeof AuthenticatedShellCollaborateEditIdRoute
+  '/collaborate/w/$id': typeof AuthenticatedShellCollaborateWIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/brand': typeof BrandRouteRouteWithChildren
-  '/creator': typeof CreatorRouteRouteWithChildren
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
-  '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
-  '/billing': typeof BillingRoute
-  '/brief': typeof BriefRoute
+  '/brand': typeof BrandRoute
   '/contact': typeof ContactRoute
-  '/explore': typeof ExploreRoute
+  '/discover': typeof DiscoverRoute
   '/features': typeof FeaturesRoute
-  '/for-brands': typeof ForBrandsRoute
-  '/for-creators': typeof ForCreatorsRoute
-  '/health': typeof HealthRoute
-  '/home': typeof HomeRoute
-  '/marketplace': typeof MarketplaceRoute
-  '/messages': typeof MessagesRoute
-  '/notifications': typeof NotificationsRoute
-  '/verification': typeof VerificationRoute
-  '/workspace': typeof WorkspaceRoute
-  '/admin/login': typeof AdminLoginRoute
-  '/ai-creators/$id': typeof AiCreatorsIdRoute
-  '/brand/dashboard': typeof BrandDashboardRoute
-  '/brand/inbox': typeof BrandInboxRoute
-  '/brand/profile': typeof BrandProfileRoute
-  '/campaigns/$id': typeof CampaignsIdRoute
-  '/collabs/$id': typeof CollabsIdRoute
-  '/creator/dashboard': typeof CreatorDashboardRoute
-  '/creator/inbox': typeof CreatorInboxRoute
-  '/creator/profile': typeof CreatorProfileRoute
-  '/creator/socials': typeof CreatorSocialsRoute
-  '/creators/$id': typeof CreatorsIdRoute
-  '/orders/$id': typeof OrdersIdRoute
-  '/p/$handle': typeof PHandleRoute
-  '/profile/edit': typeof ProfileEditRoute
-  '/u/$username': typeof UUsernameRoute
-  '/admin/': typeof AdminIndexRoute
-  '/ai-creators/': typeof AiCreatorsIndexRoute
-  '/campaigns/': typeof CampaignsIndexRoute
-  '/collabs/': typeof CollabsIndexRoute
-  '/orders/': typeof OrdersIndexRoute
-  '/profile/': typeof ProfileIndexRoute
-  '/admin/verification/$id': typeof AdminVerificationIdRoute
+  '/join': typeof JoinRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/signin': typeof SigninRoute
+  '/_authenticated/_shell': typeof AuthenticatedShellRouteWithChildren
+  '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/_authenticated/_shell/admin': typeof AuthenticatedShellAdminRoute
+  '/_authenticated/_shell/billing': typeof AuthenticatedShellBillingRoute
+  '/_authenticated/_shell/bookmarks': typeof AuthenticatedShellBookmarksRoute
+  '/_authenticated/_shell/creators': typeof AuthenticatedShellCreatorsRoute
+  '/_authenticated/_shell/email': typeof AuthenticatedShellEmailRoute
+  '/_authenticated/_shell/explore': typeof AuthenticatedShellExploreRoute
+  '/_authenticated/_shell/home': typeof AuthenticatedShellHomeRoute
+  '/_authenticated/_shell/messages': typeof AuthenticatedShellMessagesRouteWithChildren
+  '/_authenticated/_shell/notifications': typeof AuthenticatedShellNotificationsRoute
+  '/_authenticated/_shell/settings': typeof AuthenticatedShellSettingsRoute
+  '/_authenticated/_shell/shortlists': typeof AuthenticatedShellShortlistsRoute
   '/api/gst/validate-format': typeof ApiGstValidateFormatRoute
   '/api/gst/verification-status': typeof ApiGstVerificationStatusRoute
-  '/brand/campaigns/new': typeof BrandCampaignsNewRoute
-  '/admin/verification/': typeof AdminVerificationIndexRoute
-  '/brand/campaigns/': typeof BrandCampaignsIndexRoute
-  '/brand/campaigns/$id/edit': typeof BrandCampaignsIdEditRoute
+  '/api/orders/generate': typeof ApiOrdersGenerateRoute
+  '/api/orders/video': typeof ApiOrdersVideoRoute
+  '/_authenticated/_shell/ai-creators/$slug': typeof AuthenticatedShellAiCreatorsSlugRoute
+  '/_authenticated/_shell/campaigns/$id': typeof AuthenticatedShellCampaignsIdRoute
+  '/_authenticated/_shell/campaigns/new': typeof AuthenticatedShellCampaignsNewRoute
+  '/_authenticated/_shell/collaborate/new': typeof AuthenticatedShellCollaborateNewRoute
+  '/_authenticated/_shell/messages/$id': typeof AuthenticatedShellMessagesIdRoute
+  '/_authenticated/_shell/orders/$id': typeof AuthenticatedShellOrdersIdRoute
+  '/_authenticated/_shell/post/$id': typeof AuthenticatedShellPostIdRoute
+  '/_authenticated/_shell/u/$username': typeof AuthenticatedShellUUsernameRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
-  '/brand/campaigns/$id/': typeof BrandCampaignsIdIndexRoute
+  '/_authenticated/_shell/ai-creators/': typeof AuthenticatedShellAiCreatorsIndexRoute
+  '/_authenticated/_shell/campaigns/': typeof AuthenticatedShellCampaignsIndexRoute
+  '/_authenticated/_shell/collaborate/': typeof AuthenticatedShellCollaborateIndexRoute
+  '/_authenticated/_shell/messages/': typeof AuthenticatedShellMessagesIndexRoute
+  '/_authenticated/_shell/orders/': typeof AuthenticatedShellOrdersIndexRoute
+  '/_authenticated/_shell/campaigns/edit/$id': typeof AuthenticatedShellCampaignsEditIdRoute
+  '/_authenticated/_shell/collaborate/c/$id': typeof AuthenticatedShellCollaborateCIdRoute
+  '/_authenticated/_shell/collaborate/edit/$id': typeof AuthenticatedShellCollaborateEditIdRoute
+  '/_authenticated/_shell/collaborate/w/$id': typeof AuthenticatedShellCollaborateWIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/brand'
-    | '/creator'
     | '/about'
-    | '/account'
     | '/auth'
-    | '/billing'
-    | '/brief'
+    | '/brand'
     | '/contact'
-    | '/explore'
+    | '/discover'
     | '/features'
-    | '/for-brands'
-    | '/for-creators'
-    | '/health'
+    | '/join'
+    | '/reset-password'
+    | '/signin'
+    | '/onboarding'
+    | '/admin'
+    | '/billing'
+    | '/bookmarks'
+    | '/creators'
+    | '/email'
+    | '/explore'
     | '/home'
-    | '/marketplace'
     | '/messages'
     | '/notifications'
-    | '/verification'
-    | '/workspace'
-    | '/admin/login'
-    | '/ai-creators/$id'
-    | '/brand/dashboard'
-    | '/brand/inbox'
-    | '/brand/profile'
-    | '/campaigns/$id'
-    | '/collabs/$id'
-    | '/creator/dashboard'
-    | '/creator/inbox'
-    | '/creator/profile'
-    | '/creator/socials'
-    | '/creators/$id'
-    | '/orders/$id'
-    | '/p/$handle'
-    | '/profile/edit'
-    | '/u/$username'
-    | '/admin/'
-    | '/ai-creators/'
-    | '/campaigns/'
-    | '/collabs/'
-    | '/orders/'
-    | '/profile/'
-    | '/admin/verification/$id'
+    | '/settings'
+    | '/shortlists'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
-    | '/brand/campaigns/new'
-    | '/admin/verification/'
-    | '/brand/campaigns/'
-    | '/brand/campaigns/$id/edit'
+    | '/api/orders/generate'
+    | '/api/orders/video'
+    | '/ai-creators/$slug'
+    | '/campaigns/$id'
+    | '/campaigns/new'
+    | '/collaborate/new'
+    | '/messages/$id'
+    | '/orders/$id'
+    | '/post/$id'
+    | '/u/$username'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
-    | '/brand/campaigns/$id/'
+    | '/ai-creators/'
+    | '/campaigns/'
+    | '/collaborate/'
+    | '/messages/'
+    | '/orders/'
+    | '/campaigns/edit/$id'
+    | '/collaborate/c/$id'
+    | '/collaborate/edit/$id'
+    | '/collaborate/w/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/brand'
-    | '/creator'
     | '/about'
-    | '/account'
     | '/auth'
-    | '/billing'
-    | '/brief'
+    | '/brand'
     | '/contact'
-    | '/explore'
+    | '/discover'
     | '/features'
-    | '/for-brands'
-    | '/for-creators'
-    | '/health'
-    | '/home'
-    | '/marketplace'
-    | '/messages'
-    | '/notifications'
-    | '/verification'
-    | '/workspace'
-    | '/admin/login'
-    | '/ai-creators/$id'
-    | '/brand/dashboard'
-    | '/brand/inbox'
-    | '/brand/profile'
-    | '/campaigns/$id'
-    | '/collabs/$id'
-    | '/creator/dashboard'
-    | '/creator/inbox'
-    | '/creator/profile'
-    | '/creator/socials'
-    | '/creators/$id'
-    | '/orders/$id'
-    | '/p/$handle'
-    | '/profile/edit'
-    | '/u/$username'
+    | '/join'
+    | '/reset-password'
+    | '/signin'
+    | '/onboarding'
     | '/admin'
-    | '/ai-creators'
-    | '/campaigns'
-    | '/collabs'
-    | '/orders'
-    | '/profile'
-    | '/admin/verification/$id'
+    | '/billing'
+    | '/bookmarks'
+    | '/creators'
+    | '/email'
+    | '/explore'
+    | '/home'
+    | '/notifications'
+    | '/settings'
+    | '/shortlists'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
-    | '/brand/campaigns/new'
-    | '/admin/verification'
-    | '/brand/campaigns'
-    | '/brand/campaigns/$id/edit'
+    | '/api/orders/generate'
+    | '/api/orders/video'
+    | '/ai-creators/$slug'
+    | '/campaigns/$id'
+    | '/campaigns/new'
+    | '/collaborate/new'
+    | '/messages/$id'
+    | '/orders/$id'
+    | '/post/$id'
+    | '/u/$username'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
-    | '/brand/campaigns/$id'
+    | '/ai-creators'
+    | '/campaigns'
+    | '/collaborate'
+    | '/messages'
+    | '/orders'
+    | '/campaigns/edit/$id'
+    | '/collaborate/c/$id'
+    | '/collaborate/edit/$id'
+    | '/collaborate/w/$id'
   id:
     | '__root__'
     | '/'
-    | '/brand'
-    | '/creator'
+    | '/_authenticated'
     | '/about'
-    | '/account'
     | '/auth'
-    | '/billing'
-    | '/brief'
+    | '/brand'
     | '/contact'
-    | '/explore'
+    | '/discover'
     | '/features'
-    | '/for-brands'
-    | '/for-creators'
-    | '/health'
-    | '/home'
-    | '/marketplace'
-    | '/messages'
-    | '/notifications'
-    | '/verification'
-    | '/workspace'
-    | '/admin/login'
-    | '/ai-creators/$id'
-    | '/brand/dashboard'
-    | '/brand/inbox'
-    | '/brand/profile'
-    | '/campaigns/$id'
-    | '/collabs/$id'
-    | '/creator/dashboard'
-    | '/creator/inbox'
-    | '/creator/profile'
-    | '/creator/socials'
-    | '/creators/$id'
-    | '/orders/$id'
-    | '/p/$handle'
-    | '/profile/edit'
-    | '/u/$username'
-    | '/admin/'
-    | '/ai-creators/'
-    | '/campaigns/'
-    | '/collabs/'
-    | '/orders/'
-    | '/profile/'
-    | '/admin/verification/$id'
+    | '/join'
+    | '/reset-password'
+    | '/signin'
+    | '/_authenticated/_shell'
+    | '/_authenticated/onboarding'
+    | '/_authenticated/_shell/admin'
+    | '/_authenticated/_shell/billing'
+    | '/_authenticated/_shell/bookmarks'
+    | '/_authenticated/_shell/creators'
+    | '/_authenticated/_shell/email'
+    | '/_authenticated/_shell/explore'
+    | '/_authenticated/_shell/home'
+    | '/_authenticated/_shell/messages'
+    | '/_authenticated/_shell/notifications'
+    | '/_authenticated/_shell/settings'
+    | '/_authenticated/_shell/shortlists'
     | '/api/gst/validate-format'
     | '/api/gst/verification-status'
-    | '/brand/campaigns/new'
-    | '/admin/verification/'
-    | '/brand/campaigns/'
-    | '/brand/campaigns/$id/edit'
+    | '/api/orders/generate'
+    | '/api/orders/video'
+    | '/_authenticated/_shell/ai-creators/$slug'
+    | '/_authenticated/_shell/campaigns/$id'
+    | '/_authenticated/_shell/campaigns/new'
+    | '/_authenticated/_shell/collaborate/new'
+    | '/_authenticated/_shell/messages/$id'
+    | '/_authenticated/_shell/orders/$id'
+    | '/_authenticated/_shell/post/$id'
+    | '/_authenticated/_shell/u/$username'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
-    | '/brand/campaigns/$id/'
+    | '/_authenticated/_shell/ai-creators/'
+    | '/_authenticated/_shell/campaigns/'
+    | '/_authenticated/_shell/collaborate/'
+    | '/_authenticated/_shell/messages/'
+    | '/_authenticated/_shell/orders/'
+    | '/_authenticated/_shell/campaigns/edit/$id'
+    | '/_authenticated/_shell/collaborate/c/$id'
+    | '/_authenticated/_shell/collaborate/edit/$id'
+    | '/_authenticated/_shell/collaborate/w/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  BrandRouteRoute: typeof BrandRouteRouteWithChildren
-  CreatorRouteRoute: typeof CreatorRouteRouteWithChildren
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
-  AccountRoute: typeof AccountRoute
   AuthRoute: typeof AuthRoute
-  BillingRoute: typeof BillingRoute
-  BriefRoute: typeof BriefRoute
+  BrandRoute: typeof BrandRoute
   ContactRoute: typeof ContactRoute
-  ExploreRoute: typeof ExploreRoute
+  DiscoverRoute: typeof DiscoverRoute
   FeaturesRoute: typeof FeaturesRoute
-  ForBrandsRoute: typeof ForBrandsRoute
-  ForCreatorsRoute: typeof ForCreatorsRoute
-  HealthRoute: typeof HealthRoute
-  HomeRoute: typeof HomeRoute
-  MarketplaceRoute: typeof MarketplaceRoute
-  MessagesRoute: typeof MessagesRoute
-  NotificationsRoute: typeof NotificationsRoute
-  VerificationRoute: typeof VerificationRoute
-  WorkspaceRoute: typeof WorkspaceRoute
-  AdminLoginRoute: typeof AdminLoginRoute
-  AiCreatorsIdRoute: typeof AiCreatorsIdRoute
-  CampaignsIdRoute: typeof CampaignsIdRoute
-  CollabsIdRoute: typeof CollabsIdRoute
-  CreatorsIdRoute: typeof CreatorsIdRoute
-  OrdersIdRoute: typeof OrdersIdRoute
-  PHandleRoute: typeof PHandleRoute
-  ProfileEditRoute: typeof ProfileEditRoute
-  UUsernameRoute: typeof UUsernameRoute
-  AdminIndexRoute: typeof AdminIndexRoute
-  AiCreatorsIndexRoute: typeof AiCreatorsIndexRoute
-  CampaignsIndexRoute: typeof CampaignsIndexRoute
-  CollabsIndexRoute: typeof CollabsIndexRoute
-  OrdersIndexRoute: typeof OrdersIndexRoute
-  ProfileIndexRoute: typeof ProfileIndexRoute
-  AdminVerificationIdRoute: typeof AdminVerificationIdRoute
+  JoinRoute: typeof JoinRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  SigninRoute: typeof SigninRoute
   ApiGstValidateFormatRoute: typeof ApiGstValidateFormatRoute
   ApiGstVerificationStatusRoute: typeof ApiGstVerificationStatusRoute
-  AdminVerificationIndexRoute: typeof AdminVerificationIndexRoute
+  ApiOrdersGenerateRoute: typeof ApiOrdersGenerateRoute
+  ApiOrdersVideoRoute: typeof ApiOrdersVideoRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -719,18 +648,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/account': {
-      id: '/account'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof AccountRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -740,25 +669,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/billing': {
-      id: '/billing'
-      path: '/billing'
-      fullPath: '/billing'
-      preLoaderRoute: typeof BillingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/brand': {
       id: '/brand'
       path: '/brand'
       fullPath: '/brand'
-      preLoaderRoute: typeof BrandRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/brief': {
-      id: '/brief'
-      path: '/brief'
-      fullPath: '/brief'
-      preLoaderRoute: typeof BriefRouteImport
+      preLoaderRoute: typeof BrandRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -768,18 +683,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/creator': {
-      id: '/creator'
-      path: '/creator'
-      fullPath: '/creator'
-      preLoaderRoute: typeof CreatorRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/explore': {
-      id: '/explore'
-      path: '/explore'
-      fullPath: '/explore'
-      preLoaderRoute: typeof ExploreRouteImport
+    '/discover': {
+      id: '/discover'
+      path: '/discover'
+      fullPath: '/discover'
+      preLoaderRoute: typeof DiscoverRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/features': {
@@ -789,236 +697,117 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/for-brands': {
-      id: '/for-brands'
-      path: '/for-brands'
-      fullPath: '/for-brands'
-      preLoaderRoute: typeof ForBrandsRouteImport
+    '/join': {
+      id: '/join'
+      path: '/join'
+      fullPath: '/join'
+      preLoaderRoute: typeof JoinRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/for-creators': {
-      id: '/for-creators'
-      path: '/for-creators'
-      fullPath: '/for-creators'
-      preLoaderRoute: typeof ForCreatorsRouteImport
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/health': {
-      id: '/health'
-      path: '/health'
-      fullPath: '/health'
-      preLoaderRoute: typeof HealthRouteImport
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof SigninRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/home': {
-      id: '/home'
+    '/_authenticated/_shell': {
+      id: '/_authenticated/_shell'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedShellRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/onboarding': {
+      id: '/_authenticated/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/_shell/admin': {
+      id: '/_authenticated/_shell/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedShellAdminRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/billing': {
+      id: '/_authenticated/_shell/billing'
+      path: '/billing'
+      fullPath: '/billing'
+      preLoaderRoute: typeof AuthenticatedShellBillingRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/bookmarks': {
+      id: '/_authenticated/_shell/bookmarks'
+      path: '/bookmarks'
+      fullPath: '/bookmarks'
+      preLoaderRoute: typeof AuthenticatedShellBookmarksRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/creators': {
+      id: '/_authenticated/_shell/creators'
+      path: '/creators'
+      fullPath: '/creators'
+      preLoaderRoute: typeof AuthenticatedShellCreatorsRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/email': {
+      id: '/_authenticated/_shell/email'
+      path: '/email'
+      fullPath: '/email'
+      preLoaderRoute: typeof AuthenticatedShellEmailRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/explore': {
+      id: '/_authenticated/_shell/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof AuthenticatedShellExploreRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/home': {
+      id: '/_authenticated/_shell/home'
       path: '/home'
       fullPath: '/home'
-      preLoaderRoute: typeof HomeRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedShellHomeRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
     }
-    '/marketplace': {
-      id: '/marketplace'
-      path: '/marketplace'
-      fullPath: '/marketplace'
-      preLoaderRoute: typeof MarketplaceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/messages': {
-      id: '/messages'
+    '/_authenticated/_shell/messages': {
+      id: '/_authenticated/_shell/messages'
       path: '/messages'
       fullPath: '/messages'
-      preLoaderRoute: typeof MessagesRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedShellMessagesRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
     }
-    '/notifications': {
-      id: '/notifications'
+    '/_authenticated/_shell/notifications': {
+      id: '/_authenticated/_shell/notifications'
       path: '/notifications'
       fullPath: '/notifications'
-      preLoaderRoute: typeof NotificationsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedShellNotificationsRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
     }
-    '/verification': {
-      id: '/verification'
-      path: '/verification'
-      fullPath: '/verification'
-      preLoaderRoute: typeof VerificationRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_authenticated/_shell/settings': {
+      id: '/_authenticated/_shell/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedShellSettingsRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
     }
-    '/workspace': {
-      id: '/workspace'
-      path: '/workspace'
-      fullPath: '/workspace'
-      preLoaderRoute: typeof WorkspaceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/': {
-      id: '/admin/'
-      path: '/admin'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/login': {
-      id: '/admin/login'
-      path: '/admin/login'
-      fullPath: '/admin/login'
-      preLoaderRoute: typeof AdminLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ai-creators/': {
-      id: '/ai-creators/'
-      path: '/ai-creators'
-      fullPath: '/ai-creators/'
-      preLoaderRoute: typeof AiCreatorsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ai-creators/$id': {
-      id: '/ai-creators/$id'
-      path: '/ai-creators/$id'
-      fullPath: '/ai-creators/$id'
-      preLoaderRoute: typeof AiCreatorsIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/brand/dashboard': {
-      id: '/brand/dashboard'
-      path: '/dashboard'
-      fullPath: '/brand/dashboard'
-      preLoaderRoute: typeof BrandDashboardRouteImport
-      parentRoute: typeof BrandRouteRoute
-    }
-    '/brand/inbox': {
-      id: '/brand/inbox'
-      path: '/inbox'
-      fullPath: '/brand/inbox'
-      preLoaderRoute: typeof BrandInboxRouteImport
-      parentRoute: typeof BrandRouteRoute
-    }
-    '/brand/profile': {
-      id: '/brand/profile'
-      path: '/profile'
-      fullPath: '/brand/profile'
-      preLoaderRoute: typeof BrandProfileRouteImport
-      parentRoute: typeof BrandRouteRoute
-    }
-    '/campaigns/': {
-      id: '/campaigns/'
-      path: '/campaigns'
-      fullPath: '/campaigns/'
-      preLoaderRoute: typeof CampaignsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/campaigns/$id': {
-      id: '/campaigns/$id'
-      path: '/campaigns/$id'
-      fullPath: '/campaigns/$id'
-      preLoaderRoute: typeof CampaignsIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/collabs/': {
-      id: '/collabs/'
-      path: '/collabs'
-      fullPath: '/collabs/'
-      preLoaderRoute: typeof CollabsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/collabs/$id': {
-      id: '/collabs/$id'
-      path: '/collabs/$id'
-      fullPath: '/collabs/$id'
-      preLoaderRoute: typeof CollabsIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/creator/dashboard': {
-      id: '/creator/dashboard'
-      path: '/dashboard'
-      fullPath: '/creator/dashboard'
-      preLoaderRoute: typeof CreatorDashboardRouteImport
-      parentRoute: typeof CreatorRouteRoute
-    }
-    '/creator/inbox': {
-      id: '/creator/inbox'
-      path: '/inbox'
-      fullPath: '/creator/inbox'
-      preLoaderRoute: typeof CreatorInboxRouteImport
-      parentRoute: typeof CreatorRouteRoute
-    }
-    '/creator/profile': {
-      id: '/creator/profile'
-      path: '/profile'
-      fullPath: '/creator/profile'
-      preLoaderRoute: typeof CreatorProfileRouteImport
-      parentRoute: typeof CreatorRouteRoute
-    }
-    '/creator/socials': {
-      id: '/creator/socials'
-      path: '/socials'
-      fullPath: '/creator/socials'
-      preLoaderRoute: typeof CreatorSocialsRouteImport
-      parentRoute: typeof CreatorRouteRoute
-    }
-    '/creators/$id': {
-      id: '/creators/$id'
-      path: '/creators/$id'
-      fullPath: '/creators/$id'
-      preLoaderRoute: typeof CreatorsIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/orders/': {
-      id: '/orders/'
-      path: '/orders'
-      fullPath: '/orders/'
-      preLoaderRoute: typeof OrdersIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/orders/$id': {
-      id: '/orders/$id'
-      path: '/orders/$id'
-      fullPath: '/orders/$id'
-      preLoaderRoute: typeof OrdersIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/p/$handle': {
-      id: '/p/$handle'
-      path: '/p/$handle'
-      fullPath: '/p/$handle'
-      preLoaderRoute: typeof PHandleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile/': {
-      id: '/profile/'
-      path: '/profile'
-      fullPath: '/profile/'
-      preLoaderRoute: typeof ProfileIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile/edit': {
-      id: '/profile/edit'
-      path: '/profile/edit'
-      fullPath: '/profile/edit'
-      preLoaderRoute: typeof ProfileEditRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/u/$username': {
-      id: '/u/$username'
-      path: '/u/$username'
-      fullPath: '/u/$username'
-      preLoaderRoute: typeof UUsernameRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/verification/': {
-      id: '/admin/verification/'
-      path: '/admin/verification'
-      fullPath: '/admin/verification/'
-      preLoaderRoute: typeof AdminVerificationIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/verification/$id': {
-      id: '/admin/verification/$id'
-      path: '/admin/verification/$id'
-      fullPath: '/admin/verification/$id'
-      preLoaderRoute: typeof AdminVerificationIdRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_authenticated/_shell/shortlists': {
+      id: '/_authenticated/_shell/shortlists'
+      path: '/shortlists'
+      fullPath: '/shortlists'
+      preLoaderRoute: typeof AuthenticatedShellShortlistsRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
     }
     '/api/gst/validate-format': {
       id: '/api/gst/validate-format'
@@ -1034,33 +823,110 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiGstVerificationStatusRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/brand/campaigns/': {
-      id: '/brand/campaigns/'
+    '/api/orders/generate': {
+      id: '/api/orders/generate'
+      path: '/api/orders/generate'
+      fullPath: '/api/orders/generate'
+      preLoaderRoute: typeof ApiOrdersGenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/orders/video': {
+      id: '/api/orders/video'
+      path: '/api/orders/video'
+      fullPath: '/api/orders/video'
+      preLoaderRoute: typeof ApiOrdersVideoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/_shell/ai-creators/': {
+      id: '/_authenticated/_shell/ai-creators/'
+      path: '/ai-creators'
+      fullPath: '/ai-creators/'
+      preLoaderRoute: typeof AuthenticatedShellAiCreatorsIndexRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/ai-creators/$slug': {
+      id: '/_authenticated/_shell/ai-creators/$slug'
+      path: '/ai-creators/$slug'
+      fullPath: '/ai-creators/$slug'
+      preLoaderRoute: typeof AuthenticatedShellAiCreatorsSlugRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/campaigns/': {
+      id: '/_authenticated/_shell/campaigns/'
       path: '/campaigns'
-      fullPath: '/brand/campaigns/'
-      preLoaderRoute: typeof BrandCampaignsIndexRouteImport
-      parentRoute: typeof BrandRouteRoute
+      fullPath: '/campaigns/'
+      preLoaderRoute: typeof AuthenticatedShellCampaignsIndexRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
     }
-    '/brand/campaigns/new': {
-      id: '/brand/campaigns/new'
-      path: '/campaigns/new'
-      fullPath: '/brand/campaigns/new'
-      preLoaderRoute: typeof BrandCampaignsNewRouteImport
-      parentRoute: typeof BrandRouteRoute
-    }
-    '/brand/campaigns/$id/': {
-      id: '/brand/campaigns/$id/'
+    '/_authenticated/_shell/campaigns/$id': {
+      id: '/_authenticated/_shell/campaigns/$id'
       path: '/campaigns/$id'
-      fullPath: '/brand/campaigns/$id/'
-      preLoaderRoute: typeof BrandCampaignsIdIndexRouteImport
-      parentRoute: typeof BrandRouteRoute
+      fullPath: '/campaigns/$id'
+      preLoaderRoute: typeof AuthenticatedShellCampaignsIdRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
     }
-    '/brand/campaigns/$id/edit': {
-      id: '/brand/campaigns/$id/edit'
-      path: '/campaigns/$id/edit'
-      fullPath: '/brand/campaigns/$id/edit'
-      preLoaderRoute: typeof BrandCampaignsIdEditRouteImport
-      parentRoute: typeof BrandRouteRoute
+    '/_authenticated/_shell/campaigns/new': {
+      id: '/_authenticated/_shell/campaigns/new'
+      path: '/campaigns/new'
+      fullPath: '/campaigns/new'
+      preLoaderRoute: typeof AuthenticatedShellCampaignsNewRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/collaborate/': {
+      id: '/_authenticated/_shell/collaborate/'
+      path: '/collaborate'
+      fullPath: '/collaborate/'
+      preLoaderRoute: typeof AuthenticatedShellCollaborateIndexRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/collaborate/new': {
+      id: '/_authenticated/_shell/collaborate/new'
+      path: '/collaborate/new'
+      fullPath: '/collaborate/new'
+      preLoaderRoute: typeof AuthenticatedShellCollaborateNewRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/messages/': {
+      id: '/_authenticated/_shell/messages/'
+      path: '/'
+      fullPath: '/messages/'
+      preLoaderRoute: typeof AuthenticatedShellMessagesIndexRouteImport
+      parentRoute: typeof AuthenticatedShellMessagesRoute
+    }
+    '/_authenticated/_shell/messages/$id': {
+      id: '/_authenticated/_shell/messages/$id'
+      path: '/$id'
+      fullPath: '/messages/$id'
+      preLoaderRoute: typeof AuthenticatedShellMessagesIdRouteImport
+      parentRoute: typeof AuthenticatedShellMessagesRoute
+    }
+    '/_authenticated/_shell/orders/': {
+      id: '/_authenticated/_shell/orders/'
+      path: '/orders'
+      fullPath: '/orders/'
+      preLoaderRoute: typeof AuthenticatedShellOrdersIndexRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/orders/$id': {
+      id: '/_authenticated/_shell/orders/$id'
+      path: '/orders/$id'
+      fullPath: '/orders/$id'
+      preLoaderRoute: typeof AuthenticatedShellOrdersIdRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/post/$id': {
+      id: '/_authenticated/_shell/post/$id'
+      path: '/post/$id'
+      fullPath: '/post/$id'
+      preLoaderRoute: typeof AuthenticatedShellPostIdRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/u/$username': {
+      id: '/_authenticated/_shell/u/$username'
+      path: '/u/$username'
+      fullPath: '/u/$username'
+      preLoaderRoute: typeof AuthenticatedShellUUsernameRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
     }
     '/lovable/email/auth/preview': {
       id: '/lovable/email/auth/preview'
@@ -1083,91 +949,147 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/_shell/campaigns/edit/$id': {
+      id: '/_authenticated/_shell/campaigns/edit/$id'
+      path: '/campaigns/edit/$id'
+      fullPath: '/campaigns/edit/$id'
+      preLoaderRoute: typeof AuthenticatedShellCampaignsEditIdRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/collaborate/c/$id': {
+      id: '/_authenticated/_shell/collaborate/c/$id'
+      path: '/collaborate/c/$id'
+      fullPath: '/collaborate/c/$id'
+      preLoaderRoute: typeof AuthenticatedShellCollaborateCIdRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/collaborate/edit/$id': {
+      id: '/_authenticated/_shell/collaborate/edit/$id'
+      path: '/collaborate/edit/$id'
+      fullPath: '/collaborate/edit/$id'
+      preLoaderRoute: typeof AuthenticatedShellCollaborateEditIdRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
+    '/_authenticated/_shell/collaborate/w/$id': {
+      id: '/_authenticated/_shell/collaborate/w/$id'
+      path: '/collaborate/w/$id'
+      fullPath: '/collaborate/w/$id'
+      preLoaderRoute: typeof AuthenticatedShellCollaborateWIdRouteImport
+      parentRoute: typeof AuthenticatedShellRoute
+    }
   }
 }
 
-interface BrandRouteRouteChildren {
-  BrandDashboardRoute: typeof BrandDashboardRoute
-  BrandInboxRoute: typeof BrandInboxRoute
-  BrandProfileRoute: typeof BrandProfileRoute
-  BrandCampaignsNewRoute: typeof BrandCampaignsNewRoute
-  BrandCampaignsIndexRoute: typeof BrandCampaignsIndexRoute
-  BrandCampaignsIdEditRoute: typeof BrandCampaignsIdEditRoute
-  BrandCampaignsIdIndexRoute: typeof BrandCampaignsIdIndexRoute
+interface AuthenticatedShellMessagesRouteChildren {
+  AuthenticatedShellMessagesIdRoute: typeof AuthenticatedShellMessagesIdRoute
+  AuthenticatedShellMessagesIndexRoute: typeof AuthenticatedShellMessagesIndexRoute
 }
 
-const BrandRouteRouteChildren: BrandRouteRouteChildren = {
-  BrandDashboardRoute: BrandDashboardRoute,
-  BrandInboxRoute: BrandInboxRoute,
-  BrandProfileRoute: BrandProfileRoute,
-  BrandCampaignsNewRoute: BrandCampaignsNewRoute,
-  BrandCampaignsIndexRoute: BrandCampaignsIndexRoute,
-  BrandCampaignsIdEditRoute: BrandCampaignsIdEditRoute,
-  BrandCampaignsIdIndexRoute: BrandCampaignsIdIndexRoute,
+const AuthenticatedShellMessagesRouteChildren: AuthenticatedShellMessagesRouteChildren =
+  {
+    AuthenticatedShellMessagesIdRoute: AuthenticatedShellMessagesIdRoute,
+    AuthenticatedShellMessagesIndexRoute: AuthenticatedShellMessagesIndexRoute,
+  }
+
+const AuthenticatedShellMessagesRouteWithChildren =
+  AuthenticatedShellMessagesRoute._addFileChildren(
+    AuthenticatedShellMessagesRouteChildren,
+  )
+
+interface AuthenticatedShellRouteChildren {
+  AuthenticatedShellAdminRoute: typeof AuthenticatedShellAdminRoute
+  AuthenticatedShellBillingRoute: typeof AuthenticatedShellBillingRoute
+  AuthenticatedShellBookmarksRoute: typeof AuthenticatedShellBookmarksRoute
+  AuthenticatedShellCreatorsRoute: typeof AuthenticatedShellCreatorsRoute
+  AuthenticatedShellEmailRoute: typeof AuthenticatedShellEmailRoute
+  AuthenticatedShellExploreRoute: typeof AuthenticatedShellExploreRoute
+  AuthenticatedShellHomeRoute: typeof AuthenticatedShellHomeRoute
+  AuthenticatedShellMessagesRoute: typeof AuthenticatedShellMessagesRouteWithChildren
+  AuthenticatedShellNotificationsRoute: typeof AuthenticatedShellNotificationsRoute
+  AuthenticatedShellSettingsRoute: typeof AuthenticatedShellSettingsRoute
+  AuthenticatedShellShortlistsRoute: typeof AuthenticatedShellShortlistsRoute
+  AuthenticatedShellAiCreatorsSlugRoute: typeof AuthenticatedShellAiCreatorsSlugRoute
+  AuthenticatedShellCampaignsIdRoute: typeof AuthenticatedShellCampaignsIdRoute
+  AuthenticatedShellCampaignsNewRoute: typeof AuthenticatedShellCampaignsNewRoute
+  AuthenticatedShellCollaborateNewRoute: typeof AuthenticatedShellCollaborateNewRoute
+  AuthenticatedShellOrdersIdRoute: typeof AuthenticatedShellOrdersIdRoute
+  AuthenticatedShellPostIdRoute: typeof AuthenticatedShellPostIdRoute
+  AuthenticatedShellUUsernameRoute: typeof AuthenticatedShellUUsernameRoute
+  AuthenticatedShellAiCreatorsIndexRoute: typeof AuthenticatedShellAiCreatorsIndexRoute
+  AuthenticatedShellCampaignsIndexRoute: typeof AuthenticatedShellCampaignsIndexRoute
+  AuthenticatedShellCollaborateIndexRoute: typeof AuthenticatedShellCollaborateIndexRoute
+  AuthenticatedShellOrdersIndexRoute: typeof AuthenticatedShellOrdersIndexRoute
+  AuthenticatedShellCampaignsEditIdRoute: typeof AuthenticatedShellCampaignsEditIdRoute
+  AuthenticatedShellCollaborateCIdRoute: typeof AuthenticatedShellCollaborateCIdRoute
+  AuthenticatedShellCollaborateEditIdRoute: typeof AuthenticatedShellCollaborateEditIdRoute
+  AuthenticatedShellCollaborateWIdRoute: typeof AuthenticatedShellCollaborateWIdRoute
 }
 
-const BrandRouteRouteWithChildren = BrandRouteRoute._addFileChildren(
-  BrandRouteRouteChildren,
-)
-
-interface CreatorRouteRouteChildren {
-  CreatorDashboardRoute: typeof CreatorDashboardRoute
-  CreatorInboxRoute: typeof CreatorInboxRoute
-  CreatorProfileRoute: typeof CreatorProfileRoute
-  CreatorSocialsRoute: typeof CreatorSocialsRoute
+const AuthenticatedShellRouteChildren: AuthenticatedShellRouteChildren = {
+  AuthenticatedShellAdminRoute: AuthenticatedShellAdminRoute,
+  AuthenticatedShellBillingRoute: AuthenticatedShellBillingRoute,
+  AuthenticatedShellBookmarksRoute: AuthenticatedShellBookmarksRoute,
+  AuthenticatedShellCreatorsRoute: AuthenticatedShellCreatorsRoute,
+  AuthenticatedShellEmailRoute: AuthenticatedShellEmailRoute,
+  AuthenticatedShellExploreRoute: AuthenticatedShellExploreRoute,
+  AuthenticatedShellHomeRoute: AuthenticatedShellHomeRoute,
+  AuthenticatedShellMessagesRoute: AuthenticatedShellMessagesRouteWithChildren,
+  AuthenticatedShellNotificationsRoute: AuthenticatedShellNotificationsRoute,
+  AuthenticatedShellSettingsRoute: AuthenticatedShellSettingsRoute,
+  AuthenticatedShellShortlistsRoute: AuthenticatedShellShortlistsRoute,
+  AuthenticatedShellAiCreatorsSlugRoute: AuthenticatedShellAiCreatorsSlugRoute,
+  AuthenticatedShellCampaignsIdRoute: AuthenticatedShellCampaignsIdRoute,
+  AuthenticatedShellCampaignsNewRoute: AuthenticatedShellCampaignsNewRoute,
+  AuthenticatedShellCollaborateNewRoute: AuthenticatedShellCollaborateNewRoute,
+  AuthenticatedShellOrdersIdRoute: AuthenticatedShellOrdersIdRoute,
+  AuthenticatedShellPostIdRoute: AuthenticatedShellPostIdRoute,
+  AuthenticatedShellUUsernameRoute: AuthenticatedShellUUsernameRoute,
+  AuthenticatedShellAiCreatorsIndexRoute:
+    AuthenticatedShellAiCreatorsIndexRoute,
+  AuthenticatedShellCampaignsIndexRoute: AuthenticatedShellCampaignsIndexRoute,
+  AuthenticatedShellCollaborateIndexRoute:
+    AuthenticatedShellCollaborateIndexRoute,
+  AuthenticatedShellOrdersIndexRoute: AuthenticatedShellOrdersIndexRoute,
+  AuthenticatedShellCampaignsEditIdRoute:
+    AuthenticatedShellCampaignsEditIdRoute,
+  AuthenticatedShellCollaborateCIdRoute: AuthenticatedShellCollaborateCIdRoute,
+  AuthenticatedShellCollaborateEditIdRoute:
+    AuthenticatedShellCollaborateEditIdRoute,
+  AuthenticatedShellCollaborateWIdRoute: AuthenticatedShellCollaborateWIdRoute,
 }
 
-const CreatorRouteRouteChildren: CreatorRouteRouteChildren = {
-  CreatorDashboardRoute: CreatorDashboardRoute,
-  CreatorInboxRoute: CreatorInboxRoute,
-  CreatorProfileRoute: CreatorProfileRoute,
-  CreatorSocialsRoute: CreatorSocialsRoute,
+const AuthenticatedShellRouteWithChildren =
+  AuthenticatedShellRoute._addFileChildren(AuthenticatedShellRouteChildren)
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedShellRoute: typeof AuthenticatedShellRouteWithChildren
+  AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
 }
 
-const CreatorRouteRouteWithChildren = CreatorRouteRoute._addFileChildren(
-  CreatorRouteRouteChildren,
-)
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedShellRoute: AuthenticatedShellRouteWithChildren,
+  AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  BrandRouteRoute: BrandRouteRouteWithChildren,
-  CreatorRouteRoute: CreatorRouteRouteWithChildren,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
-  AccountRoute: AccountRoute,
   AuthRoute: AuthRoute,
-  BillingRoute: BillingRoute,
-  BriefRoute: BriefRoute,
+  BrandRoute: BrandRoute,
   ContactRoute: ContactRoute,
-  ExploreRoute: ExploreRoute,
+  DiscoverRoute: DiscoverRoute,
   FeaturesRoute: FeaturesRoute,
-  ForBrandsRoute: ForBrandsRoute,
-  ForCreatorsRoute: ForCreatorsRoute,
-  HealthRoute: HealthRoute,
-  HomeRoute: HomeRoute,
-  MarketplaceRoute: MarketplaceRoute,
-  MessagesRoute: MessagesRoute,
-  NotificationsRoute: NotificationsRoute,
-  VerificationRoute: VerificationRoute,
-  WorkspaceRoute: WorkspaceRoute,
-  AdminLoginRoute: AdminLoginRoute,
-  AiCreatorsIdRoute: AiCreatorsIdRoute,
-  CampaignsIdRoute: CampaignsIdRoute,
-  CollabsIdRoute: CollabsIdRoute,
-  CreatorsIdRoute: CreatorsIdRoute,
-  OrdersIdRoute: OrdersIdRoute,
-  PHandleRoute: PHandleRoute,
-  ProfileEditRoute: ProfileEditRoute,
-  UUsernameRoute: UUsernameRoute,
-  AdminIndexRoute: AdminIndexRoute,
-  AiCreatorsIndexRoute: AiCreatorsIndexRoute,
-  CampaignsIndexRoute: CampaignsIndexRoute,
-  CollabsIndexRoute: CollabsIndexRoute,
-  OrdersIndexRoute: OrdersIndexRoute,
-  ProfileIndexRoute: ProfileIndexRoute,
-  AdminVerificationIdRoute: AdminVerificationIdRoute,
+  JoinRoute: JoinRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  SigninRoute: SigninRoute,
   ApiGstValidateFormatRoute: ApiGstValidateFormatRoute,
   ApiGstVerificationStatusRoute: ApiGstVerificationStatusRoute,
-  AdminVerificationIndexRoute: AdminVerificationIndexRoute,
+  ApiOrdersGenerateRoute: ApiOrdersGenerateRoute,
+  ApiOrdersVideoRoute: ApiOrdersVideoRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,

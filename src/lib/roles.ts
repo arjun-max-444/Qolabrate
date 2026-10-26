@@ -1,42 +1,38 @@
-import { redirect } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { isBusinessEmail } from "@/lib/business-email";
+import type { Tables } from "@/integrations/supabase/types";
 
-export type AppRole = "creator" | "brand" | "admin";
+/**
+ * Mirrors the database role rules for the UI (the database enforces them):
+ * one permanently locked role per login; creators and brands post in the feed, only brands run campaigns.
+ */
+export type AccountRole = "creator" | "brand";
 
-export const dashboardFor = (role: AppRole | null) =>
-  role === "brand" ? "/brand/dashboard" : role === "admin" ? "/admin/login" : "/creator/dashboard";
+type RoleProfile = Pick<Tables<"v2_profiles">, "account_type" | "role_locked_at">;
 
-/** A person has one account type (creator or brand); admin can be granted alongside it. */
-export function pickRoles(rows: { role: string }[] | null | undefined): { role: AppRole | null; isAdmin: boolean } {
-  const list = (rows ?? []).map((r) => r.role);
-  const isAdmin = list.includes("admin");
-  const account = list.find((r) => r === "creator" || r === "brand") as AppRole | undefined;
-  return { role: account ?? (isAdmin ? "admin" : null), isAdmin };
+export const ROLE_LABEL: Record<AccountRole, string> = { creator: "Creator", brand: "Brand" };
+
+/** Pages only brand accounts may open. */
+export const BRAND_ONLY_PATHS = ["/ai-creators", "/campaigns", "/orders", "/billing", "/creators", "/shortlists", "/collaborate/new", "/collaborate/edit"] as const;
+
+export function isBrandOnlyPath(path: string): boolean {
+  return BRAND_ONLY_PATHS.some((p) => path === p || path.startsWith(`${p}/`));
 }
 
-export async function fetchRole(): Promise<{ userId: string | null; role: AppRole | null; isAdmin: boolean }> {
-  // Read the locally stored session (same source the account menu uses) so a slow or
-  // briefly failing network check can't bounce a signed-in person back to the sign-in page.
-  // Data access is still enforced by the database for this user.
-  const { data } = await supabase.auth.getSession();
-  const user = data.session?.user;
-  if (!user) return { userId: null, role: null, isAdmin: false };
-  const { data: rows } = await supabase.from("user_roles").select("role").eq("user_id", user.id);
-  return { userId: user.id, ...pickRoles(rows) };
+export function roleOf(p: RoleProfile | null | undefined): AccountRole | null {
+  if (!p || !p.role_locked_at) return null;
+  return p.account_type;
 }
 
-/** Client-only guard for role areas. */
-export async function requireRole(role: "creator" | "brand") {
-  const { userId, role: current } = await fetchRole();
-  if (!userId) throw redirect({ to: "/auth", search: { mode: "signin" } });
-  if (current !== role) throw redirect({ href: dashboardFor(current) });
-  if (role === "brand") {
-    const { data } = await supabase.auth.getSession();
-    if (!isBusinessEmail(data.session?.user.email ?? "")) {
-      await supabase.auth.signOut();
-      throw redirect({ to: "/auth", search: { mode: "signin", role: "brand" } });
-    }
-  }
-  return { userId, role: current };
+/** Creators and brands both post in the feed once their account type is chosen (verification is checked separately). */
+export function canPostInFeed(p: RoleProfile | null | undefined): boolean {
+  return roleOf(p) !== null;
+}
+
+export function canUseBrandTools(p: RoleProfile | null | undefined): boolean {
+  return roleOf(p) === "brand";
+}
+
+/** Records a refused role-restricted action in the account's security log. */
+export function reportBlocked(action: string) {
+  void supabase.rpc("report_blocked_action", { _action: action.slice(0, 200) });
 }

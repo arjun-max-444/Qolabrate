@@ -190,6 +190,139 @@
       "when": 1792855364427,
       "tag": "0026_creator_google_signup",
       "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1793026251315,
+      "tag": "0027_v2_0000_core_social",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1793026338546,
+      "tag": "0028_v2_0001_messaging_notifications",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1793026434802,
+      "tag": "0029_v2_0002_campaigns_collaboration_email",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1793026468121,
+      "tag": "0030_v2_0003_0004_grants_reminders",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1793026548838,
+      "tag": "0031_v2_0005_demo_content_verified_actions",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1793026706953,
+      "tag": "0032_v2_0006_demo_seed_functions",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1793026741401,
+      "tag": "0033_v2_0007_0008_demo_seed_polish",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1793026810817,
+      "tag": "0034_v2_0009_admin_moderation_suspension_audit",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1793026893726,
+      "tag": "0035_v2_0010_0011_directory_shortlists",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1793026969341,
+      "tag": "0036_v2_0012_campaign_workflow",
+      "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1793027186847,
+      "tag": "0037_v2_0013_ai_creator_orders",
+      "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1793027240918,
+      "tag": "0038_v2_0014_0015_grants_matching",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1793027267100,
+      "tag": "0039_v2_0016_ai_orders_message_polish",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1793027349983,
+      "tag": "0040_v2_0017_ai_creator_videos",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1793027456679,
+      "tag": "0041_v2_0018_locked_account_roles",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1793027511954,
+      "tag": "0042_v2_0019_brand_posts_demo_replies_library",
+      "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1793027579381,
+      "tag": "0043_v2_bridge_existing_members_roles",
+      "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1793028076771,
+      "tag": "0044_v2_demo_asset_remap",
+      "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1793028163511,
+      "tag": "0045_v2_demo_asset_grants",
+      "breakpoints": true
     }
   ]
 }

@@ -1,10 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { SiteShell, useAccount } from "@/components/site-shell";
+import { SiteShell, useAccount } from "@/components/legacy-auth-shell";
+import legacyAuthCss from "../legacy-auth.css?url";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { pageHead } from "@/lib/seo";
-import { dashboardFor, fetchRole } from "@/lib/roles";
+import { fetchRole } from "@/lib/legacy-roles";
 import { isBusinessEmail } from "@/lib/business-email";
 import { sendWelcomeEmail } from "@/lib/emails.functions";
 import { lovable } from "@/integrations/lovable/index";
@@ -14,11 +15,13 @@ export const Route = createFileRoute("/auth")({
     mode: typeof s["mode"] === "string" ? s["mode"] : "signin",
     role: s["role"] === "creator" || s["role"] === "brand" ? (s["role"] as "creator" | "brand") : undefined,
   }),
-  head: () =>
-    pageHead(
+  head: () => ({
+    ...pageHead(
       "Welcome to QOLABRATE",
       "Sign in or create your account to save creators and manage creative projects.",
     ),
+    links: [{ rel: "stylesheet", href: legacyAuthCss }],
+  }),
   component: Auth,
 });
 function Auth() {
@@ -63,7 +66,7 @@ function Auth() {
         setError("Brands and agencies require an official business email. Personal-email accounts can't access the brand area.");
         return;
       }
-      const provider = user.app_metadata.provider ?? "email";
+      const provider = user.app_metadata?.provider ?? "email";
       const isSocial = provider !== "email";
       const pending = oauthSignupRole(provider, existingRole, sessionStorage.getItem("qolabrate_signup_role"));
       sessionStorage.removeItem("qolabrate_signup_role");
@@ -81,20 +84,21 @@ function Auth() {
       sendWelcomeEmail().catch(() => {});
       // New accounts finish their profile first, even when a "next" destination is stored;
       // complete profiles continue to their stored destination or their own area.
-      const { data: p } = await supabase.from("profiles").select("username,bio").eq("id", user.id).maybeSingle();
-      if (!p?.username || !p.bio?.trim()) {
+      const { data: p } = await supabase.from("v2_profiles").select("onboarded").eq("id", user.id).maybeSingle();
+      if (!p?.onboarded) {
         sessionStorage.removeItem("qolabrate_next");
-        navigate({ to: "/profile/edit", search: { welcome: true }, replace: true });
+        navigate({ to: "/onboarding", replace: true });
         return;
       }
       const next = sessionStorage.getItem("qolabrate_next");
       sessionStorage.removeItem("qolabrate_next");
-      if (next && next.startsWith("/") && !next.startsWith("//") && next !== "/profile/edit") {
+      if (next && next.startsWith("/") && !next.startsWith("//") && next !== "/onboarding") {
         navigate({ href: next, replace: true });
         return;
       }
-      navigate({ href: r === "admin" ? dashboardFor(r) : "/home", replace: true });
-    })().catch(() => {
+      navigate({ href: r === "admin" ? "/admin" : "/home", replace: true });
+    })().catch((e) => {
+      console.error("Opening account failed", e);
       setChecking(false);
       setError("We couldn't open your account just now. Please try again in a moment.");
     });
@@ -135,7 +139,7 @@ function Auth() {
     } else if (mode === "setup") {
       const { error } = await supabase.auth.updateUser({ password });
       err = error?.message;
-      if (!error) navigate({ to: "/account" });
+      if (!error) navigate({ to: "/home" });
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       err = error?.message;
