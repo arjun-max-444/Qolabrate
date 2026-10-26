@@ -2435,36 +2435,51 @@ export type Database = {
         Row: {
           author_id: string
           body: string
+          campaign_id: string | null
+          category: string | null
           comment_count: number
           created_at: string
           edited_at: string | null
+          engagement_score: number | null
           id: string
+          is_demo: boolean
           like_count: number
           media: Json
+          post_type: string
           repost_count: number
           visibility: string
         }
         Insert: {
           author_id: string
           body?: string
+          campaign_id?: string | null
+          category?: string | null
           comment_count?: number
           created_at?: string
           edited_at?: string | null
+          engagement_score?: number | null
           id?: string
+          is_demo?: boolean
           like_count?: number
           media?: Json
+          post_type?: string
           repost_count?: number
           visibility?: string
         }
         Update: {
           author_id?: string
           body?: string
+          campaign_id?: string | null
+          category?: string | null
           comment_count?: number
           created_at?: string
           edited_at?: string | null
+          engagement_score?: number | null
           id?: string
+          is_demo?: boolean
           like_count?: number
           media?: Json
+          post_type?: string
           repost_count?: number
           visibility?: string
         }
@@ -2474,6 +2489,13 @@ export type Database = {
             columns: ["author_id"]
             isOneToOne: false
             referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "v2_campaigns"
             referencedColumns: ["id"]
           },
         ]
@@ -2898,13 +2920,17 @@ export type Database = {
           deadline: string | null
           deliverables: string[]
           description: string
+          eligibility: string[]
           id: string
+          is_demo: boolean
           location: string | null
           project_type: string
           published_at: string | null
           remote: boolean
           skills: string[]
+          stage: string
           status: string
+          target_audience: string | null
           title: string
           updated_at: string
         }
@@ -2922,13 +2948,17 @@ export type Database = {
           deadline?: string | null
           deliverables?: string[]
           description?: string
+          eligibility?: string[]
           id?: string
+          is_demo?: boolean
           location?: string | null
           project_type?: string
           published_at?: string | null
           remote?: boolean
           skills?: string[]
+          stage?: string
           status?: string
+          target_audience?: string | null
           title: string
           updated_at?: string
         }
@@ -2946,13 +2976,17 @@ export type Database = {
           deadline?: string | null
           deliverables?: string[]
           description?: string
+          eligibility?: string[]
           id?: string
+          is_demo?: boolean
           location?: string | null
           project_type?: string
           published_at?: string | null
           remote?: boolean
           skills?: string[]
+          stage?: string
           status?: string
+          target_audience?: string | null
           title?: string
           updated_at?: string
         }
@@ -3113,10 +3147,12 @@ export type Database = {
           created_at: string
           display_name: string
           dm_permission: string
+          engagement_rate: number | null
           followers_count: number
           following_count: number
           headline: string | null
           id: string
+          is_demo: boolean
           location: string | null
           onboarded: boolean
           posts_count: number
@@ -3137,10 +3173,12 @@ export type Database = {
           created_at?: string
           display_name?: string
           dm_permission?: string
+          engagement_rate?: number | null
           followers_count?: number
           following_count?: number
           headline?: string | null
           id: string
+          is_demo?: boolean
           location?: string | null
           onboarded?: boolean
           posts_count?: number
@@ -3161,10 +3199,12 @@ export type Database = {
           created_at?: string
           display_name?: string
           dm_permission?: string
+          engagement_rate?: number | null
           followers_count?: number
           following_count?: number
           headline?: string | null
           id?: string
+          is_demo?: boolean
           location?: string | null
           onboarded?: boolean
           posts_count?: number
@@ -3233,6 +3273,38 @@ export type Database = {
           },
         ]
       }
+      verification_requests: {
+        Row: {
+          created_at: string
+          note: string
+          reviewed_at: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          note?: string
+          reviewed_at?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          note?: string
+          reviewed_at?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "verification_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -3253,6 +3325,7 @@ export type Database = {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: Database["public"]["Enums"]["app_role"]
       }
+      cleanup_orphan_profiles: { Args: never; Returns: undefined }
       collab_action: {
         Args: {
           _action: string
@@ -3314,6 +3387,7 @@ export type Database = {
         Returns: boolean
       }
       is_staff: { Args: { _uid: string }; Returns: boolean }
+      is_verified: { Args: { _uid: string }; Returns: boolean }
       is_verified_creator: { Args: { _id: string }; Returns: boolean }
       log_collab: {
         Args: { _body: string; _collab: string; _kind: string }
@@ -3343,6 +3417,38 @@ export type Database = {
         Args: { _name: string; _uid: string; _write: boolean }
         Returns: boolean
       }
+      public_campaigns: {
+        Args: {
+          _category?: string
+          _limit?: number
+          _min_budget?: number
+          _offset?: number
+          _q?: string
+          _stage?: string
+        }
+        Returns: {
+          application_deadline: string
+          applications_count: number
+          brand: Json
+          budget_max: number
+          budget_min: number
+          category: string
+          compensation_type: string
+          creators_needed: number
+          currency: string
+          deadline: string
+          deliverables: string[]
+          description: string
+          eligibility: string[]
+          id: string
+          is_demo: boolean
+          published_at: string
+          stage: string
+          status: string
+          target_audience: string
+          title: string
+        }[]
+      }
       public_creators: {
         Args: { _id?: string }
         Returns: {
@@ -3360,6 +3466,29 @@ export type Database = {
           total_reach: number
           user_id: string
           youtube: Json
+        }[]
+      }
+      public_feed: {
+        Args: {
+          _category?: string
+          _limit?: number
+          _offset?: number
+          _q?: string
+          _sort?: string
+        }
+        Returns: {
+          author: Json
+          body: string
+          campaign_id: string
+          category: string
+          comment_count: number
+          created_at: string
+          id: string
+          is_demo: boolean
+          like_count: number
+          media: Json
+          post_type: string
+          repost_count: number
         }[]
       }
       public_profile: {
@@ -3415,6 +3544,10 @@ export type Database = {
       send_deadline_reminders: { Args: never; Returns: undefined }
       set_feed_avatar: { Args: { _path: string }; Returns: undefined }
       start_conversation: { Args: { _other: string }; Returns: string }
+      trending_post_ids: {
+        Args: { _category?: string; _limit?: number; _offset?: number }
+        Returns: string[]
+      }
       username_available: { Args: { _username: string }; Returns: boolean }
       v2_has_role: {
         Args: {
