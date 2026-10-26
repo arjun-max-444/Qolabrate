@@ -281,6 +281,13 @@
       "when": 1793027267100,
       "tag": "0039_v2_0016_ai_orders_message_polish",
       "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1793027349983,
+      "tag": "0040_v2_0017_ai_creator_videos",
+      "breakpoints": true
     }
   ]
 }

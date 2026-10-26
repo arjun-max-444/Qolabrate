@@ -166,6 +166,7 @@ export type Database = {
           updated_at: string
           usage_months: number
           usage_rights: string
+          video_count: number
         }
         Insert: {
           brand_id: string
@@ -191,6 +192,7 @@ export type Database = {
           updated_at?: string
           usage_months?: number
           usage_rights?: string
+          video_count?: number
         }
         Update: {
           brand_id?: string
@@ -216,6 +218,7 @@ export type Database = {
           updated_at?: string
           usage_months?: number
           usage_rights?: string
+          video_count?: number
         }
         Relationships: [
           {
@@ -252,6 +255,7 @@ export type Database = {
           turnaround_days: number
           usage_months: number
           usage_rights: string
+          video_count: number
         }
         Insert: {
           active?: boolean
@@ -270,6 +274,7 @@ export type Database = {
           turnaround_days?: number
           usage_months?: number
           usage_rights: string
+          video_count?: number
         }
         Update: {
           active?: boolean
@@ -288,6 +293,7 @@ export type Database = {
           turnaround_days?: number
           usage_months?: number
           usage_rights?: string
+          video_count?: number
         }
         Relationships: [
           {
@@ -582,6 +588,53 @@ export type Database = {
             columns: ["brand_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_video_jobs: {
+        Row: {
+          created_at: string
+          gateway_job_id: string | null
+          id: string
+          order_id: string
+          position: number
+          prompt: string
+          started_at: string | null
+          status: string
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          created_at?: string
+          gateway_job_id?: string | null
+          id?: string
+          order_id: string
+          position: number
+          prompt: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          version: number
+        }
+        Update: {
+          created_at?: string
+          gateway_job_id?: string | null
+          id?: string
+          order_id?: string
+          position?: number
+          prompt?: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_video_jobs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "v2_ai_orders"
             referencedColumns: ["id"]
           },
         ]
@@ -2992,6 +3045,7 @@ export type Database = {
           payment_fee_pct: number
           text_cost_estimate: number
           updated_at: string
+          video_cost_estimate: number
         }
         Insert: {
           commission_pct?: number
@@ -3001,6 +3055,7 @@ export type Database = {
           payment_fee_pct?: number
           text_cost_estimate?: number
           updated_at?: string
+          video_cost_estimate?: number
         }
         Update: {
           commission_pct?: number
@@ -3010,6 +3065,7 @@ export type Database = {
           payment_fee_pct?: number
           text_cost_estimate?: number
           updated_at?: string
+          video_cost_estimate?: number
         }
         Relationships: []
       }
@@ -3536,6 +3592,7 @@ export type Database = {
           updated_at: string
           usage_months: number
           usage_rights: string
+          video_count: number
         }
         Insert: {
           approved_at?: string | null
@@ -3576,6 +3633,7 @@ export type Database = {
           updated_at?: string
           usage_months?: number
           usage_rights?: string
+          video_count?: number
         }
         Update: {
           approved_at?: string | null
@@ -3616,6 +3674,7 @@ export type Database = {
           updated_at?: string
           usage_months?: number
           usage_rights?: string
+          video_count?: number
         }
         Relationships: [
           {
@@ -4362,6 +4421,7 @@ export type Database = {
           updated_at: string
           usage_months: number
           usage_rights: string
+          video_count: number
         }
         SetofOptions: {
           from: "v2_ai_orders"
@@ -4494,9 +4554,11 @@ export type Database = {
           _order: string
           _texts: number
           _version: number
+          _videos?: number
         }
         Returns: undefined
       }
+      generation_window: { Args: { _videos: number }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -4576,6 +4638,7 @@ export type Database = {
           updated_at: string
           usage_months: number
           usage_rights: string
+          video_count: number
         }
         SetofOptions: {
           from: "*"
@@ -4809,6 +4872,7 @@ export type Database = {
           payment_fee_pct: number
           text_cost_estimate: number
           updated_at: string
+          video_cost_estimate: number
         }
         SetofOptions: {
           from: "*"
