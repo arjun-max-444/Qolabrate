@@ -204,6 +204,13 @@
       "when": 1793026338546,
       "tag": "0028_v2_0001_messaging_notifications",
       "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1793026434802,
+      "tag": "0029_v2_0002_campaigns_collaboration_email",
+      "breakpoints": true
     }
   ]
 }

@@ -487,6 +487,39 @@ export type Database = {
         }
         Relationships: []
       }
+      campaign_saves: {
+        Row: {
+          campaign_id: string
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          campaign_id: string
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          campaign_id?: string
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_saves_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "v2_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_saves_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       campaigns: {
         Row: {
           brand_id: string
@@ -805,6 +838,180 @@ export type Database = {
             columns: ["creator_id"]
             isOneToOne: true
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collaboration_activity: {
+        Row: {
+          actor_id: string | null
+          body: string
+          collaboration_id: string
+          created_at: string
+          id: string
+          kind: string
+        }
+        Insert: {
+          actor_id?: string | null
+          body: string
+          collaboration_id: string
+          created_at?: string
+          id?: string
+          kind?: string
+        }
+        Update: {
+          actor_id?: string | null
+          body?: string
+          collaboration_id?: string
+          created_at?: string
+          id?: string
+          kind?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collaboration_activity_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collaboration_activity_collaboration_id_fkey"
+            columns: ["collaboration_id"]
+            isOneToOne: false
+            referencedRelation: "collaborations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collaboration_files: {
+        Row: {
+          collaboration_id: string
+          created_at: string
+          id: string
+          mime: string | null
+          name: string
+          path: string
+          size: number
+          uploader_id: string
+        }
+        Insert: {
+          collaboration_id: string
+          created_at?: string
+          id?: string
+          mime?: string | null
+          name: string
+          path: string
+          size?: number
+          uploader_id?: string
+        }
+        Update: {
+          collaboration_id?: string
+          created_at?: string
+          id?: string
+          mime?: string | null
+          name?: string
+          path?: string
+          size?: number
+          uploader_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collaboration_files_collaboration_id_fkey"
+            columns: ["collaboration_id"]
+            isOneToOne: false
+            referencedRelation: "collaborations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collaboration_files_uploader_id_fkey"
+            columns: ["uploader_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collaboration_members: {
+        Row: {
+          collaboration_id: string
+          joined_at: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          collaboration_id: string
+          joined_at?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          collaboration_id?: string
+          joined_at?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collaboration_members_collaboration_id_fkey"
+            columns: ["collaboration_id"]
+            isOneToOne: false
+            referencedRelation: "collaborations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collaboration_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collaborations: {
+        Row: {
+          brand_id: string
+          campaign_id: string | null
+          completed_at: string | null
+          created_at: string
+          id: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          brand_id: string
+          campaign_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          brand_id?: string
+          campaign_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collaborations_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collaborations_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: true
+            referencedRelation: "v2_campaigns"
             referencedColumns: ["id"]
           },
         ]
@@ -1445,6 +1652,100 @@ export type Database = {
         }
         Relationships: []
       }
+      deliverables: {
+        Row: {
+          collaboration_id: string
+          created_at: string
+          id: string
+          link: string | null
+          reviewed_at: string | null
+          status: string
+          submitted_at: string | null
+          title: string
+        }
+        Insert: {
+          collaboration_id: string
+          created_at?: string
+          id?: string
+          link?: string | null
+          reviewed_at?: string | null
+          status?: string
+          submitted_at?: string | null
+          title: string
+        }
+        Update: {
+          collaboration_id?: string
+          created_at?: string
+          id?: string
+          link?: string | null
+          reviewed_at?: string | null
+          status?: string
+          submitted_at?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deliverables_collaboration_id_fkey"
+            columns: ["collaboration_id"]
+            isOneToOne: false
+            referencedRelation: "collaborations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      email_messages: {
+        Row: {
+          body: string
+          created_at: string
+          error: string | null
+          folder: string
+          id: string
+          is_read: boolean
+          owner_id: string
+          sent_at: string | null
+          status: string
+          subject: string
+          to_address: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          error?: string | null
+          folder?: string
+          id?: string
+          is_read?: boolean
+          owner_id: string
+          sent_at?: string | null
+          status?: string
+          subject?: string
+          to_address?: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          error?: string | null
+          folder?: string
+          id?: string
+          is_read?: boolean
+          owner_id?: string
+          sent_at?: string | null
+          status?: string
+          subject?: string
+          to_address?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_messages_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       feed_comments: {
         Row: {
           author_id: string
@@ -1913,6 +2214,51 @@ export type Database = {
           },
         ]
       }
+      milestones: {
+        Row: {
+          collaboration_id: string
+          created_at: string
+          created_by: string | null
+          done: boolean
+          due_date: string | null
+          id: string
+          title: string
+        }
+        Insert: {
+          collaboration_id: string
+          created_at?: string
+          created_by?: string | null
+          done?: boolean
+          due_date?: string | null
+          id?: string
+          title: string
+        }
+        Update: {
+          collaboration_id?: string
+          created_at?: string
+          created_by?: string | null
+          done?: boolean
+          due_date?: string | null
+          id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "milestones_collaboration_id_fkey"
+            columns: ["collaboration_id"]
+            isOneToOne: false
+            referencedRelation: "collaborations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "milestones_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notification_preferences: {
         Row: {
           campaigns: boolean
@@ -2375,6 +2721,61 @@ export type Database = {
           },
         ]
       }
+      tasks: {
+        Row: {
+          assignee_id: string | null
+          collaboration_id: string
+          created_at: string
+          created_by: string | null
+          due_date: string | null
+          id: string
+          status: string
+          title: string
+        }
+        Insert: {
+          assignee_id?: string | null
+          collaboration_id: string
+          created_at?: string
+          created_by?: string | null
+          due_date?: string | null
+          id?: string
+          status?: string
+          title: string
+        }
+        Update: {
+          assignee_id?: string | null
+          collaboration_id?: string
+          created_at?: string
+          created_by?: string | null
+          due_date?: string | null
+          id?: string
+          status?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_assignee_id_fkey"
+            columns: ["assignee_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_collaboration_id_fkey"
+            columns: ["collaboration_id"]
+            isOneToOne: false
+            referencedRelation: "collaborations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           role: Database["public"]["Enums"]["app_role"]
@@ -2389,6 +2790,57 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      v2_applications: {
+        Row: {
+          campaign_id: string
+          created_at: string
+          creator_id: string
+          id: string
+          portfolio_item_ids: string[]
+          proposal: string
+          rate: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          campaign_id: string
+          created_at?: string
+          creator_id: string
+          id?: string
+          portfolio_item_ids?: string[]
+          proposal?: string
+          rate?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          campaign_id?: string
+          created_at?: string
+          creator_id?: string
+          id?: string
+          portfolio_item_ids?: string[]
+          proposal?: string
+          rate?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "v2_applications_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "v2_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "v2_applications_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       v2_brand_profiles: {
         Row: {
@@ -2426,6 +2878,89 @@ export type Database = {
             foreignKeyName: "v2_brand_profiles_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: true
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v2_campaigns: {
+        Row: {
+          application_deadline: string | null
+          applications_count: number
+          brand_id: string
+          budget_max: number | null
+          budget_min: number | null
+          category: string
+          compensation_type: string
+          created_at: string
+          creators_needed: number
+          currency: string
+          deadline: string | null
+          deliverables: string[]
+          description: string
+          id: string
+          location: string | null
+          project_type: string
+          published_at: string | null
+          remote: boolean
+          skills: string[]
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          application_deadline?: string | null
+          applications_count?: number
+          brand_id: string
+          budget_max?: number | null
+          budget_min?: number | null
+          category?: string
+          compensation_type?: string
+          created_at?: string
+          creators_needed?: number
+          currency?: string
+          deadline?: string | null
+          deliverables?: string[]
+          description?: string
+          id?: string
+          location?: string | null
+          project_type?: string
+          published_at?: string | null
+          remote?: boolean
+          skills?: string[]
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          application_deadline?: string | null
+          applications_count?: number
+          brand_id?: string
+          budget_max?: number | null
+          budget_min?: number | null
+          category?: string
+          compensation_type?: string
+          created_at?: string
+          creators_needed?: number
+          currency?: string
+          deadline?: string | null
+          deliverables?: string[]
+          description?: string
+          id?: string
+          location?: string | null
+          project_type?: string
+          published_at?: string | null
+          remote?: boolean
+          skills?: string[]
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "v2_campaigns_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
             referencedRelation: "v2_profiles"
             referencedColumns: ["id"]
           },
@@ -2729,6 +3264,7 @@ export type Database = {
         }
         Returns: string
       }
+      collab_role: { Args: { _collab: string; _uid: string }; Returns: string }
       collab_unlocked: { Args: { _collab: string }; Returns: boolean }
       creator_track_record: {
         Args: { _user: string }
@@ -2764,6 +3300,14 @@ export type Database = {
       is_blocked: { Args: { _a: string; _b: string }; Returns: boolean }
       is_blocked_between: { Args: { a: string; b: string }; Returns: boolean }
       is_business_email: { Args: { _email: string }; Returns: boolean }
+      is_campaign_owner: {
+        Args: { _campaign: string; _uid: string }
+        Returns: boolean
+      }
+      is_collab_member: {
+        Args: { _collab: string; _uid: string }
+        Returns: boolean
+      }
       is_collab_party: { Args: { _collab: string }; Returns: boolean }
       is_conversation_member: {
         Args: { _conv: string; _uid: string }
@@ -2771,6 +3315,10 @@ export type Database = {
       }
       is_staff: { Args: { _uid: string }; Returns: boolean }
       is_verified_creator: { Args: { _id: string }; Returns: boolean }
+      log_collab: {
+        Args: { _body: string; _collab: string; _kind: string }
+        Returns: undefined
+      }
       make_username: { Args: { _base: string; _id: string }; Returns: string }
       mark_messages_read: { Args: { _other: string }; Returns: undefined }
       my_unread_counts: {
@@ -2790,6 +3338,10 @@ export type Database = {
           id: string
           name: string
         }[]
+      }
+      private_path_allowed: {
+        Args: { _name: string; _uid: string; _write: boolean }
+        Returns: boolean
       }
       public_creators: {
         Args: { _id?: string }
