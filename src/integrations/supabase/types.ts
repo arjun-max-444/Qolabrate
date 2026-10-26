@@ -2761,6 +2761,42 @@ export type Database = {
           },
         ]
       }
+      shortlist_items: {
+        Row: {
+          added_at: string
+          creator_id: string
+          note: string | null
+          shortlist_id: string
+        }
+        Insert: {
+          added_at?: string
+          creator_id: string
+          note?: string | null
+          shortlist_id: string
+        }
+        Update: {
+          added_at?: string
+          creator_id?: string
+          note?: string | null
+          shortlist_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shortlist_items_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shortlist_items_shortlist_id_fkey"
+            columns: ["shortlist_id"]
+            isOneToOne: false
+            referencedRelation: "v2_shortlists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shortlists: {
         Row: {
           creator_id: string
@@ -3046,34 +3082,58 @@ export type Database = {
       }
       v2_creator_profiles: {
         Row: {
+          audience_size: number
           availability: string | null
           categories: string[]
           collaboration_interests: string[]
+          content_types: string[]
+          engagement_rate: number | null
           experience_level: string | null
+          languages: string[]
+          metrics_confirmed_at: string | null
+          platforms: Json
           portfolio_url: string | null
           preferred_project_types: string[]
+          rate_max: number | null
+          rate_min: number | null
           skills: string[]
           updated_at: string
           user_id: string
         }
         Insert: {
+          audience_size?: number
           availability?: string | null
           categories?: string[]
           collaboration_interests?: string[]
+          content_types?: string[]
+          engagement_rate?: number | null
           experience_level?: string | null
+          languages?: string[]
+          metrics_confirmed_at?: string | null
+          platforms?: Json
           portfolio_url?: string | null
           preferred_project_types?: string[]
+          rate_max?: number | null
+          rate_min?: number | null
           skills?: string[]
           updated_at?: string
           user_id: string
         }
         Update: {
+          audience_size?: number
           availability?: string | null
           categories?: string[]
           collaboration_interests?: string[]
+          content_types?: string[]
+          engagement_rate?: number | null
           experience_level?: string | null
+          languages?: string[]
+          metrics_confirmed_at?: string | null
+          platforms?: Json
           portfolio_url?: string | null
           preferred_project_types?: string[]
+          rate_max?: number | null
+          rate_min?: number | null
           skills?: string[]
           updated_at?: string
           user_id?: string
@@ -3267,6 +3327,38 @@ export type Database = {
         }
         Relationships: []
       }
+      v2_shortlists: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          owner_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          owner_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          owner_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "v2_shortlists_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v2_user_roles: {
         Row: {
           id: string
@@ -3369,6 +3461,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_confirm_metrics: {
+        Args: { _confirm: boolean; _reason?: string; _user: string }
+        Returns: undefined
+      }
       admin_moderate_campaign: {
         Args: { _campaign: string; _reason: string; _status: string }
         Returns: undefined
@@ -3445,6 +3541,7 @@ export type Database = {
         Args: { _action: string; _id: string }
         Returns: undefined
       }
+      demo_fill_creator_details: { Args: never; Returns: number }
       demo_hash: { Args: { _mod: number; _seed: string }; Returns: number }
       demo_sentence_case: { Args: { _t: string }; Returns: string }
       demo_uuid: { Args: { _kind: string; _n: number }; Returns: string }
@@ -3493,6 +3590,10 @@ export type Database = {
       notify: {
         Args: { _body: string; _link: string; _title: string; _user: string }
         Returns: undefined
+      }
+      owns_shortlist: {
+        Args: { _list: string; _uid: string }
+        Returns: boolean
       }
       party_names: {
         Args: { _ids: string[] }
@@ -3613,6 +3714,49 @@ export type Database = {
           _window: string
         }
         Returns: undefined
+      }
+      search_creators: {
+        Args: {
+          _available_only?: boolean
+          _content_type?: string
+          _language?: string
+          _limit?: number
+          _location?: string
+          _max_rate?: number
+          _min_audience?: number
+          _min_engagement?: number
+          _niche?: string
+          _offset?: number
+          _platform?: string
+          _q?: string
+          _sort?: string
+          _verified_only?: boolean
+        }
+        Returns: {
+          audience_size: number
+          availability: string
+          avatar_url: string
+          bio: string
+          categories: string[]
+          content_types: string[]
+          display_name: string
+          engagement_rate: number
+          followers_count: number
+          headline: string
+          id: string
+          is_demo: boolean
+          languages: string[]
+          location: string
+          metrics_confirmed: boolean
+          platforms: Json
+          portfolio_count: number
+          portfolio_url: string
+          rate_max: number
+          rate_min: number
+          skills: string[]
+          username: string
+          verified: boolean
+        }[]
       }
       seed_demo_content: { Args: never; Returns: Json }
       seed_demo_content_base: { Args: never; Returns: Json }
