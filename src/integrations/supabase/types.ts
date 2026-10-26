@@ -2231,6 +2231,21 @@ export type Database = {
           },
         ]
       }
+      demo_asset_map: {
+        Row: {
+          new_url: string
+          old_url: string
+        }
+        Insert: {
+          new_url: string
+          old_url: string
+        }
+        Update: {
+          new_url?: string
+          old_url?: string
+        }
+        Relationships: []
+      }
       demo_library: {
         Row: {
           data: Json
@@ -4613,6 +4628,7 @@ export type Database = {
       demo_apply_library: { Args: never; Returns: Json }
       demo_fill_creator_details: { Args: never; Returns: number }
       demo_hash: { Args: { _mod: number; _seed: string }; Returns: number }
+      demo_remap_assets: { Args: never; Returns: number }
       demo_sentence_case: { Args: { _t: string }; Returns: string }
       demo_uuid: { Args: { _kind: string; _n: number }; Returns: string }
       ensure_feed_profile: { Args: never; Returns: string }

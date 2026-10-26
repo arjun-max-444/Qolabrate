@@ -309,6 +309,13 @@
       "when": 1793027579381,
       "tag": "0043_v2_bridge_existing_members_roles",
       "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1793028076771,
+      "tag": "0044_v2_demo_asset_remap",
+      "breakpoints": true
     }
   ]
 }
