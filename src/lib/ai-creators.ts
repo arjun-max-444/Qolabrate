@@ -1,66 +1,150 @@
-import aria from "@/assets/ai-aria.jpg";
-import kai from "@/assets/ai-kai.jpg";
-import maya from "@/assets/ai-maya.jpg";
-import dev from "@/assets/ai-dev.jpg";
-import zoya from "@/assets/ai-zoya.jpg";
-import luna from "@/assets/ai-luna.jpg";
-import rex from "@/assets/ai-rex.jpg";
-import nora from "@/assets/ai-nora.jpg";
-import film from "@/assets/feed-film.jpg";
-import campaign from "@/assets/feed-campaign.jpg";
-import product from "@/assets/feed-product.jpg";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import type { Tables } from "@/integrations/supabase/types";
 
-export const AI_CATEGORIES = ["Beauty", "Fashion", "Fitness", "Technology", "Food", "Travel", "Gaming", "Lifestyle"] as const;
-export type AiCategory = (typeof AI_CATEGORIES)[number];
-export const AI_FORMATS = ["Images", "Short videos", "Product photography", "Captions", "Scripts"] as const;
-export type AiFormat = (typeof AI_FORMATS)[number];
+export type AiCreator = Tables<"ai_creators">;
+export type AiPackage = Tables<"ai_creator_packages">;
+export type AiCampaign = Tables<"ai_campaigns">;
+export type AiOrder = Tables<"v2_ai_orders">;
+export type AiAsset = Tables<"ai_order_assets">;
+export type AiCreatorWithPackages = AiCreator & { packages: AiPackage[] };
+export type PortfolioItem = { url: string; caption: string };
 
-export type AiPackage = { name: string; price: number; deliverables: string[]; days: number };
-export type AiCreator = {
-  id: string; name: string; username: string; image: string; bio: string; personality: string;
-  category: AiCategory; tags: string[]; audience: string; location: string;
-  estFollowers: number; estEngagement: number; formats: AiFormat[]; languages: string[];
-  available: boolean; restrictions: string; portfolio: string[]; packages: AiPackage[];
-};
-
-const pk = (base: number, video: boolean): AiPackage[] => [
-  { name: "Starter", price: base, deliverables: ["3 images", "3 captions"], days: 3 },
-  { name: "Campaign", price: base * 2.4, deliverables: ["6 images", "6 captions", "1 script"], days: 5 },
-  video
-    ? { name: "Reel", price: base * 4, deliverables: ["2 vertical videos (8s)", "4 images", "captions"], days: 7 }
-    : { name: "Premium", price: base * 3.5, deliverables: ["10 images", "10 captions", "product shots"], days: 7 },
-];
-const vid: AiFormat[] = ["Images", "Short videos", "Captions", "Scripts"];
-
-export const aiCreators: AiCreator[] = [
-  { id: "aria", name: "Aria", username: "aria.glow", image: aria, bio: "Skincare rituals and everyday glam, explained simply.", personality: "Warm, honest, routine-focused", category: "Beauty", tags: ["skincare", "makeup", "self-care"], audience: "Women 18–30", location: "India", estFollowers: 182000, estEngagement: 5.8, formats: vid, languages: ["English", "Hindi"], available: true, restrictions: "No medical or prescription claims.", portfolio: [aria, campaign, product], packages: pk(5000, true) },
-  { id: "kai", name: "Kai", username: "kai.tech", image: kai, bio: "Gadgets, apps and honest first impressions.", personality: "Curious, direct, a little nerdy", category: "Technology", tags: ["gadgets", "apps", "reviews"], audience: "Men 18–34", location: "Global", estFollowers: 240000, estEngagement: 4.1, formats: vid, languages: ["English"], available: true, restrictions: "No financial or crypto promotions.", portfolio: [kai, film, product], packages: pk(7000, true) },
-  { id: "maya", name: "Maya", username: "maya.moves", image: maya, bio: "Sunrise workouts and realistic fitness goals.", personality: "Energetic, encouraging", category: "Fitness", tags: ["workouts", "wellness", "sportswear"], audience: "Adults 20–40", location: "Global", estFollowers: 156000, estEngagement: 6.4, formats: vid, languages: ["English", "Spanish"], available: true, restrictions: "No weight-loss guarantees or supplements.", portfolio: [maya, film, product], packages: pk(6000, true) },
-  { id: "dev", name: "Dev", username: "dev.plays", image: dev, bio: "Game drops, setups and late-night ranked sessions.", personality: "Funny, hype, community-first", category: "Gaming", tags: ["esports", "setups", "mobile games"], audience: "Teens & 18–28", location: "India", estFollowers: 310000, estEngagement: 7.2, formats: vid, languages: ["English", "Hindi"], available: false, restrictions: "No gambling or betting brands.", portfolio: [dev, product, film], packages: pk(6500, true) },
-  { id: "zoya", name: "Zoya", username: "zoya.edit", image: zoya, bio: "Bold colour, sharp tailoring and festive edits.", personality: "Confident, editorial", category: "Fashion", tags: ["festive", "editorial", "accessories"], audience: "Women 22–38", location: "India", estFollowers: 205000, estEngagement: 4.9, formats: ["Images", "Product photography", "Captions"], languages: ["English", "Hindi"], available: true, restrictions: "Images only — no video.", portfolio: [zoya, campaign, product], packages: pk(8000, false) },
-  { id: "luna", name: "Luna", username: "luna.wanders", image: luna, bio: "Slow travel, hidden beaches and packing lists.", personality: "Dreamy, calm, detailed", category: "Travel", tags: ["beaches", "hotels", "itineraries"], audience: "Adults 24–40", location: "Global", estFollowers: 128000, estEngagement: 5.3, formats: ["Images", "Captions", "Product photography"], languages: ["English", "French"], available: true, restrictions: "Images only — no video.", portfolio: [luna, campaign, film], packages: pk(5500, false) },
-  { id: "rex", name: "Rex", username: "rex.cooks", image: rex, bio: "Big flavours, quick recipes, happy kitchens.", personality: "Jolly, generous, practical", category: "Food", tags: ["recipes", "kitchenware", "restaurants"], audience: "Families & 25–45", location: "Global", estFollowers: 174000, estEngagement: 6.0, formats: vid, languages: ["English"], available: true, restrictions: "No alcohol brands.", portfolio: [rex, product, campaign], packages: pk(5000, true) },
-  { id: "nora", name: "Nora", username: "nora.home", image: nora, bio: "Plants, cosy corners and calm home routines.", personality: "Gentle, thoughtful", category: "Lifestyle", tags: ["home decor", "plants", "routines"], audience: "Adults 28–50", location: "Europe", estFollowers: 98000, estEngagement: 5.1, formats: vid, languages: ["English", "German"], available: true, restrictions: "No political content.", portfolio: [nora, campaign, film], packages: pk(4500, true) },
-];
-
-export const startingPrice = (c: AiCreator) => Math.min(...c.packages.map((p) => p.price));
-
-export type AiFilters = { q: string; category: string; format: string; maxPrice: number; sort: "relevance" | "engagement" | "popularity" | "price" };
-export const defaultFilters: AiFilters = { q: "", category: "", format: "", maxPrice: 0, sort: "relevance" };
-
-export function filterAiCreators(list: AiCreator[], f: AiFilters): AiCreator[] {
-  const q = f.q.trim().toLowerCase();
-  const out = list.filter((c) =>
-    (!q || [c.name, c.username, c.bio, c.category, ...c.tags].join(" ").toLowerCase().includes(q)) &&
-    (!f.category || c.category === f.category) &&
-    (!f.format || c.formats.includes(f.format as AiFormat)) &&
-    (!f.maxPrice || startingPrice(c) <= f.maxPrice),
-  );
-  if (f.sort === "engagement") out.sort((a, b) => b.estEngagement - a.estEngagement);
-  if (f.sort === "popularity") out.sort((a, b) => b.estFollowers - a.estFollowers);
-  if (f.sort === "price") out.sort((a, b) => startingPrice(a) - startingPrice(b));
-  return out;
+export function portfolioOf(c: Pick<AiCreator, "portfolio">): PortfolioItem[] {
+  return Array.isArray(c.portfolio)
+    ? (c.portfolio as unknown[]).filter((p): p is PortfolioItem => !!p && typeof (p as PortfolioItem).url === "string")
+    : [];
 }
 
-export const inr = (n: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(n);
-export const compact = (n: number) => new Intl.NumberFormat("en", { notation: "compact" }).format(n);
+export async function fetchAiCreators(): Promise<AiCreatorWithPackages[]> {
+  const { data, error } = await supabase
+    .from("ai_creators")
+    .select("*, packages:ai_creator_packages(*)")
+    .order("name");
+  if (error) throw error;
+  return (data ?? []).map((c) => ({ ...c, packages: [...(c.packages ?? [])].sort((a, b) => a.sort - b.sort) }));
+}
+
+export async function fetchAiCreator(slug: string): Promise<AiCreatorWithPackages | null> {
+  const { data, error } = await supabase.from("ai_creators").select("*, packages:ai_creator_packages(*)").eq("slug", slug).maybeSingle();
+  if (error) throw error;
+  if (!data) return null;
+  return { ...data, packages: [...(data.packages ?? [])].sort((a, b) => a.sort - b.sort) };
+}
+
+export type CreatorFilter = { q?: string | undefined; niche?: string | undefined; format?: "image" | "caption" | "script" | "video" | undefined; maxPrice?: number | undefined; audience?: string | undefined; style?: string | undefined };
+
+/** Client-side marketplace filtering (the catalogue is small and fully readable). */
+export function filterCreators(list: AiCreatorWithPackages[], f: CreatorFilter, feePct = 10) {
+  const q = f.q?.trim().toLowerCase();
+  const aud = f.audience?.trim().toLowerCase();
+  const style = f.style?.trim().toLowerCase();
+  return list.filter((c) => {
+    if (!c.active) return false;
+    if (f.niche && !c.niches.includes(f.niche)) return false;
+    if (f.format && !c.formats.includes(f.format)) return false;
+    if (aud && !c.audiences.some((a) => a.toLowerCase().includes(aud) || aud.includes(a.toLowerCase()))) return false;
+    if (style && !c.content_styles.some((s) => s.toLowerCase().includes(style))) return false;
+    if (f.maxPrice) {
+      const cheapest = Math.min(...c.packages.filter((p) => p.active).map((p) => Math.round(p.price * (1 + feePct / 100))));
+      if (!(cheapest <= f.maxPrice)) return false;
+    }
+    if (q) {
+      const hay = [c.name, c.tagline, c.bio, ...c.niches, ...c.audiences, ...c.content_styles].join(" ").toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+export type GenEvent = { type: "progress"; message: string } | { type: "done"; version: number } | { type: "videos"; message: string } | { type: "error"; message: string } | { type: "ping" };
+
+/**
+ * Starts AI content generation for an order and reports progress.
+ * Resolves "done" when content is ready, "videos" when videos are still rendering (poll with advanceVideoStep), or null on failure.
+ */
+export async function runGeneration(orderId: string, onEvent: (e: GenEvent) => void): Promise<"done" | "videos" | null> {
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token;
+  if (!token) { onEvent({ type: "error", message: "Sign in again to continue." }); return null; }
+  let res: Response;
+  try {
+    res = await fetch("/api/orders/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ orderId }),
+    });
+  } catch {
+    onEvent({ type: "error", message: "Couldn't reach the server. Check your connection." });
+    return null;
+  }
+  if (!res.ok || !res.body) {
+    const body = await res.json().catch(() => ({}));
+    onEvent({ type: "error", message: (body as { error?: string }).error ?? "Generation couldn't start." });
+    return null;
+  }
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let buf = "";
+  let ok: "done" | "videos" | null = null;
+  let ended = false;
+  for (;;) {
+    const { done, value } = await reader.read().catch(() => ({ done: true, value: undefined }));
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    let i: number;
+    while ((i = buf.indexOf("\n")) >= 0) {
+      const line = buf.slice(0, i).trim();
+      buf = buf.slice(i + 1);
+      if (!line) continue;
+      try {
+        const e = JSON.parse(line) as GenEvent;
+        if (e.type === "done") { ok = "done"; ended = true; }
+        if (e.type === "videos") { ok = "videos"; ended = true; }
+        if (e.type === "error") ended = true;
+        onEvent(e);
+      } catch { /* ignore partial */ }
+    }
+  }
+  if (!ended) onEvent({ type: "error", message: "The connection closed before generation finished. Refresh to see the latest status." });
+  return ok;
+}
+
+export type VideoStep =
+  | { state: "idle" }
+  | { state: "rendering"; done: number; total: number; message: string }
+  | { state: "done"; version: number }
+  | { state: "failed"; message: string }
+  | { state: "error"; message: string };
+
+/** Asks the server to move an order's video rendering forward one step (check, store, start next, finish). */
+export async function advanceVideoStep(orderId: string): Promise<VideoStep> {
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token;
+  if (!token) return { state: "error", message: "Sign in again to continue." };
+  try {
+    const res = await fetch("/api/orders/video", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ orderId }),
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) return { state: "error", message: (body as { error?: string }).error ?? "Couldn't check the video progress." };
+    return body as VideoStep;
+  } catch {
+    return { state: "error", message: "Couldn't reach the server. Check your connection." };
+  }
+}
+
+/** Platform commission settings (default 10%, charged on top). */
+export function useSettings() {
+  return useQuery({
+    queryKey: ["platform-settings"],
+    staleTime: 5 * 60_000,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("platform_settings").select("*").maybeSingle();
+      if (error) throw error;
+      return data ?? { commission_pct: 10, fee_mode: "separate" as const };
+    },
+  });
+}
