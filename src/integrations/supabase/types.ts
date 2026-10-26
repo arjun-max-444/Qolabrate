@@ -2231,6 +2231,24 @@ export type Database = {
           },
         ]
       }
+      demo_library: {
+        Row: {
+          data: Json
+          key: string
+          kind: string
+        }
+        Insert: {
+          data?: Json
+          key: string
+          kind: string
+        }
+        Update: {
+          data?: Json
+          key?: string
+          kind?: string
+        }
+        Relationships: []
+      }
       email_messages: {
         Row: {
           body: string
@@ -2705,6 +2723,7 @@ export type Database = {
           created_at: string
           deleted_at: string | null
           id: string
+          is_automated: boolean
           reply_to: string | null
           sender_id: string
         }
@@ -2715,6 +2734,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           id?: string
+          is_automated?: boolean
           reply_to?: string | null
           sender_id: string
         }
@@ -2725,6 +2745,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           id?: string
+          is_automated?: boolean
           reply_to?: string | null
           sender_id?: string
         }
@@ -4589,6 +4610,7 @@ export type Database = {
         Args: { _action: string; _id: string }
         Returns: undefined
       }
+      demo_apply_library: { Args: never; Returns: Json }
       demo_fill_creator_details: { Args: never; Returns: number }
       demo_hash: { Args: { _mod: number; _seed: string }; Returns: number }
       demo_sentence_case: { Args: { _t: string }; Returns: string }
