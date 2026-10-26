@@ -4090,6 +4090,51 @@ export type Database = {
           },
         ]
       }
+      v2_creator_ratings: {
+        Row: {
+          brand_id: string
+          comment: string | null
+          created_at: string
+          creator_id: string
+          id: string
+          rating: number
+          updated_at: string
+        }
+        Insert: {
+          brand_id: string
+          comment?: string | null
+          created_at?: string
+          creator_id: string
+          id?: string
+          rating: number
+          updated_at?: string
+        }
+        Update: {
+          brand_id?: string
+          comment?: string | null
+          created_at?: string
+          creator_id?: string
+          id?: string
+          rating?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "v2_creator_ratings_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "v2_creator_ratings_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v2_notifications: {
         Row: {
           actor_id: string | null
@@ -4602,6 +4647,14 @@ export type Database = {
         }
       }
       confirm_order: { Args: { _order: string }; Returns: undefined }
+      creator_rating_summary: {
+        Args: { _creator: string }
+        Returns: {
+          average: number
+          streak: number
+          total: number
+        }[]
+      }
       creator_track_record: {
         Args: { _user: string }
         Returns: {
