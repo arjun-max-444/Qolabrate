@@ -66,7 +66,7 @@ function Auth() {
         setError("Brands and agencies require an official business email. Personal-email accounts can't access the brand area.");
         return;
       }
-      const provider = user.app_metadata.provider ?? "email";
+      const provider = user.app_metadata?.provider ?? "email";
       const isSocial = provider !== "email";
       const pending = oauthSignupRole(provider, existingRole, sessionStorage.getItem("qolabrate_signup_role"));
       sessionStorage.removeItem("qolabrate_signup_role");
