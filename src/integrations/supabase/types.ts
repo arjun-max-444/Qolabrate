@@ -219,6 +219,39 @@ export type Database = {
           },
         ]
       }
+      bookmarks: {
+        Row: {
+          created_at: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookmarks_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookmarks_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       brand_documents: {
         Row: {
           created_at: string | null
@@ -829,6 +862,58 @@ export type Database = {
             columns: ["creator_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      comments: {
+        Row: {
+          author_id: string
+          body: string
+          created_at: string
+          edited_at: string | null
+          id: string
+          parent_id: string | null
+          post_id: string
+        }
+        Insert: {
+          author_id: string
+          body: string
+          created_at?: string
+          edited_at?: string | null
+          id?: string
+          parent_id?: string | null
+          post_id: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          created_at?: string
+          edited_at?: string | null
+          id?: string
+          parent_id?: string | null
+          post_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
             referencedColumns: ["id"]
           },
         ]
@@ -1585,6 +1670,39 @@ export type Database = {
           },
         ]
       }
+      follows: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_id: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_id: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follows_follower_id_fkey"
+            columns: ["follower_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follows_following_id_fkey"
+            columns: ["following_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       legacy_identities: {
         Row: {
           auth_user_id: string | null
@@ -1605,6 +1723,39 @@ export type Database = {
           profile_data?: Json | null
         }
         Relationships: []
+      }
+      likes: {
+        Row: {
+          created_at: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "likes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       notifications: {
         Row: {
@@ -1737,6 +1888,53 @@ export type Database = {
           },
         ]
       }
+      posts: {
+        Row: {
+          author_id: string
+          body: string
+          comment_count: number
+          created_at: string
+          edited_at: string | null
+          id: string
+          like_count: number
+          media: Json
+          repost_count: number
+          visibility: string
+        }
+        Insert: {
+          author_id: string
+          body?: string
+          comment_count?: number
+          created_at?: string
+          edited_at?: string | null
+          id?: string
+          like_count?: number
+          media?: Json
+          repost_count?: number
+          visibility?: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          comment_count?: number
+          created_at?: string
+          edited_at?: string | null
+          id?: string
+          like_count?: number
+          media?: Json
+          repost_count?: number
+          visibility?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "posts_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           account_status: string
@@ -1835,6 +2033,39 @@ export type Database = {
           },
         ]
       }
+      reposts: {
+        Row: {
+          created_at: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reposts_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reposts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       security_events: {
         Row: {
           created_at: string | null
@@ -1904,6 +2135,172 @@ export type Database = {
         }
         Update: {
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      v2_brand_profiles: {
+        Row: {
+          campaign_categories: string[]
+          collaboration_requirements: string | null
+          company_description: string | null
+          contact_person: string | null
+          industry: string | null
+          target_audience: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          campaign_categories?: string[]
+          collaboration_requirements?: string | null
+          company_description?: string | null
+          contact_person?: string | null
+          industry?: string | null
+          target_audience?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          campaign_categories?: string[]
+          collaboration_requirements?: string | null
+          company_description?: string | null
+          contact_person?: string | null
+          industry?: string | null
+          target_audience?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "v2_brand_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v2_creator_profiles: {
+        Row: {
+          availability: string | null
+          categories: string[]
+          collaboration_interests: string[]
+          experience_level: string | null
+          portfolio_url: string | null
+          preferred_project_types: string[]
+          skills: string[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          availability?: string | null
+          categories?: string[]
+          collaboration_interests?: string[]
+          experience_level?: string | null
+          portfolio_url?: string | null
+          preferred_project_types?: string[]
+          skills?: string[]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          availability?: string | null
+          categories?: string[]
+          collaboration_interests?: string[]
+          experience_level?: string | null
+          portfolio_url?: string | null
+          preferred_project_types?: string[]
+          skills?: string[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "v2_creator_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v2_profiles: {
+        Row: {
+          account_type: Database["public"]["Enums"]["account_type"]
+          avatar_url: string | null
+          bio: string | null
+          cover_url: string | null
+          created_at: string
+          display_name: string
+          followers_count: number
+          following_count: number
+          headline: string | null
+          id: string
+          location: string | null
+          onboarded: boolean
+          posts_count: number
+          social_links: Json
+          updated_at: string
+          username: string | null
+          verified: boolean
+          website: string | null
+        }
+        Insert: {
+          account_type?: Database["public"]["Enums"]["account_type"]
+          avatar_url?: string | null
+          bio?: string | null
+          cover_url?: string | null
+          created_at?: string
+          display_name?: string
+          followers_count?: number
+          following_count?: number
+          headline?: string | null
+          id: string
+          location?: string | null
+          onboarded?: boolean
+          posts_count?: number
+          social_links?: Json
+          updated_at?: string
+          username?: string | null
+          verified?: boolean
+          website?: string | null
+        }
+        Update: {
+          account_type?: Database["public"]["Enums"]["account_type"]
+          avatar_url?: string | null
+          bio?: string | null
+          cover_url?: string | null
+          created_at?: string
+          display_name?: string
+          followers_count?: number
+          following_count?: number
+          headline?: string | null
+          id?: string
+          location?: string | null
+          onboarded?: boolean
+          posts_count?: number
+          social_links?: Json
+          updated_at?: string
+          username?: string | null
+          verified?: boolean
+          website?: string | null
+        }
+        Relationships: []
+      }
+      v2_user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["v2_app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["v2_app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["v2_app_role"]
           user_id?: string
         }
         Relationships: []
@@ -2083,10 +2480,19 @@ export type Database = {
       }
       set_feed_avatar: { Args: { _path: string }; Returns: undefined }
       username_available: { Args: { _username: string }; Returns: boolean }
+      v2_has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["v2_app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       verification_editable: { Args: { _uid: string }; Returns: boolean }
     }
     Enums: {
+      account_type: "creator" | "brand"
       app_role: "creator" | "brand" | "admin"
+      v2_app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2214,7 +2620,9 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      account_type: ["creator", "brand"],
       app_role: ["creator", "brand", "admin"],
+      v2_app_role: ["admin", "moderator", "user"],
     },
   },
 } as const

@@ -190,6 +190,13 @@
       "when": 1792855364427,
       "tag": "0026_creator_google_signup",
       "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1793026251315,
+      "tag": "0027_v2_0000_core_social",
+      "breakpoints": true
     }
   ]
 }
