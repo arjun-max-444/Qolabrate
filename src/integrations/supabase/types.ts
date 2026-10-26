@@ -14,6 +14,38 @@ export type Database = {
   }
   public: {
     Tables: {
+      account_events: {
+        Row: {
+          created_at: string
+          detail: string
+          id: string
+          kind: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          detail?: string
+          id?: string
+          kind: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          detail?: string
+          id?: string
+          kind?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "account_events_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       active_sessions: {
         Row: {
           created_at: string | null
@@ -4134,6 +4166,7 @@ export type Database = {
           location: string | null
           onboarded: boolean
           posts_count: number
+          role_locked_at: string | null
           show_email: boolean
           social_links: Json
           suspended_at: string | null
@@ -4162,6 +4195,7 @@ export type Database = {
           location?: string | null
           onboarded?: boolean
           posts_count?: number
+          role_locked_at?: string | null
           show_email?: boolean
           social_links?: Json
           suspended_at?: string | null
@@ -4190,6 +4224,7 @@ export type Database = {
           location?: string | null
           onboarded?: boolean
           posts_count?: number
+          role_locked_at?: string | null
           show_email?: boolean
           social_links?: Json
           suspended_at?: string | null
@@ -4335,7 +4370,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      account_event: {
+        Args: { _detail: string; _kind: string; _user: string }
+        Returns: undefined
+      }
       add_extended_rights: { Args: { _order: string }; Returns: string }
+      admin_change_account_type: {
+        Args: {
+          _reason: string
+          _type: Database["public"]["Enums"]["account_type"]
+          _user: string
+        }
+        Returns: undefined
+      }
       admin_confirm_metrics: {
         Args: { _confirm: boolean; _reason?: string; _user: string }
         Returns: undefined
@@ -4476,6 +4523,10 @@ export type Database = {
         Returns: undefined
       }
       change_plan: { Args: { _plan: string }; Returns: undefined }
+      choose_account_type: {
+        Args: { _type: Database["public"]["Enums"]["account_type"] }
+        Returns: undefined
+      }
       choose_signup_role: {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: Database["public"]["Enums"]["app_role"]
@@ -4569,6 +4620,7 @@ export type Database = {
       inr: { Args: { _n: number }; Returns: string }
       is_blocked: { Args: { _a: string; _b: string }; Returns: boolean }
       is_blocked_between: { Args: { a: string; b: string }; Returns: boolean }
+      is_brand: { Args: { _uid: string }; Returns: boolean }
       is_business_email: { Args: { _email: string }; Returns: boolean }
       is_campaign_owner: {
         Args: { _campaign: string; _uid: string }
@@ -4583,6 +4635,7 @@ export type Database = {
         Args: { _conv: string; _uid: string }
         Returns: boolean
       }
+      is_creator: { Args: { _uid: string }; Returns: boolean }
       is_order_brand: {
         Args: { _order: string; _uid: string }
         Returns: boolean
@@ -4794,6 +4847,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      report_blocked_action: { Args: { _action: string }; Returns: undefined }
       request_revision: {
         Args: { _feedback: string; _order: string }
         Returns: Json
