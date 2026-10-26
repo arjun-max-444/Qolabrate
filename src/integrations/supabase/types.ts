@@ -141,6 +141,377 @@ export type Database = {
           },
         ]
       }
+      ai_campaigns: {
+        Row: {
+          brand_id: string
+          budget: number
+          caption_count: number
+          created_at: string
+          deadline: string
+          id: string
+          image_count: number
+          instructions: string
+          language: string
+          location: string | null
+          name: string
+          niche: string | null
+          objective: string
+          preferred_creator_id: string | null
+          product_description: string
+          reference_urls: string[]
+          revision_allowance: number
+          script_count: number
+          status: string
+          target_audience: string
+          updated_at: string
+          usage_months: number
+          usage_rights: string
+        }
+        Insert: {
+          brand_id: string
+          budget: number
+          caption_count?: number
+          created_at?: string
+          deadline: string
+          id?: string
+          image_count?: number
+          instructions?: string
+          language?: string
+          location?: string | null
+          name: string
+          niche?: string | null
+          objective: string
+          preferred_creator_id?: string | null
+          product_description: string
+          reference_urls?: string[]
+          revision_allowance?: number
+          script_count?: number
+          status?: string
+          target_audience: string
+          updated_at?: string
+          usage_months?: number
+          usage_rights?: string
+        }
+        Update: {
+          brand_id?: string
+          budget?: number
+          caption_count?: number
+          created_at?: string
+          deadline?: string
+          id?: string
+          image_count?: number
+          instructions?: string
+          language?: string
+          location?: string | null
+          name?: string
+          niche?: string | null
+          objective?: string
+          preferred_creator_id?: string | null
+          product_description?: string
+          reference_urls?: string[]
+          revision_allowance?: number
+          script_count?: number
+          status?: string
+          target_audience?: string
+          updated_at?: string
+          usage_months?: number
+          usage_rights?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_campaigns_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_campaigns_preferred_creator_id_fkey"
+            columns: ["preferred_creator_id"]
+            isOneToOne: false
+            referencedRelation: "ai_creators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_creator_packages: {
+        Row: {
+          active: boolean
+          caption_count: number
+          creator_id: string
+          description: string
+          extended_rights_price: number | null
+          extra_revision_price: number | null
+          id: string
+          image_count: number
+          name: string
+          price: number
+          revisions_included: number
+          script_count: number
+          sort: number
+          turnaround_days: number
+          usage_months: number
+          usage_rights: string
+        }
+        Insert: {
+          active?: boolean
+          caption_count?: number
+          creator_id: string
+          description: string
+          extended_rights_price?: number | null
+          extra_revision_price?: number | null
+          id?: string
+          image_count?: number
+          name: string
+          price: number
+          revisions_included?: number
+          script_count?: number
+          sort?: number
+          turnaround_days?: number
+          usage_months?: number
+          usage_rights: string
+        }
+        Update: {
+          active?: boolean
+          caption_count?: number
+          creator_id?: string
+          description?: string
+          extended_rights_price?: number | null
+          extra_revision_price?: number | null
+          id?: string
+          image_count?: number
+          name?: string
+          price?: number
+          revisions_included?: number
+          script_count?: number
+          sort?: number
+          turnaround_days?: number
+          usage_months?: number
+          usage_rights?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_creator_packages_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "ai_creators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_creators: {
+        Row: {
+          active: boolean
+          audiences: string[]
+          avatar_url: string | null
+          bio: string
+          content_styles: string[]
+          created_at: string
+          formats: string[]
+          id: string
+          languages: string[]
+          max_active_orders: number
+          name: string
+          niches: string[]
+          personality: string
+          portfolio: Json
+          slug: string
+          style_prompt: string
+          tagline: string
+          updated_at: string
+          usage_terms: string
+          voice_prompt: string
+        }
+        Insert: {
+          active?: boolean
+          audiences?: string[]
+          avatar_url?: string | null
+          bio: string
+          content_styles?: string[]
+          created_at?: string
+          formats?: string[]
+          id?: string
+          languages?: string[]
+          max_active_orders?: number
+          name: string
+          niches?: string[]
+          personality: string
+          portfolio?: Json
+          slug: string
+          style_prompt: string
+          tagline: string
+          updated_at?: string
+          usage_terms: string
+          voice_prompt: string
+        }
+        Update: {
+          active?: boolean
+          audiences?: string[]
+          avatar_url?: string | null
+          bio?: string
+          content_styles?: string[]
+          created_at?: string
+          formats?: string[]
+          id?: string
+          languages?: string[]
+          max_active_orders?: number
+          name?: string
+          niches?: string[]
+          personality?: string
+          portfolio?: Json
+          slug?: string
+          style_prompt?: string
+          tagline?: string
+          updated_at?: string
+          usage_terms?: string
+          voice_prompt?: string
+        }
+        Relationships: []
+      }
+      ai_match_results: {
+        Row: {
+          campaign_id: string
+          computed_at: string
+          creator_id: string
+          package_id: string | null
+          reasons: string[]
+          score: number
+          warnings: string[]
+        }
+        Insert: {
+          campaign_id: string
+          computed_at?: string
+          creator_id: string
+          package_id?: string | null
+          reasons?: string[]
+          score: number
+          warnings?: string[]
+        }
+        Update: {
+          campaign_id?: string
+          computed_at?: string
+          creator_id?: string
+          package_id?: string | null
+          reasons?: string[]
+          score?: number
+          warnings?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_match_results_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "ai_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_match_results_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "ai_creators"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_match_results_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "ai_creator_packages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_order_assets: {
+        Row: {
+          content: string | null
+          created_at: string
+          id: string
+          is_sample: boolean
+          kind: string
+          order_id: string
+          position: number
+          prompt: string | null
+          status: string
+          storage_path: string | null
+          version: number
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          is_sample?: boolean
+          kind: string
+          order_id: string
+          position?: number
+          prompt?: string | null
+          status?: string
+          storage_path?: string | null
+          version: number
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          is_sample?: boolean
+          kind?: string
+          order_id?: string
+          position?: number
+          prompt?: string | null
+          status?: string
+          storage_path?: string | null
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_order_assets_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "v2_ai_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_order_events: {
+        Row: {
+          actor_id: string | null
+          body: string
+          created_at: string
+          id: string
+          kind: string
+          order_id: string
+        }
+        Insert: {
+          actor_id?: string | null
+          body: string
+          created_at?: string
+          id?: string
+          kind: string
+          order_id: string
+        }
+        Update: {
+          actor_id?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          order_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_order_events_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_order_events_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "v2_ai_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_orders: {
         Row: {
           brand_id: string
@@ -2478,6 +2849,170 @@ export type Database = {
           },
         ]
       }
+      order_charges: {
+        Row: {
+          amount: number
+          brand_id: string
+          created_at: string
+          description: string
+          id: string
+          kind: string
+          months: number | null
+          order_id: string
+          paid_at: string | null
+          status: string
+        }
+        Insert: {
+          amount: number
+          brand_id: string
+          created_at?: string
+          description: string
+          id?: string
+          kind: string
+          months?: number | null
+          order_id: string
+          paid_at?: string | null
+          status?: string
+        }
+        Update: {
+          amount?: number
+          brand_id?: string
+          created_at?: string
+          description?: string
+          id?: string
+          kind?: string
+          months?: number | null
+          order_id?: string
+          paid_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_charges_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_charges_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "v2_ai_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          brand_id: string
+          charge_id: string | null
+          created_at: string
+          id: string
+          is_simulated: boolean
+          kind: string
+          order_id: string | null
+          plan_id: string | null
+          platform_fee: number
+          processing_fee: number
+          provider: string
+          refunded_at: string | null
+          status: string
+        }
+        Insert: {
+          amount: number
+          brand_id: string
+          charge_id?: string | null
+          created_at?: string
+          id?: string
+          is_simulated?: boolean
+          kind: string
+          order_id?: string | null
+          plan_id?: string | null
+          platform_fee?: number
+          processing_fee?: number
+          provider?: string
+          refunded_at?: string | null
+          status?: string
+        }
+        Update: {
+          amount?: number
+          brand_id?: string
+          charge_id?: string | null
+          created_at?: string
+          id?: string
+          is_simulated?: boolean
+          kind?: string
+          order_id?: string | null
+          plan_id?: string | null
+          platform_fee?: number
+          processing_fee?: number
+          provider?: string
+          refunded_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_charge_id_fkey"
+            columns: ["charge_id"]
+            isOneToOne: false
+            referencedRelation: "order_charges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "v2_ai_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      platform_settings: {
+        Row: {
+          commission_pct: number
+          fee_mode: string
+          id: boolean
+          image_cost_estimate: number
+          payment_fee_pct: number
+          text_cost_estimate: number
+          updated_at: string
+        }
+        Insert: {
+          commission_pct?: number
+          fee_mode?: string
+          id?: boolean
+          image_cost_estimate?: number
+          payment_fee_pct?: number
+          text_cost_estimate?: number
+          updated_at?: string
+        }
+        Update: {
+          commission_pct?: number
+          fee_mode?: string
+          id?: boolean
+          image_cost_estimate?: number
+          payment_fee_pct?: number
+          text_cost_estimate?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       portfolio_items: {
         Row: {
           created_at: string | null
@@ -2861,6 +3396,36 @@ export type Database = {
           },
         ]
       }
+      subscription_plans: {
+        Row: {
+          campaign_limit: number | null
+          features: string[]
+          id: string
+          name: string
+          order_limit: number | null
+          price_monthly: number
+          sort: number
+        }
+        Insert: {
+          campaign_limit?: number | null
+          features?: string[]
+          id: string
+          name: string
+          order_limit?: number | null
+          price_monthly: number
+          sort?: number
+        }
+        Update: {
+          campaign_limit?: number | null
+          features?: string[]
+          id?: string
+          name?: string
+          order_limit?: number | null
+          price_monthly?: number
+          sort?: number
+        }
+        Relationships: []
+      }
       tasks: {
         Row: {
           assignee_id: string | null
@@ -2931,6 +3496,158 @@ export type Database = {
         }
         Relationships: []
       }
+      v2_ai_orders: {
+        Row: {
+          approved_at: string | null
+          brand_id: string
+          brand_total: number
+          campaign_id: string
+          cancelled_at: string | null
+          caption_count: number
+          commission_pct: number
+          completed_at: string | null
+          confirmed_at: string | null
+          created_at: string
+          creator_id: string
+          current_version: number
+          deadline: string
+          decided_at: string | null
+          decision_reason: string | null
+          extra_requirements: string
+          extra_revision_price: number | null
+          fee_mode: string
+          generating_since: string | null
+          generation_cost_estimate: number
+          id: string
+          image_count: number
+          last_feedback: string | null
+          package_id: string
+          package_price: number
+          paid_at: string | null
+          payment_fee: number
+          platform_fee: number
+          production_started_at: string | null
+          ready_at: string | null
+          revisions_allowed: number
+          revisions_used: number
+          script_count: number
+          sent_at: string | null
+          status: string
+          updated_at: string
+          usage_months: number
+          usage_rights: string
+        }
+        Insert: {
+          approved_at?: string | null
+          brand_id: string
+          brand_total?: number
+          campaign_id: string
+          cancelled_at?: string | null
+          caption_count?: number
+          commission_pct?: number
+          completed_at?: string | null
+          confirmed_at?: string | null
+          created_at?: string
+          creator_id: string
+          current_version?: number
+          deadline: string
+          decided_at?: string | null
+          decision_reason?: string | null
+          extra_requirements?: string
+          extra_revision_price?: number | null
+          fee_mode?: string
+          generating_since?: string | null
+          generation_cost_estimate?: number
+          id?: string
+          image_count?: number
+          last_feedback?: string | null
+          package_id: string
+          package_price?: number
+          paid_at?: string | null
+          payment_fee?: number
+          platform_fee?: number
+          production_started_at?: string | null
+          ready_at?: string | null
+          revisions_allowed?: number
+          revisions_used?: number
+          script_count?: number
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+          usage_months?: number
+          usage_rights?: string
+        }
+        Update: {
+          approved_at?: string | null
+          brand_id?: string
+          brand_total?: number
+          campaign_id?: string
+          cancelled_at?: string | null
+          caption_count?: number
+          commission_pct?: number
+          completed_at?: string | null
+          confirmed_at?: string | null
+          created_at?: string
+          creator_id?: string
+          current_version?: number
+          deadline?: string
+          decided_at?: string | null
+          decision_reason?: string | null
+          extra_requirements?: string
+          extra_revision_price?: number | null
+          fee_mode?: string
+          generating_since?: string | null
+          generation_cost_estimate?: number
+          id?: string
+          image_count?: number
+          last_feedback?: string | null
+          package_id?: string
+          package_price?: number
+          paid_at?: string | null
+          payment_fee?: number
+          platform_fee?: number
+          production_started_at?: string | null
+          ready_at?: string | null
+          revisions_allowed?: number
+          revisions_used?: number
+          script_count?: number
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+          usage_months?: number
+          usage_rights?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "v2_ai_orders_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "v2_ai_orders_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "ai_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "v2_ai_orders_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "ai_creators"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "v2_ai_orders_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "ai_creator_packages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v2_applications: {
         Row: {
           campaign_id: string
@@ -2992,6 +3709,7 @@ export type Database = {
           company_description: string | null
           contact_person: string | null
           industry: string | null
+          products: string | null
           target_audience: string | null
           updated_at: string
           user_id: string
@@ -3002,6 +3720,7 @@ export type Database = {
           company_description?: string | null
           contact_person?: string | null
           industry?: string | null
+          products?: string | null
           target_audience?: string | null
           updated_at?: string
           user_id: string
@@ -3012,6 +3731,7 @@ export type Database = {
           company_description?: string | null
           contact_person?: string | null
           industry?: string | null
+          products?: string | null
           target_audience?: string | null
           updated_at?: string
           user_id?: string
@@ -3022,6 +3742,51 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: true
             referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v2_brand_subscriptions: {
+        Row: {
+          brand_id: string
+          current_period_end: string | null
+          current_period_start: string
+          is_simulated: boolean
+          plan_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          brand_id: string
+          current_period_end?: string | null
+          current_period_start?: string
+          is_simulated?: boolean
+          plan_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          brand_id?: string
+          current_period_end?: string | null
+          current_period_start?: string
+          is_simulated?: boolean
+          plan_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "v2_brand_subscriptions_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: true
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "v2_brand_subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
             referencedColumns: ["id"]
           },
         ]
@@ -3511,6 +4276,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      add_extended_rights: { Args: { _order: string }; Returns: string }
       admin_confirm_metrics: {
         Args: { _confirm: boolean; _reason?: string; _user: string }
         Returns: undefined
@@ -3520,8 +4286,21 @@ export type Database = {
         Returns: undefined
       }
       admin_platform_stats: { Args: never; Returns: Json }
+      admin_refund_order: {
+        Args: { _order: string; _reason: string }
+        Returns: undefined
+      }
+      admin_revenue_summary: { Args: never; Returns: Json }
       admin_review_verification: {
         Args: { _approve: boolean; _reason?: string; _user: string }
+        Returns: undefined
+      }
+      admin_set_ai_creator: {
+        Args: { _active: boolean; _creator: string; _reason: string }
+        Returns: undefined
+      }
+      admin_set_package: {
+        Args: { _active: boolean; _package: string; _price: number }
         Returns: undefined
       }
       admin_set_suspended: {
@@ -3532,6 +4311,66 @@ export type Database = {
         Args: { _user: string; _verified: boolean }
         Returns: undefined
       }
+      admin_update_settings: {
+        Args: {
+          _commission: number
+          _fee_mode: string
+          _image_cost: number
+          _payment_fee_pct: number
+          _text_cost: number
+        }
+        Returns: undefined
+      }
+      ai_orders_snapshot_price: {
+        Args: { o: Database["public"]["Tables"]["v2_ai_orders"]["Row"] }
+        Returns: {
+          approved_at: string | null
+          brand_id: string
+          brand_total: number
+          campaign_id: string
+          cancelled_at: string | null
+          caption_count: number
+          commission_pct: number
+          completed_at: string | null
+          confirmed_at: string | null
+          created_at: string
+          creator_id: string
+          current_version: number
+          deadline: string
+          decided_at: string | null
+          decision_reason: string | null
+          extra_requirements: string
+          extra_revision_price: number | null
+          fee_mode: string
+          generating_since: string | null
+          generation_cost_estimate: number
+          id: string
+          image_count: number
+          last_feedback: string | null
+          package_id: string
+          package_price: number
+          paid_at: string | null
+          payment_fee: number
+          platform_fee: number
+          production_started_at: string | null
+          ready_at: string | null
+          revisions_allowed: number
+          revisions_used: number
+          script_count: number
+          sent_at: string | null
+          status: string
+          updated_at: string
+          usage_months: number
+          usage_rights: string
+        }
+        SetofOptions: {
+          from: "v2_ai_orders"
+          to: "v2_ai_orders"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      approve_content: { Args: { _order: string }; Returns: undefined }
       audit: {
         Args: {
           _action: string
@@ -3542,6 +4381,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      begin_generation: { Args: { _order: string }; Returns: number }
       brand_badges: {
         Args: { _ids: string[] }
         Returns: {
@@ -3549,6 +4389,33 @@ export type Database = {
           verified: boolean
         }[]
       }
+      brand_plan: {
+        Args: { _uid: string }
+        Returns: {
+          campaign_limit: number | null
+          features: string[]
+          id: string
+          name: string
+          order_limit: number | null
+          price_monthly: number
+          sort: number
+        }
+        SetofOptions: {
+          from: "*"
+          to: "subscription_plans"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      campaign_committed: {
+        Args: { _campaign: string; _except: string }
+        Returns: number
+      }
+      cancel_order: {
+        Args: { _order: string; _reason: string }
+        Returns: undefined
+      }
+      change_plan: { Args: { _plan: string }; Returns: undefined }
       choose_signup_role: {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: Database["public"]["Enums"]["app_role"]
@@ -3568,6 +4435,26 @@ export type Database = {
       }
       collab_role: { Args: { _collab: string; _uid: string }; Returns: string }
       collab_unlocked: { Args: { _collab: string }; Returns: boolean }
+      complete_order: { Args: { _order: string }; Returns: undefined }
+      compute_matches: {
+        Args: { _campaign: string }
+        Returns: {
+          campaign_id: string
+          computed_at: string
+          creator_id: string
+          package_id: string | null
+          reasons: string[]
+          score: number
+          warnings: string[]
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "ai_match_results"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      confirm_order: { Args: { _order: string }; Returns: undefined }
       creator_track_record: {
         Args: { _user: string }
         Returns: {
@@ -3597,6 +4484,19 @@ export type Database = {
       demo_uuid: { Args: { _kind: string; _n: number }; Returns: string }
       ensure_feed_profile: { Args: never; Returns: string }
       expire_collabs: { Args: never; Returns: undefined }
+      fail_generation: {
+        Args: { _message: string; _order: string }
+        Returns: undefined
+      }
+      finish_generation: {
+        Args: {
+          _images: number
+          _order: string
+          _texts: number
+          _version: number
+        }
+        Returns: undefined
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -3604,6 +4504,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      inr: { Args: { _n: number }; Returns: string }
       is_blocked: { Args: { _a: string; _b: string }; Returns: boolean }
       is_blocked_between: { Args: { a: string; b: string }; Returns: boolean }
       is_business_email: { Args: { _email: string }; Returns: boolean }
@@ -3620,6 +4521,10 @@ export type Database = {
         Args: { _conv: string; _uid: string }
         Returns: boolean
       }
+      is_order_brand: {
+        Args: { _order: string; _uid: string }
+        Returns: boolean
+      }
       is_staff: { Args: { _uid: string }; Returns: boolean }
       is_suspended: { Args: { _uid: string }; Returns: boolean }
       is_verified: { Args: { _uid: string }; Returns: boolean }
@@ -3630,6 +4535,55 @@ export type Database = {
       }
       make_username: { Args: { _base: string; _id: string }; Returns: string }
       mark_messages_read: { Args: { _other: string }; Returns: undefined }
+      my_order: {
+        Args: { _order: string }
+        Returns: {
+          approved_at: string | null
+          brand_id: string
+          brand_total: number
+          campaign_id: string
+          cancelled_at: string | null
+          caption_count: number
+          commission_pct: number
+          completed_at: string | null
+          confirmed_at: string | null
+          created_at: string
+          creator_id: string
+          current_version: number
+          deadline: string
+          decided_at: string | null
+          decision_reason: string | null
+          extra_requirements: string
+          extra_revision_price: number | null
+          fee_mode: string
+          generating_since: string | null
+          generation_cost_estimate: number
+          id: string
+          image_count: number
+          last_feedback: string | null
+          package_id: string
+          package_price: number
+          paid_at: string | null
+          payment_fee: number
+          platform_fee: number
+          production_started_at: string | null
+          ready_at: string | null
+          revisions_allowed: number
+          revisions_used: number
+          script_count: number
+          sent_at: string | null
+          status: string
+          updated_at: string
+          usage_months: number
+          usage_rights: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "v2_ai_orders"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       my_unread_counts: {
         Args: never
         Returns: {
@@ -3639,6 +4593,17 @@ export type Database = {
       }
       notify: {
         Args: { _body: string; _link: string; _title: string; _user: string }
+        Returns: undefined
+      }
+      order_event: {
+        Args: { _body: string; _kind: string; _order: string }
+        Returns: undefined
+      }
+      order_notify: {
+        Args: {
+          _body: string
+          o: Database["public"]["Tables"]["v2_ai_orders"]["Row"]
+        }
         Returns: undefined
       }
       owns_shortlist: {
@@ -3652,6 +4617,7 @@ export type Database = {
           name: string
         }[]
       }
+      pay_charge: { Args: { _charge: string }; Returns: undefined }
       private_path_allowed: {
         Args: { _name: string; _uid: string; _write: boolean }
         Returns: boolean
@@ -3765,6 +4731,11 @@ export type Database = {
         }
         Returns: undefined
       }
+      request_revision: {
+        Args: { _feedback: string; _order: string }
+        Returns: Json
+      }
+      revise_offer: { Args: { _order: string }; Returns: undefined }
       search_creators: {
         Args: {
           _available_only?: boolean
@@ -3826,7 +4797,27 @@ export type Database = {
         Returns: string
       }
       send_deadline_reminders: { Args: never; Returns: undefined }
+      send_offer: { Args: { _order: string }; Returns: Json }
       set_feed_avatar: { Args: { _path: string }; Returns: undefined }
+      settings: {
+        Args: never
+        Returns: {
+          commission_pct: number
+          fee_mode: string
+          id: boolean
+          image_cost_estimate: number
+          payment_fee_pct: number
+          text_cost_estimate: number
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "platform_settings"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      simulate_payment: { Args: { _order: string }; Returns: undefined }
       start_campaign_conversation: {
         Args: { _campaign: string; _other: string }
         Returns: string
