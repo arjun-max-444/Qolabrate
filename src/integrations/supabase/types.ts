@@ -3412,6 +3412,7 @@ export type Database = {
         }
         Returns: string
       }
+      send_deadline_reminders: { Args: never; Returns: undefined }
       set_feed_avatar: { Args: { _path: string }; Returns: undefined }
       start_conversation: { Args: { _other: string }; Returns: string }
       username_available: { Args: { _username: string }; Returns: boolean }
