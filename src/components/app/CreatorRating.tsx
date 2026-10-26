@@ -32,13 +32,14 @@ export function CreatorRating({ creatorId }: { creatorId: string }) {
   const [hover, setHover] = useState(0);
   const [busy, setBusy] = useState(false);
   const rate = async (rating: number) => {
-    if (!user) return;
+    if (!user) return undefined;
     setBusy(true);
     const { error } = await supabase.from("v2_creator_ratings").upsert({ brand_id: user.id, creator_id: creatorId, rating }, { onConflict: "brand_id,creator_id" });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return undefined; }
     toast.success("Rating saved");
     qc.invalidateQueries({ queryKey: ["creator-rating", creatorId] });
+    return undefined;
   };
 
   const total = Number(summary?.total ?? 0);
