@@ -164,7 +164,7 @@ export function ComposeButton({ className = "" }: { className?: string }) {
 
 function Sidebar() {
   return (
-    <aside className="sticky top-0 hidden h-screen w-[88px] shrink-0 flex-col px-3 py-5 md:flex xl:w-[260px]">
+    <aside className="sticky top-0 hidden h-dvh w-[88px] shrink-0 flex-col overflow-y-auto overscroll-contain px-3 py-5 [scrollbar-width:thin] md:flex xl:w-[260px]">
       <Link to="/home" className="mb-2 px-3 font-display text-[26px] font-extrabold tracking-[-0.03em] max-xl:text-center">
         <span className="max-xl:hidden">Qolabrate.</span><span className="xl:hidden">Q.</span>
       </Link>
