@@ -232,6 +232,13 @@
       "when": 1793026706953,
       "tag": "0032_v2_0006_demo_seed_functions",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1793026741401,
+      "tag": "0033_v2_0007_0008_demo_seed_polish",
+      "breakpoints": true
     }
   ]
 }

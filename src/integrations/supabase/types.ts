@@ -3358,11 +3358,13 @@ export type Database = {
           creator_whatsapp: string
         }[]
       }
+      dedupe_demo_posts: { Args: never; Returns: number }
       deliverable_action: {
         Args: { _action: string; _id: string }
         Returns: undefined
       }
       demo_hash: { Args: { _mod: number; _seed: string }; Returns: number }
+      demo_sentence_case: { Args: { _t: string }; Returns: string }
       demo_uuid: { Args: { _kind: string; _n: number }; Returns: string }
       ensure_feed_profile: { Args: never; Returns: string }
       expire_collabs: { Args: never; Returns: undefined }
@@ -3530,6 +3532,7 @@ export type Database = {
         Returns: undefined
       }
       seed_demo_content: { Args: never; Returns: Json }
+      seed_demo_content_base: { Args: never; Returns: Json }
       send_collab: {
         Args: {
           _brief: string
