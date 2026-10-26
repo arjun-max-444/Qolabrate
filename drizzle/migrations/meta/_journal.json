@@ -253,6 +253,13 @@
       "when": 1793026893726,
       "tag": "0035_v2_0010_0011_directory_shortlists",
       "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1793026969341,
+      "tag": "0036_v2_0012_campaign_workflow",
+      "breakpoints": true
     }
   ]
 }

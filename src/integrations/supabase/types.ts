@@ -1237,6 +1237,7 @@ export type Database = {
       }
       conversations: {
         Row: {
+          campaign_id: string | null
           created_at: string
           id: string
           last_message_at: string
@@ -1244,6 +1245,7 @@ export type Database = {
           last_sender_id: string | null
         }
         Insert: {
+          campaign_id?: string | null
           created_at?: string
           id?: string
           last_message_at?: string
@@ -1251,6 +1253,7 @@ export type Database = {
           last_sender_id?: string | null
         }
         Update: {
+          campaign_id?: string | null
           created_at?: string
           id?: string
           last_message_at?: string
@@ -1258,6 +1261,13 @@ export type Database = {
           last_sender_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "conversations_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "v2_campaigns"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "conversations_last_sender_id_fkey"
             columns: ["last_sender_id"]
@@ -1696,30 +1706,54 @@ export type Database = {
       deliverables: {
         Row: {
           collaboration_id: string
+          completed_at: string | null
           created_at: string
+          creator_id: string | null
+          due_date: string | null
+          feedback: string | null
+          final_url: string | null
           id: string
           link: string | null
+          proof_url: string | null
           reviewed_at: string | null
+          revision_limit: number
+          revisions_used: number
           status: string
           submitted_at: string | null
           title: string
         }
         Insert: {
           collaboration_id: string
+          completed_at?: string | null
           created_at?: string
+          creator_id?: string | null
+          due_date?: string | null
+          feedback?: string | null
+          final_url?: string | null
           id?: string
           link?: string | null
+          proof_url?: string | null
           reviewed_at?: string | null
+          revision_limit?: number
+          revisions_used?: number
           status?: string
           submitted_at?: string | null
           title: string
         }
         Update: {
           collaboration_id?: string
+          completed_at?: string | null
           created_at?: string
+          creator_id?: string | null
+          due_date?: string | null
+          feedback?: string | null
+          final_url?: string | null
           id?: string
           link?: string | null
+          proof_url?: string | null
           reviewed_at?: string | null
+          revision_limit?: number
+          revisions_used?: number
           status?: string
           submitted_at?: string | null
           title?: string
@@ -1730,6 +1764,13 @@ export type Database = {
             columns: ["collaboration_id"]
             isOneToOne: false
             referencedRelation: "collaborations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deliverables_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -2898,6 +2939,7 @@ export type Database = {
           id: string
           portfolio_item_ids: string[]
           proposal: string
+          proposed_price: number | null
           rate: string | null
           status: string
           updated_at: string
@@ -2909,6 +2951,7 @@ export type Database = {
           id?: string
           portfolio_item_ids?: string[]
           proposal?: string
+          proposed_price?: number | null
           rate?: string | null
           status?: string
           updated_at?: string
@@ -2920,6 +2963,7 @@ export type Database = {
           id?: string
           portfolio_item_ids?: string[]
           proposal?: string
+          proposed_price?: number | null
           rate?: string | null
           status?: string
           updated_at?: string
@@ -2998,6 +3042,7 @@ export type Database = {
           deliverables: string[]
           description: string
           eligibility: string[]
+          goals: string | null
           id: string
           is_demo: boolean
           location: string | null
@@ -3011,6 +3056,7 @@ export type Database = {
           target_audience: string | null
           title: string
           updated_at: string
+          usage_rights: string | null
         }
         Insert: {
           application_deadline?: string | null
@@ -3027,6 +3073,7 @@ export type Database = {
           deliverables?: string[]
           description?: string
           eligibility?: string[]
+          goals?: string | null
           id?: string
           is_demo?: boolean
           location?: string | null
@@ -3040,6 +3087,7 @@ export type Database = {
           target_audience?: string | null
           title: string
           updated_at?: string
+          usage_rights?: string | null
         }
         Update: {
           application_deadline?: string | null
@@ -3056,6 +3104,7 @@ export type Database = {
           deliverables?: string[]
           description?: string
           eligibility?: string[]
+          goals?: string | null
           id?: string
           is_demo?: boolean
           location?: string | null
@@ -3069,6 +3118,7 @@ export type Database = {
           target_audience?: string | null
           title?: string
           updated_at?: string
+          usage_rights?: string | null
         }
         Relationships: [
           {
@@ -3777,6 +3827,10 @@ export type Database = {
       }
       send_deadline_reminders: { Args: never; Returns: undefined }
       set_feed_avatar: { Args: { _path: string }; Returns: undefined }
+      start_campaign_conversation: {
+        Args: { _campaign: string; _other: string }
+        Returns: string
+      }
       start_conversation: { Args: { _other: string }; Returns: string }
       trending_post_ids: {
         Args: { _category?: string; _limit?: number; _offset?: number }
