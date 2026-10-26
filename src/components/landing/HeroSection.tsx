@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ChevronRight, Building2 } from "lucide-react";
 import handshake from "@/assets/handshake.jpg";
-import { GoogleIcon } from "./GoogleIcon";
 
 const pill =
   "inline-flex h-[46px] w-full items-center justify-center gap-3 rounded-full text-[15px] font-semibold transition sm:w-[240px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
@@ -15,13 +14,6 @@ export function HeroActions() {
             <ChevronRight className="h-3.5 w-3.5" strokeWidth={3} />
           </span>
           Join as Creator
-        </Link>
-        <Link
-          to="/signin"
-          className={`${pill} border border-foreground bg-background text-foreground hover:bg-surface`}
-        >
-          <GoogleIcon />
-          Continue with Google
         </Link>
       </div>
 
