@@ -225,6 +225,13 @@
       "when": 1793026548838,
       "tag": "0031_v2_0005_demo_content_verified_actions",
       "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1793026706953,
+      "tag": "0032_v2_0006_demo_seed_functions",
+      "breakpoints": true
     }
   ]
 }

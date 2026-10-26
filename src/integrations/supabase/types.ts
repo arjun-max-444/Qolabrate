@@ -3326,6 +3326,7 @@ export type Database = {
         Returns: Database["public"]["Enums"]["app_role"]
       }
       cleanup_orphan_profiles: { Args: never; Returns: undefined }
+      clear_demo_content: { Args: never; Returns: Json }
       collab_action: {
         Args: {
           _action: string
@@ -3361,6 +3362,8 @@ export type Database = {
         Args: { _action: string; _id: string }
         Returns: undefined
       }
+      demo_hash: { Args: { _mod: number; _seed: string }; Returns: number }
+      demo_uuid: { Args: { _kind: string; _n: number }; Returns: string }
       ensure_feed_profile: { Args: never; Returns: string }
       expire_collabs: { Args: never; Returns: undefined }
       has_role: {
@@ -3526,6 +3529,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      seed_demo_content: { Args: never; Returns: Json }
       send_collab: {
         Args: {
           _brief: string
