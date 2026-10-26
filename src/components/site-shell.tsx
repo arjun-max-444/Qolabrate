@@ -26,7 +26,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   const [profileComplete, setProfileComplete] = useState<boolean | null>(null);
   const refreshRef = useRef<() => Promise<void>>(async () => {});
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    supabase.auth.getSession().then(({ data }) => setUser(data.session?.user ?? null));
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
       if (["SIGNED_IN", "SIGNED_OUT", "USER_UPDATED", "INITIAL_SESSION"].includes(event))
         setUser(session?.user ?? null);

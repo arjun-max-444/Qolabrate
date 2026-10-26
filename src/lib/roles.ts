@@ -16,10 +16,14 @@ export function pickRoles(rows: { role: string }[] | null | undefined): { role: 
 }
 
 export async function fetchRole(): Promise<{ userId: string | null; role: AppRole | null; isAdmin: boolean }> {
-  const { data } = await supabase.auth.getUser();
-  if (!data.user) return { userId: null, role: null, isAdmin: false };
-  const { data: rows } = await supabase.from("user_roles").select("role").eq("user_id", data.user.id);
-  return { userId: data.user.id, ...pickRoles(rows) };
+  // Read the locally stored session (same source the account menu uses) so a slow or
+  // briefly failing network check can't bounce a signed-in person back to the sign-in page.
+  // Data access is still enforced by the database for this user.
+  const { data } = await supabase.auth.getSession();
+  const user = data.session?.user;
+  if (!user) return { userId: null, role: null, isAdmin: false };
+  const { data: rows } = await supabase.from("user_roles").select("role").eq("user_id", user.id);
+  return { userId: user.id, ...pickRoles(rows) };
 }
 
 /** Client-only guard for role areas. */
