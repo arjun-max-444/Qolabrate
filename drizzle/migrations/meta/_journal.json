@@ -197,6 +197,13 @@
       "when": 1793026251315,
       "tag": "0027_v2_0000_core_social",
       "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1793026338546,
+      "tag": "0028_v2_0001_messaging_notifications",
+      "breakpoints": true
     }
   ]
 }

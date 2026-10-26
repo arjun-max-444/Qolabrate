@@ -219,6 +219,39 @@ export type Database = {
           },
         ]
       }
+      blocks: {
+        Row: {
+          blocked_id: string
+          blocker_id: string
+          created_at: string
+        }
+        Insert: {
+          blocked_id: string
+          blocker_id: string
+          created_at?: string
+        }
+        Update: {
+          blocked_id?: string
+          blocker_id?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blocks_blocked_id_fkey"
+            columns: ["blocked_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "blocks_blocker_id_fkey"
+            columns: ["blocker_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bookmarks: {
         Row: {
           created_at: string
@@ -914,6 +947,74 @@ export type Database = {
             columns: ["post_id"]
             isOneToOne: false
             referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversation_members: {
+        Row: {
+          conversation_id: string
+          joined_at: string
+          last_read_at: string
+          user_id: string
+        }
+        Insert: {
+          conversation_id: string
+          joined_at?: string
+          last_read_at?: string
+          user_id: string
+        }
+        Update: {
+          conversation_id?: string
+          joined_at?: string
+          last_read_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_members_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversation_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          created_at: string
+          id: string
+          last_message_at: string
+          last_message_preview: string | null
+          last_sender_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_message_at?: string
+          last_message_preview?: string | null
+          last_sender_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_message_at?: string
+          last_message_preview?: string | null
+          last_sender_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_last_sender_id_fkey"
+            columns: ["last_sender_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -1757,6 +1858,102 @@ export type Database = {
           },
         ]
       }
+      messages: {
+        Row: {
+          attachments: Json
+          body: string
+          conversation_id: string
+          created_at: string
+          deleted_at: string | null
+          id: string
+          reply_to: string | null
+          sender_id: string
+        }
+        Insert: {
+          attachments?: Json
+          body?: string
+          conversation_id: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          reply_to?: string | null
+          sender_id: string
+        }
+        Update: {
+          attachments?: Json
+          body?: string
+          conversation_id?: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          reply_to?: string | null
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_reply_to_fkey"
+            columns: ["reply_to"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_preferences: {
+        Row: {
+          campaigns: boolean
+          collaboration: boolean
+          email: boolean
+          in_app: boolean
+          messages: boolean
+          social: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          campaigns?: boolean
+          collaboration?: boolean
+          email?: boolean
+          in_app?: boolean
+          messages?: boolean
+          social?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          campaigns?: boolean
+          collaboration?: boolean
+          email?: boolean
+          in_app?: boolean
+          messages?: boolean
+          social?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_preferences_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           body: string
@@ -2033,6 +2230,60 @@ export type Database = {
           },
         ]
       }
+      reports: {
+        Row: {
+          created_at: string
+          details: string | null
+          id: string
+          reason: string
+          reporter_id: string
+          resolved_at: string | null
+          resolved_by: string | null
+          status: string
+          target_id: string
+          target_type: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          reason: string
+          reporter_id: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+          target_id: string
+          target_type: string
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          reason?: string
+          reporter_id?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+          target_id?: string
+          target_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_reporter_id_fkey"
+            columns: ["reporter_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_resolved_by_fkey"
+            columns: ["resolved_by"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reposts: {
         Row: {
           created_at: string
@@ -2224,14 +2475,109 @@ export type Database = {
           },
         ]
       }
+      v2_notifications: {
+        Row: {
+          actor_id: string | null
+          body: string
+          created_at: string
+          dedupe_key: string | null
+          id: string
+          link: string | null
+          read_at: string | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          actor_id?: string | null
+          body?: string
+          created_at?: string
+          dedupe_key?: string | null
+          id?: string
+          link?: string | null
+          read_at?: string | null
+          type: string
+          user_id: string
+        }
+        Update: {
+          actor_id?: string | null
+          body?: string
+          created_at?: string
+          dedupe_key?: string | null
+          id?: string
+          link?: string | null
+          read_at?: string | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "v2_notifications_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "v2_notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v2_portfolio_items: {
+        Row: {
+          cover_url: string | null
+          created_at: string
+          description: string | null
+          id: string
+          owner_id: string
+          tags: string[]
+          title: string
+          url: string | null
+        }
+        Insert: {
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          owner_id: string
+          tags?: string[]
+          title: string
+          url?: string | null
+        }
+        Update: {
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          owner_id?: string
+          tags?: string[]
+          title?: string
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "v2_portfolio_items_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "v2_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v2_profiles: {
         Row: {
           account_type: Database["public"]["Enums"]["account_type"]
           avatar_url: string | null
           bio: string | null
+          collab_permission: string
+          contact_email: string | null
           cover_url: string | null
           created_at: string
           display_name: string
+          dm_permission: string
           followers_count: number
           following_count: number
           headline: string | null
@@ -2239,6 +2585,7 @@ export type Database = {
           location: string | null
           onboarded: boolean
           posts_count: number
+          show_email: boolean
           social_links: Json
           updated_at: string
           username: string | null
@@ -2249,9 +2596,12 @@ export type Database = {
           account_type?: Database["public"]["Enums"]["account_type"]
           avatar_url?: string | null
           bio?: string | null
+          collab_permission?: string
+          contact_email?: string | null
           cover_url?: string | null
           created_at?: string
           display_name?: string
+          dm_permission?: string
           followers_count?: number
           following_count?: number
           headline?: string | null
@@ -2259,6 +2609,7 @@ export type Database = {
           location?: string | null
           onboarded?: boolean
           posts_count?: number
+          show_email?: boolean
           social_links?: Json
           updated_at?: string
           username?: string | null
@@ -2269,9 +2620,12 @@ export type Database = {
           account_type?: Database["public"]["Enums"]["account_type"]
           avatar_url?: string | null
           bio?: string | null
+          collab_permission?: string
+          contact_email?: string | null
           cover_url?: string | null
           created_at?: string
           display_name?: string
+          dm_permission?: string
           followers_count?: number
           following_count?: number
           headline?: string | null
@@ -2279,6 +2633,7 @@ export type Database = {
           location?: string | null
           onboarded?: boolean
           posts_count?: number
+          show_email?: boolean
           social_links?: Json
           updated_at?: string
           username?: string | null
@@ -2348,6 +2703,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_set_verified: {
+        Args: { _user: string; _verified: boolean }
+        Returns: undefined
+      }
       brand_badges: {
         Args: { _ids: string[] }
         Returns: {
@@ -2403,11 +2762,24 @@ export type Database = {
         Returns: boolean
       }
       is_blocked: { Args: { _a: string; _b: string }; Returns: boolean }
+      is_blocked_between: { Args: { a: string; b: string }; Returns: boolean }
       is_business_email: { Args: { _email: string }; Returns: boolean }
       is_collab_party: { Args: { _collab: string }; Returns: boolean }
+      is_conversation_member: {
+        Args: { _conv: string; _uid: string }
+        Returns: boolean
+      }
+      is_staff: { Args: { _uid: string }; Returns: boolean }
       is_verified_creator: { Args: { _id: string }; Returns: boolean }
       make_username: { Args: { _base: string; _id: string }; Returns: string }
       mark_messages_read: { Args: { _other: string }; Returns: undefined }
+      my_unread_counts: {
+        Args: never
+        Returns: {
+          conversation_id: string
+          unread: number
+        }[]
+      }
       notify: {
         Args: { _body: string; _link: string; _title: string; _user: string }
         Returns: undefined
@@ -2463,6 +2835,16 @@ export type Database = {
           website: string
         }[]
       }
+      rate_limit: {
+        Args: {
+          _col: string
+          _max: number
+          _table: string
+          _uid: string
+          _window: string
+        }
+        Returns: undefined
+      }
       send_collab: {
         Args: {
           _brief: string
@@ -2479,6 +2861,7 @@ export type Database = {
         Returns: string
       }
       set_feed_avatar: { Args: { _path: string }; Returns: undefined }
+      start_conversation: { Args: { _other: string }; Returns: string }
       username_available: { Args: { _username: string }; Returns: boolean }
       v2_has_role: {
         Args: {
@@ -2486,6 +2869,17 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      v2_notify: {
+        Args: {
+          _actor: string
+          _body: string
+          _key: string
+          _link: string
+          _type: string
+          _user: string
+        }
+        Returns: undefined
       }
       verification_editable: { Args: { _uid: string }; Returns: boolean }
     }
