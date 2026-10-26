@@ -18,6 +18,7 @@ import { ReportDialog } from "@/components/app/ReportDialog";
 import { startConversation } from "@/lib/messages";
 import { CAMPAIGN_SELECT, type Campaign } from "@/lib/campaigns";
 import { compactCount } from "@/lib/catalog";
+import { CreatorRating } from "@/components/app/CreatorRating";
 import { DemoPill } from "@/components/app/PostMedia";
 import { MetricBadge } from "@/components/app/CreatorCard";
 import { InviteToCampaign, SaveToShortlist } from "@/components/app/CreatorActions";
@@ -260,6 +261,7 @@ function ProfilePage() {
             {social.map(([k, v]) => <span key={k} className="rounded-full bg-surface px-3 py-1"><b className="capitalize">{k === "x" ? "X" : k}</b> {v}</span>)}
           </div>
         )}
+        {p.account_type === "creator" && <CreatorRating creatorId={p.id} />}
         <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm">
           <span><b>{compactCount(p.following_count)}</b> <span className="text-muted-foreground">Following</span></span>
           <span><b>{compactCount(p.followers_count)}</b> <span className="text-muted-foreground">Followers</span></span>
