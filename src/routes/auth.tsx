@@ -99,7 +99,6 @@ function Auth() {
       navigate({ href: r === "admin" ? "/admin" : "/home", replace: true });
     })().catch((e) => {
       console.error("Opening account failed", e);
-      (window as unknown as { __authErr?: string }).__authErr = String((e as Error)?.stack ?? e);
       setChecking(false);
       setError("We couldn't open your account just now. Please try again in a moment.");
     });
